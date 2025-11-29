@@ -119,7 +119,7 @@
         .view-section { display: none; padding: 40px; max-width: 1200px; margin: 0 auto; width: 100%; animation: fadeIn 0.3s; }
         .view-section.active { display: block; }
 
-        /* [VIEW 1] 대시보드 (수정됨) */
+        /* [VIEW 1] 대시보드 */
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; height: 100%; }
         .dash-card { background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #eee; display: flex; flex-direction: column; }
         .dash-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #f5f5f5; }
@@ -140,7 +140,7 @@
         .status-ongoing { background: #e3f2fd; color: #0277bd; }
         .status-urgent { background: #ffebee; color: #c62828; }
 
-        /* [NEW] 팀원 케어 체크 (Issues) */
+        /* 팀원 케어 체크 */
         .dash-issue-list { display: flex; flex-direction: column; gap: 10px; }
         .issue-item {
             padding: 14px; border: 1px solid #eee; border-radius: 10px; display: flex; align-items: center; gap: 12px;
@@ -153,7 +153,7 @@
         .issue-desc { font-size: 13px; color: #666; }
         .issue-tag { font-size: 11px; padding: 4px 8px; border-radius: 12px; background: #fef3c7; color: #d97706; font-weight: 600; }
 
-        /* [NEW] Quick Memo */
+        /* Quick Memo */
         .memo-area { 
             width: 100%; height: 150px; border: none; background: #fff9c4; padding: 20px; 
             border-radius: 8px; resize: none; font-size: 14px; line-height: 1.6; color: #555; 
@@ -220,6 +220,8 @@
         .profile-lg-img { width: 120px; height: 120px; background: #f0f0f0; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 50px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         .skill-row { margin-bottom: 16px; }
         .skill-info { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+        .progress-track { width: 100%; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
         .swot-box { display: flex; gap: 20px; }
         .swot-col { flex: 1; }
         .swot-head { font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
@@ -304,7 +306,8 @@
     <div id="main-app">
         <header class="main-header">
             <div class="header-logo" onclick="showDashboard()">CHEMILEADER</div>
-            <input type="text" class="search-box" placeholder="팀원, 부서 검색">
+            <!-- [수정] 검색창에 id 부여 -->
+            <input type="text" id="top-search-input" class="search-box" placeholder="팀원, 부서 검색">
         </header>
 
         <div class="app-body">
@@ -655,7 +658,7 @@
                 keywords: ['#PM', '#리더십', '#소통'],
                 feedbackStyle: { directness: '완곡함', focus: '관계 중심', tone: '부드러움' },
                 skills: [ { name: 'PM', per: 92, color: '#008785' }, { name: 'Communication', per: 88, color: '#551D83' } ],
-                strengths: ['강력한 추진력', '이해관계자 조율'], weaknesses: ['최신 기술 트렌드 이해'],
+                strengths: ['강력한 추진력', '이해관계자 조율'], weaknesses: ['최신 기술 트렌드 이해', '실무 툴 활용'],
                 growthPath: "M30 40 Q 150 30 270 40", growthPoints: [{x:30,y:40}, {x:150,y:35}, {x:270,y:40}], growthDesc: "안정적인 리더십 발휘 단계",
                 history: [ { date:'20.01', title:'DX PM', desc:'스마트팩토리' } ],
                 kpiTotal: 95, kpiDesc: "프로젝트 납기 100% 준수",
@@ -666,7 +669,7 @@
                 projectLog: { succ: "스마트팩토리 예산 15% 절감", imp: "초기 기술 검토 단계 리스크 관리" }
             },
             '박재원': {
-                job: 'Software Eng.', avatar: '👨🏻‍💻', years: '3년',
+                job: 'Software Eng.', avatar: '👩🏻‍💻', years: '3년',
                 keywords: ['#개발', '#클라우드', '#성실'],
                 feedbackStyle: { directness: '직설적', focus: '과업 중심', tone: '부드러움' },
                 skills: [ { name: 'React', per: 75, color: '#551D83' }, { name: 'AWS', per: 60, color: '#70C0E6' } ],
@@ -685,7 +688,7 @@
                 keywords: ['#UX', '#디자인', '#공감'],
                 feedbackStyle: { directness: '완곡함', focus: '관계 중심', tone: '부드러움' },
                 skills: [ { name: 'UI Design', per: 88, color: '#D7177B' }, { name: 'Figma', per: 90, color: '#551D83' } ],
-                strengths: ['사용자 중심 사고', '창의적 디자인'], weaknesses: ['데이터 기반 설득'],
+                strengths: ['사용자 중심 사고', '창의적 디자인'], weaknesses: ['데이터 기반 설득', '개발 용어 이해'],
                 growthPath: "M30 90 Q 150 80 270 30", growthPoints: [{x:30,y:90}, {x:150,y:70}, {x:270,y:30}], growthDesc: "디자인 시스템 구축으로 전문성 확대",
                 history: [ { date:'19.11', title:'입사', desc:'디자인센터' } ],
                 kpiTotal: 90, kpiDesc: "디자인 시스템 1.0 배포",
@@ -714,6 +717,28 @@
             }
         }
         document.getElementById('login-pw').addEventListener('keypress', (e) => { if(e.key==='Enter') checkLogin(); });
+
+        // --- 상단바 검색 기능 ---
+        document.getElementById('top-search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const val = this.value.trim();
+                if (!val) return;
+
+                // 팀원 이름 검색 (부분 일치)
+                const foundName = Object.keys(teamDB).find(name => name.includes(val));
+                
+                if (foundName) {
+                    // 피드백 탭으로 이동하고 해당 팀원의 상세 정보 표시
+                    showFeedback(); // 먼저 피드백 탭 활성화 및 리스트 렌더링
+                    showFeedbackDetail(foundName); // 상세 페이지로 이동
+                    
+                    // 검색창 초기화
+                    this.value = '';
+                } else {
+                    alert('해당 팀원을 찾을 수 없습니다.');
+                }
+            }
+        });
 
         // --- 네비게이션 ---
         function hideAllViews() {
