@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHEMILEADER - Team Management System</title>
+    
+    <!-- 폰트: Noto Sans KR -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* [디자인 시스템] */
+        :root {
+            --color-magenta: #D7177B;
+            --color-purple: #551D83;
+            --color-lightblue: #70C0E6;
+            --color-teal: #008785;
+            --color-bg-gray: #F5F5F5;
+            --sidebar-width: 240px;
+            --header-height: 64px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--color-bg-gray);
+            color: #333;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ---------------------------------------------------------
+           1. 로그인 페이지 (White & 3-Color Gradient Flipped)
+           --------------------------------------------------------- */
+        #login-page {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #ffffff;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-card {
+            background: #ffffff; padding: 60px 50px; 
+            width: 100%; max-width: 420px; text-align: center;
+        }
+
+        .login-logo {
+            font-size: 42px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 40px;
+            background: linear-gradient(90deg, var(--color-magenta) 0%, var(--color-purple) 50%, var(--color-lightblue) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent;
+        }
+
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-label { font-size: 13px; font-weight: 700; color: #555; margin-bottom: 8px; display: block; }
+        
+        .login-input {
+            width: 100%; padding: 14px 16px; border: 1px solid #ddd;
+            border-radius: 8px; font-size: 15px; outline: none; transition: 0.2s; background: #f9f9f9; color: #333;
+        }
+        .login-input:focus { border-color: var(--color-purple); background: #fff; box-shadow: 0 0 0 3px rgba(85, 29, 131, 0.1); }
+
+        .login-btn {
+            width: 100%; padding: 16px; margin-top: 24px;
+            background: linear-gradient(90deg, var(--color-magenta) 0%, var(--color-purple) 50%, var(--color-lightblue) 100%);
+            color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s;
+            box-shadow: 0 4px 15px rgba(85, 29, 131, 0.25);
+        }
+        .login-btn:hover { transform: translateY(-2px); opacity: 0.95; }
+        .login-footer { margin-top: 32px; font-size: 12px; color: #aaa; }
+
+        /* ---------------------------------------------------------
+           2. 메인 레이아웃
+           --------------------------------------------------------- */
+        #main-app { display: none; width: 100%; height: 100%; }
+
+        /* 사이드바 */
+        .main-sidebar {
+            width: var(--sidebar-width); background: #fff; border-right: 1px solid #e0e0e0;
+            display: flex; flex-direction: column; flex-shrink: 0; z-index: 100;
+        }
+        
+        .app-logo-area {
+            height: var(--header-height); display: flex; align-items: center; padding-left: 24px;
+            font-size: 20px; font-weight: 900; letter-spacing: -0.5px; cursor: pointer;
+            background: linear-gradient(90deg, var(--color-magenta) 0%, var(--color-purple) 50%, var(--color-lightblue) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .main-menu { list-style: none; margin-top: 20px; padding: 0 12px; }
+        .menu-item {
+            padding: 16px 20px; border-radius: 12px; margin-bottom: 8px; cursor: pointer;
+            font-size: 16px; font-weight: 700; color: #555; transition: 0.2s; display: flex; align-items: center; gap: 12px;
+        }
+        .menu-item:hover { background-color: #f5f5f5; color: var(--color-purple); }
+        .menu-item.active { background-color: #f4eff9; color: var(--color-purple); }
+        
+        .leader-profile { margin-top: auto; padding: 24px; border-top: 1px solid #eee; display: flex; align-items: center; gap: 12px; }
+        .lp-avatar { width: 40px; height: 40px; border-radius: 50%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .lp-info { display: flex; flex-direction: column; }
+        .lp-name { font-size: 14px; font-weight: 700; }
+        .lp-role { font-size: 11px; color: #888; }
+
+        /* 컨텐츠 영역 */
+        .content-container { flex: 1; background-color: var(--color-bg-gray); overflow-y: auto; padding: 0; position: relative; display: flex; flex-direction: column; }
+        
+        /* 헤더 */
+        .main-header {
+            height: var(--header-height); background: #fff; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; flex-shrink: 0;
+        }
+        .header-title { font-size: 18px; font-weight: 700; color: #333; }
+        .search-box {
+            background: #f5f5f5; border: 1px solid #ddd; border-radius: 20px; padding: 8px 20px; outline: none; width: 280px; font-size: 14px; transition: 0.3s;
+        }
+        .search-box:focus { border-color: var(--color-purple); background: #fff; }
+
+        /* 뷰 (Sections) */
+        .view-section { display: none; padding: 40px; max-width: 1200px; margin: 0 auto; width: 100%; height: 100%; overflow-y: auto;}
+        .view-section.active { display: block; animation: fadeIn 0.3s; }
+
+        /* [VIEW 1] 대시보드 */
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+        .dash-card { background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+        .dash-welcome { font-size: 28px; font-weight: 700; margin-bottom: 12px; color: #333; }
+        .dash-sub { color: #666; font-size: 16px; margin-bottom: 30px; }
+        .dash-info-row { display: flex; gap: 40px; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 20px; }
+        .dash-label { font-size: 13px; color: #888; font-weight: 700; margin-bottom: 6px; display: block; }
+        .dash-value { font-size: 18px; font-weight: 600; color: #333; }
+        
+        .cheer-card { 
+            background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%); 
+            border: 1px solid #b2ebf2; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+        .cheer-icon { font-size: 60px; margin-bottom: 16px; animation: float 3s infinite ease-in-out; }
+        .cheer-text { font-size: 18px; font-weight: 700; color: var(--color-teal); line-height: 1.5; }
+
+        /* [VIEW 2] 평가 */
+        .sub-tabs { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 30px; }
+        .sub-tab-item { padding: 14px 24px; cursor: pointer; font-size: 16px; font-weight: 500; color: #888; border-bottom: 3px solid transparent; transition: 0.2s; }
+        .sub-tab-item:hover { color: #555; }
+        .sub-tab-item.active { color: var(--color-purple); font-weight: 700; border-bottom-color: var(--color-purple); }
+        .eval-placeholder { text-align: center; padding: 100px 0; color: #aaa; font-size: 16px; background: #fff; border-radius: 12px; border: 1px dashed #ddd; }
+
+        /* [VIEW 3] 피드백 - 리스트 */
+        .member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+        .member-card {
+            background: #fff; border-radius: 16px; padding: 30px 24px; border: 1px solid #eee;
+            cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .member-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(85,29,131,0.1); border-color: var(--color-purple); }
+        .mc-avatar { width: 90px; height: 90px; background: #f9f9f9; border-radius: 50%; font-size: 40px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .mc-name { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+        .mc-role { font-size: 14px; color: #888; margin-bottom: 20px; }
+        .mc-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+        .mc-tag { font-size: 12px; background: #f0f4f8; padding: 4px 10px; border-radius: 20px; color: #555; font-weight: 500; }
+
+        /* [VIEW 4] 피드백 - 상세 */
+        .detail-header { display: flex; align-items: center; gap: 20px; margin-bottom: 30px; }
+        .btn-back { 
+            padding: 10px 18px; background: #fff; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-weight: 700; color: #555;
+            display: flex; align-items: center; gap: 6px; transition: 0.2s;
+        }
+        .btn-back:hover { background: #f5f5f5; color: #333; }
+
+        /* 상세 탭 (큼지막하게) */
+        .detail-tabs { display: flex; gap: 12px; margin-bottom: 24px; }
+        .detail-tab { 
+            flex: 1; text-align: center; padding: 16px; background: #fff; border: 1px solid #eee; border-radius: 12px; 
+            font-size: 16px; font-weight: 600; color: #888; cursor: pointer; transition: 0.2s;
+        }
+        .detail-tab:hover { background: #fafafa; }
+        .detail-tab.active { background: var(--color-purple); color: #fff; border-color: var(--color-purple); box-shadow: 0 4px 12px rgba(85,29,131,0.2); }
+
+        .detail-content { display: none; animation: fadeIn 0.3s; }
+        .detail-content.active { display: block; }
+
+        /* 상세 카드들 */
+        .card { background: #fff; border-radius: 16px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid #eee; margin-bottom: 24px; }
+        .card-head { font-size: 18px; font-weight: 700; color: #333; margin-bottom: 20px; border-bottom: 1px solid #f5f5f5; padding-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+
+        /* 그리드 레이아웃 */
+        .grid-basic { display: grid; grid-template-columns: 320px 1fr; gap: 24px; }
+        .grid-half { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+        /* 요소 스타일 */
+        .profile-lg-box { text-align: center; }
+        .profile-lg-img { width: 120px; height: 120px; background: #f0f0f0; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 50px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        
+        .skill-row { margin-bottom: 16px; }
+        .skill-info { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+        .progress-track { width: 100%; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+
+        .swot-box { display: flex; gap: 20px; }
+        .swot-col { flex: 1; }
+        .swot-head { font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        .swot-item { font-size: 13px; padding: 10px 12px; background: #f9f9f9; border-radius: 8px; margin-bottom: 6px; border: 1px solid #f0f0f0; }
+
+        .timeline-item { position: relative; padding-left: 20px; padding-bottom: 24px; border-left: 2px solid #eee; }
+        .timeline-item::before { content:''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; border-radius: 50%; background: #fff; border: 3px solid var(--color-purple); }
+        .tl-date { font-size: 13px; font-weight: 700; color: var(--color-purple); }
+        .tl-title { font-size: 15px; font-weight: 700; margin-top: 4px; }
+        .tl-desc { font-size: 13px; color: #666; margin-top: 2px; }
+
+        /* 성과 탭 스타일 */
+        .eval-grade-card { background: linear-gradient(135deg, #222 0%, #444 100%); color: #fff; border-radius: 16px; padding: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .grade-big { font-size: 60px; font-weight: 900; line-height: 1; text-shadow: 0 0 20px rgba(215,23,123,0.5); }
+        
+        .kpi-donut-wrapper { display: flex; align-items: center; justify-content: center; gap: 40px; }
+        .kpi-text { text-align: left; }
+
+        .career-path { display: flex; align-items: center; justify-content: center; gap: 20px; padding: 20px 0; }
+        .cp-node { padding: 12px 24px; background: #f5f5f5; border-radius: 12px; font-weight: 700; color: #333; }
+        .cp-node.future { background: #f4eff9; color: var(--color-purple); border: 1px solid var(--color-purple); }
+        .cp-arrow { font-size: 24px; color: #ddd; }
+
+        /* 전달(피드백) 탭 스타일 */
+        .fb-input-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+        .fb-card-small { background: #fcfcfc; border: 1px solid #eee; padding: 16px; border-radius: 12px; }
+        .fb-label { font-size: 14px; font-weight: 700; margin-bottom: 10px; display: block; }
+        .fb-textarea { width: 100%; height: 100px; border: 1px solid #ddd; border-radius: 8px; padding: 12px; resize: none; font-family: inherit; font-size: 14px; outline: none; transition: 0.2s; }
+        .fb-textarea:focus { border-color: var(--color-purple); background: #fff; }
+
+        .evidence-container { background: #f9f9f9; padding: 20px; border-radius: 12px; margin-bottom: 20px; display: none; }
+        .evidence-container.active { display: block; animation: fadeIn 0.3s; }
+        .evidence-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .evidence-box { background: #fff; border: 1px solid #ddd; padding: 16px; border-radius: 8px; cursor: pointer; transition: 0.2s; position: relative; }
+        .evidence-box:hover { border-color: var(--color-lightblue); }
+        .evidence-box.selected { border-color: var(--color-purple); background: #f4eff9; box-shadow: 0 4px 12px rgba(85,29,131,0.1); }
+        .evidence-box.selected::after { content:'✔'; position: absolute; top:10px; right:10px; color:var(--color-purple); font-weight:bold; }
+        
+        .tone-controls { display: flex; gap: 20px; padding: 20px; background: #fff; border: 1px solid #eee; border-radius: 12px; margin-bottom: 20px; }
+        .tone-group { flex: 1; }
+        .tone-btn-group { display: flex; background: #f5f5f5; border-radius: 8px; padding: 4px; margin-top: 8px; }
+        .tone-btn { flex: 1; text-align: center; padding: 8px; font-size: 13px; cursor: pointer; border-radius: 6px; color: #888; transition: 0.2s; font-weight: 500; }
+        .tone-btn.active { background: #fff; color: var(--color-purple); font-weight: 700; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+        .final-msg-box { width: 100%; height: 200px; border: 1px solid var(--color-purple); border-radius: 12px; padding: 20px; font-size: 15px; line-height: 1.6; resize: none; outline: none; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <!-- [1] 로그인 페이지 -->
+    <div id="login-page">
+        <div class="login-card">
+            <div class="login-logo">CHEMILEADER</div>
+            <div class="input-group">
+                <label class="input-label">아이디</label>
+                <input type="text" id="login-id" class="login-input" placeholder="ID를 입력하세요">
+            </div>
+            <div class="input-group">
+                <label class="input-label">비밀번호</label>
+                <input type="password" id="login-pw" class="login-input" placeholder="비밀번호를 입력하세요">
+            </div>
+            <button class="login-btn" onclick="checkLogin()">로그인</button>
+            <div class="login-footer">Copyright © HEROS_B. All Rights Reserved.</div>
+        </div>
+    </div>
+
+    <!-- [2] 메인 앱 -->
+    <div id="main-app">
+        <!-- 사이드바 -->
+        <nav class="main-sidebar">
+            <div class="app-logo-area" onclick="showDashboard()">CHEMILEADER</div>
+            
+            <ul class="main-menu">
+                <li class="menu-item" id="menu-eval" onclick="showEval()">📊 평가</li>
+                <li class="menu-item" id="menu-feedback" onclick="showFeedbackList()">💬 피드백</li>
+            </ul>
+
+            <div class="leader-profile">
+                <div class="lp-avatar">👨🏻‍💼</div>
+                <div class="lp-info">
+                    <div class="lp-name">박LG 팀장</div>
+                    <div class="lp-role">DX 추진팀</div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 컨텐츠 -->
+        <main class="content-container">
+            <header class="main-header">
+                <div class="header-title">Team Management</div>
+                <input type="text" class="search-box" placeholder="팀원 검색...">
+            </header>
+
+            <!-- [VIEW 1] 대시보드 -->
+            <section id="view-dashboard" class="view-section active">
+                <div class="dashboard-grid">
+                    <div class="dash-card">
+                        <div class="dash-welcome">박LG 팀장님, 안녕하세요! 👋</div>
+                        <div class="dash-sub">오늘도 팀원들과 함께 성장하는 하루 되세요.</div>
+                        <div class="dash-info-row">
+                            <div><span class="dash-label">소속 팀</span><span class="dash-value">DX 추진팀</span></div>
+                            <div><span class="dash-label">팀 목표</span><span class="dash-value">Global Top Tier Science Company 도약</span></div>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <span class="dash-label">주요 프로젝트</span>
+                            <div style="display:flex; gap:10px; margin-top:8px;">
+                                <span class="mc-tag" style="background:#e3f2fd; color:#0277bd;">🏭 Smart Factory Phase 2</span>
+                                <span class="mc-tag" style="background:#f3e5f5; color:#7b1fa2;">🤖 AI Safety Model 고도화</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dash-card cheer-card">
+                        <div class="cheer-icon">🍀</div>
+                        <div class="cheer-text">리더님의 긍정적인 피드백이<br>팀을 성장시킵니다.<br>오늘도 힘내세요!</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- [VIEW 2] 평가 -->
+            <section id="view-evaluation" class="view-section">
+                <div class="sub-tabs">
+                    <div class="sub-tab-item active" onclick="switchEvalTab(this)">정량평가</div>
+                    <div class="sub-tab-item" onclick="switchEvalTab(this)">정성평가</div>
+                    <div class="sub-tab-item" onclick="switchEvalTab(this)">공동평가</div>
+                </div>
+                <div class="eval-placeholder">
+                    <div style="font-size:40px; margin-bottom:20px;">🚧</div>
+                    평가 모듈은 현재 준비 중입니다.<br>추후 업데이트될 예정입니다.
+                </div>
+            </section>
+
+            <!-- [VIEW 3] 피드백 - 목록 -->
+            <section id="view-feedback-list" class="view-section">
+                <div style="margin-bottom:24px;">
+                    <div style="font-size:24px; font-weight:700;">팀원 피드백</div>
+                    <div style="color:#888; font-size:14px;">팀원을 선택하여 상세 피드백을 작성하세요.</div>
+                </div>
+                <div class="member-grid" id="member-card-container"></div>
+            </section>
+
+            <!-- [VIEW 4] 피드백 - 상세 -->
+            <section id="view-feedback-detail" class="view-section">
+                <div class="detail-header">
+                    <button class="btn-back" onclick="showFeedbackList()">← 목록으로</button>
+                    <div style="font-size:20px; font-weight:700;">
+                        <span id="detail-member-name"></span> <span style="font-weight:400; color:#888;">상세 정보</span>
+                    </div>
+                </div>
+
+                <div class="detail-tabs">
+                    <div class="detail-tab active" onclick="switchDetailTab('basic', this)">기본정보</div>
+                    <div class="detail-tab" onclick="switchDetailTab('perf', this)">성과 & 육성</div>
+                    <div class="detail-tab" onclick="switchDetailTab('feedback', this)">전달 (Feedback)</div>
+                </div>
+
+                <!-- 1. 기본정보 -->
+                <div id="dt-basic" class="detail-content active">
+                    <div class="grid-basic">
+                        <div class="card profile-lg-box">
+                            <div class="profile-lg-img" id="p-avatar"></div>
+                            <div style="font-size:22px; font-weight:700;" id="p-name"></div>
+                            <div style="color:#666; margin-bottom:12px;" id="p-job"></div>
+                            <div id="p-keywords" style="display:flex; justify-content:center; gap:6px; flex-wrap:wrap;"></div>
+                            <div id="p-info-list" style="margin-top:20px; text-align:left; border-top:1px solid #eee; padding-top:20px;"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-head">전문 역량</div>
+                            <div id="p-skills"></div>
+                            
+                            <div class="card-head" style="margin-top:30px;">SWOT 분석</div>
+                            <div class="swot-box">
+                                <div class="swot-col">
+                                    <div class="swot-head" style="color:var(--color-magenta)">🔥 강점</div>
+                                    <div id="p-strengths"></div>
+                                </div>
+                                <div class="swot-col">
+                                    <div class="swot-head" style="color:var(--color-teal)">💡 보완점</div>
+                                    <div id="p-weaknesses"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid-half">
+                        <div class="card">
+                            <div class="card-head">성장 곡선</div>
+                            <div style="height:150px; display:flex; align-items:center; justify-content:center;">
+                                <svg width="300" height="120" viewBox="0 0 300 120">
+                                    <path id="growth-path" d="" fill="none" stroke="var(--color-purple)" stroke-width="3" stroke-linecap="round"/>
+                                    <g id="growth-points"></g>
+                                </svg>
+                            </div>
+                            <div id="growth-desc" style="text-align:center; color:#666; font-size:14px;"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-head">Career History</div>
+                            <div id="p-history" style="padding-top:10px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. 성과 & 육성 -->
+                <div id="dt-perf" class="detail-content">
+                    <div class="eval-summary-card">
+                        <div>
+                            <div style="font-size:14px; opacity:0.8;">2023 종합 성과 등급</div>
+                            <div class="grade-big" id="final-grade"></div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-size:16px;">업무달성도(KPI) <strong id="sum-kpi" style="font-size:24px;"></strong>점</div>
+                            <div style="font-size:16px; margin-top:4px;">핵심가치 <strong id="sum-cv" style="font-size:24px;"></strong>점</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-half">
+                        <div class="card">
+                            <div class="card-head">업무 달성도 (KPI)</div>
+                            <div class="kpi-donut-wrapper">
+                                <svg width="120" height="120">
+                                    <circle cx="60" cy="60" r="54" fill="none" stroke="#f0f0f0" stroke-width="12"></circle>
+                                    <circle id="kpi-donut" cx="60" cy="60" r="54" fill="none" stroke="var(--color-magenta)" stroke-width="12" stroke-linecap="round" stroke-dasharray="339" stroke-dashoffset="339" transform="rotate(-90 60 60)"></circle>
+                                </svg>
+                                <div class="kpi-text">
+                                    <div style="font-weight:700; font-size:24px; color:var(--color-magenta);" id="kpi-val"></div>
+                                    <div id="kpi-desc" style="font-size:13px; color:#666; margin-top:4px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-head">핵심가치 5대 항목</div>
+                            <div id="cv-list"></div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-head">Career & Growth</div>
+                        <div class="career-path">
+                            <div class="cp-node" id="dev-current"></div>
+                            <div class="cp-arrow">➜</div>
+                            <div class="cp-node future" id="dev-goal"></div>
+                        </div>
+                        <div style="margin-top:20px; background:#f9f9f9; padding:20px; border-radius:12px;">
+                            <div style="font-weight:700; margin-bottom:10px;">🚩 육성 목표</div>
+                            <div id="dev-comp-goals"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. 전달 (피드백) -->
+                <div id="dt-feedback" class="detail-content">
+                    <div class="card">
+                        <div class="card-head" style="color:var(--color-purple);">Step 1. 피드백 키워드 입력</div>
+                        <div class="fb-input-grid">
+                            <div class="fb-card-small">
+                                <span class="fb-label" style="color:var(--color-magenta)">🔥 강점 (Strength)</span>
+                                <textarea id="input-str" class="fb-textarea" placeholder="예: 분석적인 사고, 빠른 습득력"></textarea>
+                            </div>
+                            <div class="fb-card-small">
+                                <span class="fb-label" style="color:var(--color-teal)">💡 보완점 (Improvement)</span>
+                                <textarea id="input-imp" class="fb-textarea" placeholder="예: 소통 강화, 경청하는 태도"></textarea>
+                            </div>
+                            <div class="fb-card-small">
+                                <span class="fb-label" style="color:var(--color-purple)">🚀 성장 방향 (Growth)</span>
+                                <textarea id="input-gro" class="fb-textarea" placeholder="예: 프로젝트 리더, 기술 전문가"></textarea>
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <button class="login-btn" style="width:auto; padding:12px 30px; margin:0;" onclick="generateEvidence()">✨ AI 근거 찾기</button>
+                        </div>
+                    </div>
+
+                    <div id="ai-evidence-section" class="evidence-container">
+                        <div class="card-head" style="border:none; margin-bottom:10px;">Step 2. AI 추천 근거 선택</div>
+                        <div class="evidence-grid">
+                            <div class="evidence-box" id="ev-box-str" onclick="selectEvidence('str')">
+                                <div style="font-size:12px; color:#888; margin-bottom:6px;">강점 근거</div>
+                                <div id="ev-text-str" style="font-size:13px; line-height:1.5;"></div>
+                            </div>
+                            <div class="evidence-box" id="ev-box-imp" onclick="selectEvidence('imp')">
+                                <div style="font-size:12px; color:#888; margin-bottom:6px;">보완점 근거</div>
+                                <div id="ev-text-imp" style="font-size:13px; line-height:1.5;"></div>
+                            </div>
+                            <div class="evidence-box" id="ev-box-gro" onclick="selectEvidence('gro')">
+                                <div style="font-size:12px; color:#888; margin-bottom:6px;">성장 제언</div>
+                                <div id="ev-text-gro" style="font-size:13px; line-height:1.5;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-head">Step 3. 톤앤매너 & 최종 생성</div>
+                        <div class="tone-controls">
+                            <div class="tone-group">
+                                <span style="font-size:13px; font-weight:700;">화법</span>
+                                <div class="tone-btn-group">
+                                    <div class="tone-btn active" onclick="setTone('direct', this)">직설적</div>
+                                    <div class="tone-btn" onclick="setTone('indirect', this)">완곡함</div>
+                                </div>
+                            </div>
+                            <div class="tone-group">
+                                <span style="font-size:13px; font-weight:700;">관점</span>
+                                <div class="tone-btn-group">
+                                    <div class="tone-btn active" onclick="setTone('task', this)">과업 중심</div>
+                                    <div class="tone-btn" onclick="setTone('relation', this)">관계 중심</div>
+                                </div>
+                            </div>
+                        </div>
+                        <textarea id="final-feedback-text" class="final-msg-box" placeholder="AI가 생성한 최종 메시지가 여기에 표시됩니다."></textarea>
+                        <div style="text-align:right; margin-top:20px;">
+                            <button class="login-btn" style="width:auto; padding:12px 30px; margin:0;" onclick="alert('피드백이 전송되었습니다!')">📩 피드백 전송</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // --- 데이터베이스 (Full Data) ---
+        const teamDB = {
+            '박태희': {
+                job: 'Data Scientist', avatar: '👩🏻‍💻', years: '5년 3개월',
+                keywords: ['#데이터분석', '#통계', '#논리적'],
+                skills: [ { name: 'Python', per: 90, color: '#D7177B' }, { name: 'ML', per: 75, color: '#551D83' } ],
+                strengths: ['데이터 인사이트 도출', '새로운 툴 학습 빠름'], weaknesses: ['발표 스킬 부족', '멀티태스킹 어려움'],
+                growthPath: "M10 90 Q 150 20 290 50", growthPoints: [{x:10,y:90}, {x:150,y:20}, {x:290,y:50}], growthDesc: "최근 분석 역량이 급격히 상승함",
+                history: [ { date:'23.01', title:'DX팀 합류', desc:'데이터 분석 리드' }, { date:'19.01', title:'입사', desc:'생산기술팀' } ],
+                kpiTotal: 92, kpiDesc: "데이터 파이프라인 구축 완료 (120% 달성)",
+                coreValues: [ {n:'Customer', s:95}, {n:'Sustainability', s:85}, {n:'Agility', s:90}, {n:'Passion', s:92}, {n:'Collaboration', s:80} ],
+                currRole: 'Data Scientist', goalRole: 'Data Tech Lead', compGoals: ['MLOps 구축 경험', 'AWS 자격 취득'],
+                projectLog: { succ: "데이터 파이프라인 최적화로 처리 속도 200% 개선", imp: "현업 부서와의 초기 요구사항 조율 미흡" }
+            },
+            '박재현': {
+                job: 'AI Researcher', avatar: '👨🏻‍🔬', years: '8년 1개월',
+                keywords: ['#AI', '#딥러닝', '#혁신'],
+                skills: [ { name: 'Deep Learning', per: 95, color: '#551D83' }, { name: 'CV', per: 80, color: '#D7177B' } ],
+                strengths: ['최신 논문 구현 능력', '알고리즘 최적화'], weaknesses: ['비즈니스 적용 관점', '문서화 습관'],
+                growthPath: "M10 70 L 150 50 L 290 20", growthPoints: [{x:10,y:70}, {x:150,y:50}, {x:290,y:20}], growthDesc: "꾸준한 우상향 성장세 유지",
+                history: [ { date:'22.01', title:'선행연구팀', desc:'비전 검사' } ],
+                kpiTotal: 88, kpiDesc: "특허 2건 출원, 학회 발표",
+                coreValues: [ {n:'Customer', s:80}, {n:'Sustainability', s:75}, {n:'Agility', s:95}, {n:'Passion', s:90}, {n:'Collaboration', s:70} ],
+                currRole: 'AI Researcher', goalRole: 'Principal Researcher', compGoals: ['Top Tier 학회 논문', '글로벌 네트워킹'],
+                projectLog: { succ: "비전 검사 정확도 99.5% 달성", imp: "현장 엔지니어 피드백 반영 지연" }
+            },
+            '박정호': {
+                job: 'Project Manager', avatar: '👨🏻‍💼', years: '12년',
+                keywords: ['#PM', '#리더십', '#소통'],
+                skills: [ { name: 'PM', per: 92, color: '#008785' }, { name: 'Communication', per: 88, color: '#551D83' } ],
+                strengths: ['강력한 추진력', '이해관계자 조율'], weaknesses: ['최신 기술 트렌드 이해'],
+                growthPath: "M10 30 Q 150 20 290 20", growthPoints: [{x:10,y:30}, {x:150,y:20}, {x:290,y:20}], growthDesc: "안정적인 리더십 발휘 단계",
+                history: [ { date:'20.01', title:'DX PM', desc:'스마트팩토리' } ],
+                kpiTotal: 95, kpiDesc: "프로젝트 납기 100% 준수",
+                coreValues: [ {n:'Customer', s:90}, {n:'Sustainability', s:85}, {n:'Agility', s:88}, {n:'Passion', s:92}, {n:'Collaboration', s:98} ],
+                currRole: 'Project Manager', goalRole: 'Center Leader', compGoals: ['PMP 갱신', '애자일 코칭 자격'],
+                projectLog: { succ: "스마트팩토리 예산 15% 절감", imp: "초기 기술 검토 단계 리스크 관리" }
+            },
+            '박재원': {
+                job: 'Software Eng.', avatar: '👨🏻‍💻', years: '3년',
+                keywords: ['#개발', '#클라우드', '#성실'],
+                skills: [ { name: 'React', per: 75, color: '#551D83' }, { name: 'AWS', per: 60, color: '#70C0E6' } ],
+                strengths: ['빠른 프로토타이핑', '성실한 태도'], weaknesses: ['아키텍처 설계', '코드 리뷰 참여'],
+                growthPath: "M10 90 L 100 80 L 290 40", growthPoints: [{x:10,y:90}, {x:100,y:80}, {x:290,y:40}], growthDesc: "초기 적응 후 가파른 성장",
+                history: [ { date:'21.02', title:'입사', desc:'플랫폼 개발' } ],
+                kpiTotal: 85, kpiDesc: "신규 기능 3종 배포 완료",
+                coreValues: [ {n:'Customer', s:85}, {n:'Sustainability', s:80}, {n:'Agility', s:85}, {n:'Passion', s:90}, {n:'Collaboration', s:88} ],
+                currRole: 'Software Eng.', goalRole: 'Architect', compGoals: ['Kubernetes 마스터', 'MSA 전환 경험'],
+                projectLog: { succ: "사용자 요청 기능 2주내 배포", imp: "테스트 코드 커버리지 부족" }
+            },
+            '하유림': {
+                job: 'UX Designer', avatar: '👩🏻‍🎨', years: '4년',
+                keywords: ['#UX', '#디자인', '#공감'],
+                skills: [ { name: 'UI Design', per: 88, color: '#D7177B' }, { name: 'Figma', per: 90, color: '#551D83' } ],
+                strengths: ['사용자 중심 사고', '창의적 디자인'], weaknesses: ['데이터 기반 설득'],
+                growthPath: "M10 90 C 100 90 150 40 290 30", growthPoints: [{x:10,y:90}, {x:290,y:30}], growthDesc: "디자인 시스템 구축으로 전문성 확대",
+                history: [ { date:'19.11', title:'입사', desc:'디자인센터' } ],
+                kpiTotal: 90, kpiDesc: "디자인 시스템 1.0 배포",
+                coreValues: [ {n:'Customer', s:98}, {n:'Sustainability', s:80}, {n:'Agility', s:85}, {n:'Passion', s:90}, {n:'Collaboration', s:92} ],
+                currRole: 'UX Designer', goalRole: 'Product Designer', compGoals: ['UX Writing', '데이터 시각화'],
+                projectLog: { succ: "개발-디자인 협업 효율 30% 증가", imp: "로그 데이터 기반 근거 부족" }
+            }
+        };
+
+        let currentMember = null;
+        let selectedEvidence = { str: '', imp: '', gro: '' };
+        let toneProfile = { direct: true, task: true };
+
+        // --- 로그인 ---
+        function checkLogin() {
+            const id = document.getElementById('login-id').value;
+            const pw = document.getElementById('login-pw').value;
+            if(id === 'HEROSB' && pw === 'LGCHEM') {
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('main-app').style.display = 'flex';
+                showDashboard();
+            } else {
+                alert('ID: HEROSB, PW: LGCHEM 입니다.');
+            }
+        }
+        document.getElementById('login-pw').addEventListener('keypress', (e) => { if(e.key==='Enter') checkLogin(); });
+
+        // --- 네비게이션 ---
+        function hideAllViews() {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+        }
+        function showDashboard() { hideAllViews(); document.getElementById('view-dashboard').classList.add('active'); }
+        function showEval() { 
+            hideAllViews(); 
+            document.getElementById('view-evaluation').classList.add('active'); 
+            document.getElementById('menu-eval').classList.add('active');
+        }
+        function switchEvalTab(el) {
+            document.querySelectorAll('.sub-tab-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+        }
+        function showFeedbackList() {
+            hideAllViews();
+            document.getElementById('view-feedback-list').classList.add('active');
+            document.getElementById('menu-feedback').classList.add('active');
+            renderMembers();
+        }
+
+        // --- 피드백 (리스트) ---
+        function renderMembers() {
+            const container = document.getElementById('member-card-container');
+            container.innerHTML = '';
+            Object.keys(teamDB).forEach(name => {
+                const m = teamDB[name];
+                const card = document.createElement('div');
+                card.className = 'member-card';
+                card.onclick = () => showFeedbackDetail(name);
+                const tags = m.keywords.map(k => `<span class="mc-tag">${k}</span>`).join('');
+                card.innerHTML = `<div class="mc-avatar">${m.avatar}</div><div class="mc-name">${name}</div><div class="mc-role">${m.job} | ${m.years}</div><div class="mc-tags">${tags}</div>`;
+                container.appendChild(card);
+            });
+        }
+
+        // --- 피드백 (상세) ---
+        function showFeedbackDetail(name) {
+            currentMember = teamDB[name];
+            hideAllViews();
+            document.getElementById('view-feedback-detail').classList.add('active');
+            document.getElementById('menu-feedback').classList.add('active');
+            
+            document.getElementById('detail-member-name').innerText = name;
+            
+            // [Tab 1: Basic]
+            document.getElementById('p-avatar').innerText = currentMember.avatar;
+            document.getElementById('p-name').innerText = name;
+            document.getElementById('p-job').innerText = `${currentMember.job} | ${currentMember.years}`;
+            document.getElementById('p-keywords').innerHTML = currentMember.keywords.map(k => `<span class="mc-tag">${k}</span>`).join('');
+            document.getElementById('p-info-list').innerHTML = `<div>입사일: ${currentMember.history[currentMember.history.length-1].date}</div>`;
+            
+            document.getElementById('p-skills').innerHTML = currentMember.skills.map(s => 
+                `<div class="skill-row"><div class="skill-info"><span>${s.name}</span><span>${s.per}%</span></div><div class="progress-track"><div class="progress-fill" style="width:${s.per}%; background:${s.color}"></div></div></div>`
+            ).join('');
+            document.getElementById('p-strengths').innerHTML = currentMember.strengths.map(s => `<div class="swot-item">+ ${s}</div>`).join('');
+            document.getElementById('p-weaknesses').innerHTML = currentMember.weaknesses.map(s => `<div class="swot-item">- ${s}</div>`).join('');
+            
+            document.getElementById('growth-path').setAttribute('d', currentMember.growthPath);
+            document.getElementById('growth-points').innerHTML = currentMember.growthPoints.map(p => `<circle cx="${p.x}" cy="${p.y}" r="4" fill="#fff" stroke="var(--color-purple)" stroke-width="2"/>`).join('');
+            document.getElementById('growth-desc').innerText = currentMember.growthDesc;
+            
+            document.getElementById('p-history').innerHTML = currentMember.history.map(h => 
+                `<div class="timeline-item"><div class="tl-date">${h.date}</div><div class="tl-title">${h.title}</div><div class="tl-desc">${h.desc}</div></div>`
+            ).join('');
+
+            // [Tab 2: Perf]
+            const finalScore = currentMember.kpiTotal * 0.8 + currentMember.coreValues.reduce((a,b)=>a+b.s,0)/5 * 0.2;
+            document.getElementById('final-grade').innerText = finalScore >= 90 ? 'S' : (finalScore >= 80 ? 'A' : 'B');
+            document.getElementById('sum-kpi').innerText = currentMember.kpiTotal;
+            document.getElementById('sum-cv').innerText = Math.round(currentMember.coreValues.reduce((a,b)=>a+b.s,0)/5);
+            
+            document.getElementById('kpi-val').innerText = currentMember.kpiTotal + '%';
+            document.getElementById('kpi-desc').innerText = currentMember.kpiDesc;
+            const dashOffset = 339 - (339 * currentMember.kpiTotal / 100);
+            setTimeout(() => document.getElementById('kpi-donut').style.strokeDashoffset = dashOffset, 100);
+            
+            document.getElementById('cv-list').innerHTML = currentMember.coreValues.map(c => 
+                `<div style="margin-bottom:8px; font-size:13px;"><div style="display:flex; justify-content:space-between; margin-bottom:2px;"><span>${c.n}</span><strong>${c.s}</strong></div><div style="height:4px; background:#eee; border-radius:2px;"><div style="width:${c.s}%; height:100%; background:var(--color-teal); border-radius:2px;"></div></div></div>`
+            ).join('');
+            
+            document.getElementById('dev-current').innerText = currentMember.currRole;
+            document.getElementById('dev-goal').innerText = currentMember.goalRole;
+            document.getElementById('dev-comp-goals').innerHTML = `<ul>${currentMember.compGoals.map(g => `<li>${g}</li>`).join('')}</ul>`;
+
+            // Reset UI
+            switchDetailTab('basic', document.querySelector('.detail-tab'));
+            document.getElementById('input-str').value = '';
+            document.getElementById('input-imp').value = '';
+            document.getElementById('input-gro').value = '';
+            document.getElementById('final-feedback-text').value = '';
+            document.getElementById('ai-evidence-section').classList.remove('active');
+            selectedEvidence = { str:'', imp:'', gro:'' };
+        }
+
+        function switchDetailTab(tabName, el) {
+            document.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            document.querySelectorAll('.detail-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('dt-' + tabName).classList.add('active');
+        }
+
+        // --- AI Logic ---
+        function generateEvidence() {
+            if(!document.getElementById('input-str').value || !document.getElementById('input-imp').value || !document.getElementById('input-gro').value) {
+                alert('키워드를 모두 입력해주세요.'); return;
+            }
+            // 근거 생성
+            document.getElementById('ev-text-str').innerText = `"${currentMember.projectLog.succ}" 성과를 보면, 입력하신 강점이 잘 드러납니다.`;
+            document.getElementById('ev-text-imp').innerText = `"${currentMember.projectLog.imp}" 사례에서 보완이 필요해 보입니다.`;
+            document.getElementById('ev-text-gro').innerText = `"${currentMember.goalRole}"로 성장하기 위해 꼭 필요한 부분입니다.`;
+            
+            document.getElementById('ai-evidence-section').classList.add('active');
+            createFinalMsg();
+        }
+
+        function selectEvidence(type) {
+            const box = document.getElementById('ev-box-'+type);
+            const text = document.getElementById('ev-text-'+type).innerText;
+            if(selectedEvidence[type]) {
+                selectedEvidence[type] = ''; box.classList.remove('selected');
+            } else {
+                selectedEvidence[type] = text; box.classList.add('selected');
+            }
+            createFinalMsg();
+        }
+
+        function setTone(type, el) {
+            const isDirect = type === 'direct' || type === 'indirect';
+            if(isDirect) toneProfile.direct = (type === 'direct');
+            else toneProfile.task = (type === 'task');
+            
+            el.parentElement.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            createFinalMsg();
+        }
+
+        function createFinalMsg() {
+            const str = document.getElementById('input-str').value;
+            const imp = document.getElementById('input-imp').value;
+            const gro = document.getElementById('input-gro').value;
+            
+            let msg = toneProfile.direct ? "금년도 성과에 대해 피드백 드립니다.\n\n" : "올 한 해 정말 고생 많으셨습니다. 성과에 대해 이야기 나누고 싶습니다.\n\n";
+            
+            msg += `1. 강점\n${str} 부분이 탁월합니다.`;
+            if(selectedEvidence.str) msg += ` 특히 ${selectedEvidence.str}`;
+            msg += "\n\n";
+
+            msg += `2. 보완점\n${imp} 부분은 개선이 필요합니다.`;
+            if(selectedEvidence.imp) msg += ` ${selectedEvidence.imp}`;
+            msg += "\n\n";
+
+            msg += `3. 성장 제언\n${gro} 방향으로 역량을 키워봅시다.`;
+            if(selectedEvidence.gro) msg += ` ${selectedEvidence.gro}`;
+            
+            document.getElementById('final-feedback-text').value = msg;
+        }
+    </script>
+</body>
+</html>
