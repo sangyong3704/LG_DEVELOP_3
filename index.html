@@ -256,6 +256,7 @@
         .pref-item.highlight { border-color: var(--color-purple); background: #f9f4ff; color: var(--color-purple); font-weight: 700; }
         .pref-label { font-size: 12px; color: #888; }
         .pref-val { font-size: 14px; }
+        .pref-help { font-size: 11px; color: #999; line-height: 1.4; }
         .pref-desc { font-size: 13px; color: #555; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 8px; line-height: 1.5; }
 
         .fb-input-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
@@ -276,11 +277,52 @@
         .tone-group { flex: 1; }
         .tone-btn-group { display: flex; background: #f5f5f5; border-radius: 8px; padding: 4px; margin-top: 8px; }
         .tone-btn { flex: 1; text-align: center; padding: 8px; font-size: 13px; cursor: pointer; border-radius: 6px; color: #888; transition: 0.2s; font-weight: 500; }
-        .tone-btn.active { background: #fff; color: var(--color-purple); font-weight: 700; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .tone-btn.active { background: #fff; color: #551D83; font-weight: 700; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .final-msg-box { width: 100%; height: 200px; border: 1px solid var(--color-purple); border-radius: 12px; padding: 20px; font-size: 15px; line-height: 1.6; resize: none; outline: none; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
+
+        /* ---------------------------------------------------------
+           3. 반응형 (모바일 시연용)
+           --------------------------------------------------------- */
+        @media (max-width: 768px) {
+            body { overflow: auto; }
+
+            .main-header {
+                padding: 0 16px;
+            }
+            .search-box {
+                width: 180px;
+            }
+            .view-section {
+                padding: 20px 16px;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .grid-basic {
+                grid-template-columns: 1fr;
+            }
+            .grid-half {
+                grid-template-columns: 1fr;
+            }
+            .grid-career-growth {
+                grid-template-columns: 1fr;
+            }
+            .member-grid {
+                grid-template-columns: 1fr;
+            }
+            .detail-tabs {
+                gap: 24px;
+            }
+            .detail-tab {
+                font-size: 16px;
+            }
+            .tone-controls {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
@@ -306,7 +348,6 @@
     <div id="main-app">
         <header class="main-header">
             <div class="header-logo" onclick="showDashboard()">CHEMILEADER</div>
-            <!-- [수정] 검색창에 id 부여 -->
             <input type="text" id="top-search-input" class="search-box" placeholder="팀원, 부서 검색">
         </header>
 
@@ -345,7 +386,7 @@
                                 </div>
                             </div>
 
-                            <!-- [NEW] 금주 팀원 특이사항 (Care Check) -->
+                            <!-- 금주 팀원 특이사항 (Care Check) -->
                             <div class="dash-info-block">
                                 <div class="dash-info-title" style="color:#d97706;">📢 금주 팀원 특이사항</div>
                                 <div class="dash-issue-list">
@@ -386,11 +427,11 @@
 
                         <!-- 오른쪽 사이드 카드: 응원 및 메모 -->
                         <div style="display: flex; flex-direction: column; gap: 24px; height:100%;">
-                            <!-- [NEW] Quick Memo -->
+                            <!-- Quick Memo -->
                             <div class="dash-card" style="flex:0 auto; padding: 20px;">
                                 <div style="font-size:14px; font-weight:700; color:#555; margin-bottom:10px;">📒 Quick Memo</div>
-                                <textarea class="memo-area" placeholder="팀원들에게 전달할 내용이나 아이디어를 적어두세요."></textarea>
-                                <button class="memo-btn">메모 저장</button>
+                                <textarea class="memo-area" id="quick-memo" placeholder="팀원들에게 전달할 내용이나 아이디어를 적어두세요."></textarea>
+                                <button class="memo-btn" onclick="saveMemo()">메모 저장</button>
                             </div>
 
                             <!-- 응원 카드 -->
@@ -544,9 +585,21 @@
                             <div class="preference-card" id="feedback-preference-section">
                                 <div class="pref-header">💡 피드백 성향 가이드</div>
                                 <div class="pref-grid">
-                                    <div class="pref-item" id="pref-directness"><span class="pref-label">화법</span><strong class="pref-val" id="val-directness"></strong></div>
-                                    <div class="pref-item" id="pref-focus"><span class="pref-label">관점</span><strong class="pref-val" id="val-focus"></strong></div>
-                                    <div class="pref-item" id="pref-tone"><span class="pref-label">어조</span><strong class="pref-val" id="val-tone"></strong></div>
+                                    <div class="pref-item" id="pref-directness">
+                                        <span class="pref-label">화법</span>
+                                        <strong class="pref-val" id="val-directness"></strong>
+                                        <small class="pref-help" id="help-directness"></small>
+                                    </div>
+                                    <div class="pref-item" id="pref-focus">
+                                        <span class="pref-label">관점</span>
+                                        <strong class="pref-val" id="val-focus"></strong>
+                                        <small class="pref-help" id="help-focus"></small>
+                                    </div>
+                                    <div class="pref-item" id="pref-tone">
+                                        <span class="pref-label">어조</span>
+                                        <strong class="pref-val" id="val-tone"></strong>
+                                        <small class="pref-help" id="help-tone"></small>
+                                    </div>
                                 </div>
                                 <div class="pref-desc" id="pref-guide-text">AI가 해당 성향을 고려하여 피드백 초안을 작성합니다.</div>
                             </div>
@@ -711,6 +764,7 @@
             if(id === 'HEROSB' && pw === 'LGCHEM') {
                 document.getElementById('login-page').style.display = 'none';
                 document.getElementById('main-app').style.display = 'flex';
+                loadMemo();
                 showDashboard();
             } else {
                 alert('ID: HEROSB, PW: LGCHEM 입니다.');
@@ -718,21 +772,28 @@
         }
         document.getElementById('login-pw').addEventListener('keypress', (e) => { if(e.key==='Enter') checkLogin(); });
 
+        // --- Quick Memo localStorage ---
+        function saveMemo() {
+            const val = document.getElementById('quick-memo').value;
+            localStorage.setItem('chemileader_quickMemo', val);
+            alert('메모가 저장되었습니다.');
+        }
+        function loadMemo() {
+            const saved = localStorage.getItem('chemileader_quickMemo');
+            if (saved) document.getElementById('quick-memo').value = saved;
+        }
+
         // --- 상단바 검색 기능 ---
         document.getElementById('top-search-input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 const val = this.value.trim();
                 if (!val) return;
 
-                // 팀원 이름 검색 (부분 일치)
                 const foundName = Object.keys(teamDB).find(name => name.includes(val));
                 
                 if (foundName) {
-                    // 피드백 탭으로 이동하고 해당 팀원의 상세 정보 표시
-                    showFeedback(); // 먼저 피드백 탭 활성화 및 리스트 렌더링
-                    showFeedbackDetail(foundName); // 상세 페이지로 이동
-                    
-                    // 검색창 초기화
+                    showFeedback();
+                    showFeedbackDetail(foundName);
                     this.value = '';
                 } else {
                     alert('해당 팀원을 찾을 수 없습니다.');
@@ -799,6 +860,23 @@
             });
         }
 
+        // --- 성향 설명 텍스트 ---
+        function getDirectnessHelp(v) {
+            if (v === '직설적') return '돌려 말하기보다, 핵심을 명확하게 짚어주는 피드백을 선호합니다.';
+            if (v === '완곡함') return '먼저 공감과 격려를 듣고 나서, 개선점을 제안받을 때 안정감을 느낍니다.';
+            return '';
+        }
+        function getFocusHelp(v) {
+            if (v === '과업 중심') return '성과, 목표, 구체적인 업무 결과에 초점을 둔 피드백을 선호합니다.';
+            if (v === '관계 중심') return '관계, 감정, 팀워크에 대한 언급이 함께 있는 피드백을 선호합니다.';
+            return '';
+        }
+        function getToneHelp(v) {
+            if (v === '논리적') return '사실과 데이터, 근거가 잘 정리된 메시지에 설득을 느끼는 스타일입니다.';
+            if (v === '부드러움') return '따뜻한 표현과 정서적 지지가 담긴 어조에서 편안함을 느끼는 스타일입니다.';
+            return '';
+        }
+
         // --- 피드백 (상세) ---
         function showFeedbackDetail(name) {
             currentMember = teamDB[name];
@@ -806,7 +884,8 @@
             document.getElementById('view-feedback-detail').classList.add('active');
 
             document.querySelectorAll('.member-list-item').forEach(item => item.classList.remove('active'));
-            document.getElementById('ml-' + name).classList.add('active');
+            const li = document.getElementById('ml-' + name);
+            if (li) li.classList.add('active');
             document.getElementById('detail-member-name').innerText = name;
 
             // [Tab 1: Basic]
@@ -855,6 +934,9 @@
             document.getElementById('val-directness').innerText = pref.directness;
             document.getElementById('val-focus').innerText = pref.focus;
             document.getElementById('val-tone').innerText = pref.tone;
+            document.getElementById('help-directness').innerText = getDirectnessHelp(pref.directness);
+            document.getElementById('help-focus').innerText = getFocusHelp(pref.focus);
+            document.getElementById('help-tone').innerText = getToneHelp(pref.tone);
             document.getElementById('pref-guide-text').innerText = `AI가 ${name}님의 성향(${pref.directness}, ${pref.focus}, ${pref.tone})을 고려하여 맞춤형 피드백 초안을 작성합니다.`;
             
             document.querySelectorAll('.pref-item').forEach(el => el.classList.add('highlight')); 
@@ -891,12 +973,19 @@
             if(!document.getElementById('input-str').value || !document.getElementById('input-imp').value || !document.getElementById('input-gro').value) {
                 alert('키워드를 모두 입력해주세요.'); return;
             }
-            document.getElementById('ev-text-str').innerText = `"${currentMember.projectLog.succ}" 성과를 보면, 입력하신 강점이 잘 드러납니다.`;
-            document.getElementById('ev-text-imp').innerText = `"${currentMember.projectLog.imp}" 사례에서 보완이 필요해 보입니다.`;
-            document.getElementById('ev-text-gro').innerText = `"${currentMember.goalRole}"로 성장하기 위해 꼭 필요한 부분입니다.`;
-            
+
+            // 간단한 로딩 느낌
+            document.getElementById('ev-text-str').innerText = '강점 관련 데이터를 분석하는 중입니다...';
+            document.getElementById('ev-text-imp').innerText = '보완점 관련 사례를 찾는 중입니다...';
+            document.getElementById('ev-text-gro').innerText = '성장 방향 제안을 준비하는 중입니다...';
             document.getElementById('ai-evidence-section').classList.add('active');
-            createFinalMsg();
+
+            setTimeout(() => {
+                document.getElementById('ev-text-str').innerText = `"${currentMember.projectLog.succ}" 성과를 보면, 입력하신 강점이 잘 드러납니다.`;
+                document.getElementById('ev-text-imp').innerText = `"${currentMember.projectLog.imp}" 사례에서 보완이 필요해 보입니다.`;
+                document.getElementById('ev-text-gro').innerText = `"${currentMember.goalRole}"로 성장하기 위해 꼭 필요한 부분입니다.`;
+                createFinalMsg();
+            }, 700);
         }
 
         function selectEvidence(type) {
