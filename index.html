@@ -125,27 +125,18 @@
         .dash-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #f5f5f5; }
         .dash-welcome { font-size: 26px; font-weight: 700; color: #333; margin-bottom: 8px; }
         .dash-sub { color: #666; font-size: 15px; }
-        
         .dash-info-block { margin-bottom: 30px; }
         .dash-info-title { font-size: 15px; font-weight: 700; color: var(--color-purple); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .dash-info-content { font-size: 18px; font-weight: 600; color: #333; line-height: 1.4; }
         
-        /* 프로젝트 리스트 */
         .dash-project-list { display: flex; flex-direction: column; gap: 10px; }
-        .dash-project-item { 
-            background: #f9f9f9; padding: 12px 16px; border-radius: 8px; font-size: 14px; 
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        .dash-project-item { background: #f9f9f9; padding: 12px 16px; border-radius: 8px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
         .proj-status { font-size: 12px; padding: 4px 8px; border-radius: 4px; font-weight: 700; }
         .status-ongoing { background: #e3f2fd; color: #0277bd; }
         .status-urgent { background: #ffebee; color: #c62828; }
 
-        /* 팀원 케어 체크 */
         .dash-issue-list { display: flex; flex-direction: column; gap: 10px; }
-        .issue-item {
-            padding: 14px; border: 1px solid #eee; border-radius: 10px; display: flex; align-items: center; gap: 12px;
-            background: #fff; transition: 0.2s;
-        }
+        .issue-item { padding: 14px; border: 1px solid #eee; border-radius: 10px; display: flex; align-items: center; gap: 12px; background: #fff; transition: 0.2s; }
         .issue-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .issue-icon { font-size: 20px; }
         .issue-content { flex: 1; }
@@ -153,20 +144,12 @@
         .issue-desc { font-size: 13px; color: #666; }
         .issue-tag { font-size: 11px; padding: 4px 8px; border-radius: 12px; background: #fef3c7; color: #d97706; font-weight: 600; }
 
-        /* Quick Memo */
-        .memo-area { 
-            width: 100%; height: 150px; border: none; background: #fff9c4; padding: 20px; 
-            border-radius: 8px; resize: none; font-size: 14px; line-height: 1.6; color: #555; 
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 10px;
-        }
+        .memo-area { width: 100%; height: 150px; border: none; background: #fff9c4; padding: 20px; border-radius: 8px; resize: none; font-size: 14px; line-height: 1.6; color: #555; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 10px; }
         .memo-area:focus { outline: none; }
         .memo-btn { width: 100%; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: 600; color: #666; }
         .memo-btn:hover { background: #f5f5f5; }
 
-        .cheer-card { 
-            background: linear-gradient(135deg, #f0faff 0%, #ffffff 100%); 
-            border: 1px solid #cceeff; text-align: center; align-items: center; justify-content: center; flex: 1;
-        }
+        .cheer-card { background: linear-gradient(135deg, #f0faff 0%, #ffffff 100%); border: 1px solid #cceeff; text-align: center; align-items: center; justify-content: center; flex: 1; }
         .cheer-icon { font-size: 50px; margin-bottom: 16px; animation: float 3s infinite ease-in-out; }
         .cheer-text { font-size: 16px; font-weight: 700; color: var(--color-teal); line-height: 1.6; }
         
@@ -248,16 +231,20 @@
         .goal-item { padding: 12px; background: #f9f9f9; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #444; line-height: 1.5; display: flex; align-items: flex-start; gap: 8px; }
         .goal-item::before { content:'•'; color:var(--color-teal); font-weight:bold; }
 
-        /* Feedback Tab Elements */
-        .preference-card { background: linear-gradient(135deg, #f0faff 0%, #ffffff 100%); border: 1px solid var(--color-lightblue); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
-        .pref-header { font-size: 16px; font-weight: 700; color: var(--color-teal); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .pref-grid { display: flex; gap: 12px; margin-bottom: 16px; }
-        .pref-item { flex: 1; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .pref-item.highlight { border-color: var(--color-purple); background: #f9f4ff; color: var(--color-purple); font-weight: 700; }
-        .pref-label { font-size: 12px; color: #888; }
-        .pref-val { font-size: 14px; }
-        .pref-help { font-size: 11px; color: #999; line-height: 1.4; }
-        .pref-desc { font-size: 13px; color: #555; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 8px; line-height: 1.5; }
+        /* [수정] Feedback Tab - Preference Card (상세 성향 추가) */
+        .preference-card { background: linear-gradient(135deg, #f0faff 0%, #ffffff 100%); border: 1px solid var(--color-lightblue); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+        .pref-header { font-size: 18px; font-weight: 700; color: var(--color-teal); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .pref-grid { display: flex; gap: 16px; margin-bottom: 16px; }
+        .pref-item { 
+            flex: 1; background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 16px; text-align: center; 
+            display: flex; flex-direction: column; align-items: center; gap: 8px; transition: 0.2s;
+        }
+        .pref-item.highlight { border-color: var(--color-purple); background: #f9f4ff; box-shadow: 0 4px 12px rgba(85,29,131,0.05); }
+        .pref-icon { font-size: 24px; margin-bottom: 4px; }
+        .pref-label { font-size: 12px; color: #888; font-weight: 500; }
+        .pref-val { font-size: 16px; font-weight: 700; color: var(--color-purple); }
+        .pref-sub-desc { font-size: 12px; color: #666; margin-top: 4px; background: rgba(0,0,0,0.03); padding: 6px 10px; border-radius: 6px; width: 100%; word-break: keep-all; line-height: 1.4; }
+        .pref-guide-box { font-size: 14px; color: #555; background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid #eee; display: flex; align-items: center; gap: 8px; }
 
         .fb-input-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
         .fb-card-small { background: #fcfcfc; border: 1px solid #eee; padding: 16px; border-radius: 12px; }
@@ -277,51 +264,45 @@
         .tone-group { flex: 1; }
         .tone-btn-group { display: flex; background: #f5f5f5; border-radius: 8px; padding: 4px; margin-top: 8px; }
         .tone-btn { flex: 1; text-align: center; padding: 8px; font-size: 13px; cursor: pointer; border-radius: 6px; color: #888; transition: 0.2s; font-weight: 500; }
-        .tone-btn.active { background: #fff; color: #551D83; font-weight: 700; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .tone-btn.active { background: #fff; color: var(--color-purple); font-weight: 700; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .final-msg-box { width: 100%; height: 200px; border: 1px solid var(--color-purple); border-radius: 12px; padding: 20px; font-size: 15px; line-height: 1.6; resize: none; outline: none; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
 
-        /* ---------------------------------------------------------
-           3. 반응형 (모바일 시연용)
-           --------------------------------------------------------- */
+        /* [수정] 모바일 반응형 레이아웃 (Responsive) */
         @media (max-width: 768px) {
-            body { overflow: auto; }
+            .app-body { flex-direction: column; overflow-y: auto; }
+            
+            /* 사이드바 -> 상단 메뉴바로 변경 */
+            .main-sidebar {
+                width: 100%; height: auto; flex-direction: row; padding: 10px; border-right: none; border-bottom: 1px solid #e0e0e0;
+                justify-content: space-around; align-items: center; flex-shrink: 0;
+            }
+            .leader-profile { display: none; } /* 공간 절약을 위해 프로필 숨김 */
+            .main-menu { display: flex; margin-top: 0; padding: 0; width: 100%; justify-content: space-around; }
+            .menu-item { margin-bottom: 0; padding: 10px; font-size: 14px; }
+            .member-list-sidebar { display: none !important; } /* 모바일에서는 사이드 리스트 숨김 (화면이 좁으므로) */
 
-            .main-header {
-                padding: 0 16px;
+            /* 컨텐츠 영역 */
+            .content-container { overflow-y: visible; } /* Body 스크롤 사용 */
+            .detail-content-area { padding: 20px; }
+            .view-section { padding: 20px; }
+
+            /* 그리드 1단 변경 */
+            .dashboard-grid, .grid-basic, .grid-half, .grid-career-growth, .fb-input-grid, .evidence-grid, .pref-grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px;
             }
-            .search-box {
-                width: 180px;
-            }
-            .view-section {
-                padding: 20px 16px;
-            }
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-            .grid-basic {
-                grid-template-columns: 1fr;
-            }
-            .grid-half {
-                grid-template-columns: 1fr;
-            }
-            .grid-career-growth {
-                grid-template-columns: 1fr;
-            }
-            .member-grid {
-                grid-template-columns: 1fr;
-            }
-            .detail-tabs {
-                gap: 24px;
-            }
-            .detail-tab {
-                font-size: 16px;
-            }
-            .tone-controls {
-                flex-direction: column;
-            }
+            
+            /* 상세 탭 조정 */
+            .detail-tabs { gap: 20px; }
+            .detail-tab { font-size: 14px; padding: 14px 6px; }
+            
+            /* 기타 요소 크기 조정 */
+            .grade-big { font-size: 50px; }
+            .grade-info-score { font-size: 22px; }
+            .final-msg-box { height: 150px; }
         }
     </style>
 </head>
@@ -348,7 +329,7 @@
     <div id="main-app">
         <header class="main-header">
             <div class="header-logo" onclick="showDashboard()">CHEMILEADER</div>
-            <input type="text" id="top-search-input" class="search-box" placeholder="팀원, 부서 검색">
+            <input type="text" class="search-box" placeholder="팀원, 부서 검색">
         </header>
 
         <div class="app-body">
@@ -386,7 +367,7 @@
                                 </div>
                             </div>
 
-                            <!-- 금주 팀원 특이사항 (Care Check) -->
+                            <!-- 금주 팀원 특이사항 -->
                             <div class="dash-info-block">
                                 <div class="dash-info-title" style="color:#d97706;">📢 금주 팀원 특이사항</div>
                                 <div class="dash-issue-list">
@@ -425,16 +406,13 @@
                             </div>
                         </div>
 
-                        <!-- 오른쪽 사이드 카드: 응원 및 메모 -->
+                        <!-- 오른쪽 사이드 카드 -->
                         <div style="display: flex; flex-direction: column; gap: 24px; height:100%;">
-                            <!-- Quick Memo -->
                             <div class="dash-card" style="flex:0 auto; padding: 20px;">
                                 <div style="font-size:14px; font-weight:700; color:#555; margin-bottom:10px;">📒 Quick Memo</div>
-                                <textarea class="memo-area" id="quick-memo" placeholder="팀원들에게 전달할 내용이나 아이디어를 적어두세요."></textarea>
-                                <button class="memo-btn" onclick="saveMemo()">메모 저장</button>
+                                <textarea class="memo-area" placeholder="팀원들에게 전달할 내용이나 아이디어를 적어두세요."></textarea>
+                                <button class="memo-btn">메모 저장</button>
                             </div>
-
-                            <!-- 응원 카드 -->
                             <div class="dash-card cheer-card">
                                 <div class="cheer-icon">🍀</div>
                                 <div class="cheer-text">
@@ -582,26 +560,32 @@
 
                         <!-- 3. 전달 (피드백) -->
                         <div id="dt-feedback" class="detail-content">
+                            <!-- [수정] 피드백 성향 카드 고도화 -->
                             <div class="preference-card" id="feedback-preference-section">
                                 <div class="pref-header">💡 피드백 성향 가이드</div>
                                 <div class="pref-grid">
                                     <div class="pref-item" id="pref-directness">
+                                        <div class="pref-icon" id="icon-directness"></div>
                                         <span class="pref-label">화법</span>
                                         <strong class="pref-val" id="val-directness"></strong>
-                                        <small class="pref-help" id="help-directness"></small>
+                                        <small class="pref-sub-desc" id="desc-directness"></small>
                                     </div>
                                     <div class="pref-item" id="pref-focus">
+                                        <div class="pref-icon" id="icon-focus"></div>
                                         <span class="pref-label">관점</span>
                                         <strong class="pref-val" id="val-focus"></strong>
-                                        <small class="pref-help" id="help-focus"></small>
+                                        <small class="pref-sub-desc" id="desc-focus"></small>
                                     </div>
                                     <div class="pref-item" id="pref-tone">
+                                        <div class="pref-icon" id="icon-tone"></div>
                                         <span class="pref-label">어조</span>
                                         <strong class="pref-val" id="val-tone"></strong>
-                                        <small class="pref-help" id="help-tone"></small>
+                                        <small class="pref-sub-desc" id="desc-tone"></small>
                                     </div>
                                 </div>
-                                <div class="pref-desc" id="pref-guide-text">AI가 해당 성향을 고려하여 피드백 초안을 작성합니다.</div>
+                                <div class="pref-guide-box">
+                                    <span>🤖</span> <span id="pref-guide-text">AI가 팀원의 성향을 고려하여 피드백 초안을 작성합니다.</span>
+                                </div>
                             </div>
 
                             <div class="card">
@@ -674,7 +658,17 @@
     </div>
 
     <script>
-        // --- 데이터베이스 (Full Data) ---
+        // --- 성향 가이드 매핑 데이터 ---
+        const styleMap = {
+            '직설적': { icon: '🎯', desc: '핵심부터 명확하게 전달하는 것을 선호합니다.' },
+            '완곡함': { icon: '🧸', desc: '공감과 격려를 먼저 들을 때 안정감을 느낍니다.' },
+            '과업 중심': { icon: '📊', desc: '구체적인 성과와 데이터 위주의 피드백을 선호합니다.' },
+            '관계 중심': { icon: '🤝', desc: '팀워크와 태도에 대한 인정을 중요하게 생각합니다.' },
+            '논리적': { icon: '⚖️', desc: '인과관계와 근거가 명확한 설명을 선호합니다.' },
+            '부드러움': { icon: '🌿', desc: '강압적이지 않고 제안하는 투의 어조를 선호합니다.' }
+        };
+
+        // --- 데이터베이스 ---
         const teamDB = {
             '박태희': {
                 job: 'Data Scientist', avatar: '👩🏻‍💻', years: '5년 3개월',
@@ -682,7 +676,7 @@
                 feedbackStyle: { directness: '직설적', focus: '과업 중심', tone: '논리적' },
                 skills: [ { name: 'Python', per: 90, color: '#D7177B' }, { name: 'ML', per: 75, color: '#551D83' } ],
                 strengths: ['데이터 인사이트 도출', '새로운 툴 학습 빠름'], weaknesses: ['발표 스킬 부족', '멀티태스킹 어려움'],
-                growthPath: "M30 90 Q 150 10 270 50", growthPoints: [{x:30,y:90}, {x:150,y:40}, {x:270,y:50}], growthDesc: "최근 분석 역량이 급격히 상승함",
+                growthPath: "M20 90 Q 150 30 280 50", growthPoints: [{x:20,y:90}, {x:150,y:30}, {x:280,y:50}], growthDesc: "최근 분석 역량이 급격히 상승함",
                 history: [ { date:'23.01', title:'DX팀 합류', desc:'데이터 분석 리드' }, { date:'19.01', title:'입사', desc:'생산기술팀' } ],
                 kpiTotal: 92, kpiDesc: "데이터 파이프라인 구축 완료 (120% 달성)",
                 coreValues: [ {n:'Customer', s:95}, {n:'Sustainability', s:85}, {n:'Agility', s:90}, {n:'Passion', s:92}, {n:'Collaboration', s:80} ],
@@ -697,7 +691,7 @@
                 feedbackStyle: { directness: '완곡함', focus: '과업 중심', tone: '논리적' },
                 skills: [ { name: 'Deep Learning', per: 95, color: '#551D83' }, { name: 'CV', per: 80, color: '#D7177B' } ],
                 strengths: ['최신 논문 구현 능력', '알고리즘 최적화'], weaknesses: ['비즈니스 적용 관점', '문서화 습관'],
-                growthPath: "M30 90 Q 150 50 270 20", growthPoints: [{x:30,y:90}, {x:150,y:53}, {x:270,y:20}], growthDesc: "꾸준한 우상향 성장세 유지",
+                growthPath: "M20 70 L 150 50 L 280 20", growthPoints: [{x:20,y:70}, {x:150,y:50}, {x:280,y:20}], growthDesc: "꾸준한 우상향 성장세 유지",
                 history: [ { date:'22.01', title:'선행연구팀', desc:'비전 검사' } ],
                 kpiTotal: 88, kpiDesc: "특허 2건 출원, 학회 발표",
                 coreValues: [ {n:'Customer', s:80}, {n:'Sustainability', s:75}, {n:'Agility', s:95}, {n:'Passion', s:90}, {n:'Collaboration', s:70} ],
@@ -712,7 +706,7 @@
                 feedbackStyle: { directness: '완곡함', focus: '관계 중심', tone: '부드러움' },
                 skills: [ { name: 'PM', per: 92, color: '#008785' }, { name: 'Communication', per: 88, color: '#551D83' } ],
                 strengths: ['강력한 추진력', '이해관계자 조율'], weaknesses: ['최신 기술 트렌드 이해', '실무 툴 활용'],
-                growthPath: "M30 40 Q 150 30 270 40", growthPoints: [{x:30,y:40}, {x:150,y:35}, {x:270,y:40}], growthDesc: "안정적인 리더십 발휘 단계",
+                growthPath: "M20 30 Q 150 20 280 20", growthPoints: [{x:20,y:30}, {x:150,y:20}, {x:280,y:20}], growthDesc: "안정적인 리더십 발휘 단계",
                 history: [ { date:'20.01', title:'DX PM', desc:'스마트팩토리' } ],
                 kpiTotal: 95, kpiDesc: "프로젝트 납기 100% 준수",
                 coreValues: [ {n:'Customer', s:90}, {n:'Sustainability', s:85}, {n:'Agility', s:88}, {n:'Passion', s:92}, {n:'Collaboration', s:98} ],
@@ -727,7 +721,7 @@
                 feedbackStyle: { directness: '직설적', focus: '과업 중심', tone: '부드러움' },
                 skills: [ { name: 'React', per: 75, color: '#551D83' }, { name: 'AWS', per: 60, color: '#70C0E6' } ],
                 strengths: ['빠른 프로토타이핑', '성실한 태도'], weaknesses: ['아키텍처 설계', '코드 리뷰 참여'],
-                growthPath: "M30 90 L 120 80 L 270 30", growthPoints: [{x:30,y:90}, {x:120,y:80}, {x:270,y:30}], growthDesc: "초기 적응 후 가파른 성장",
+                growthPath: "M20 90 L 120 80 L 280 40", growthPoints: [{x:20,y:90}, {x:120,y:80}, {x:280,y:40}], growthDesc: "초기 적응 후 가파른 성장",
                 history: [ { date:'21.02', title:'입사', desc:'플랫폼 개발' } ],
                 kpiTotal: 85, kpiDesc: "신규 기능 3종 배포 완료",
                 coreValues: [ {n:'Customer', s:85}, {n:'Sustainability', s:80}, {n:'Agility', s:85}, {n:'Passion', s:90}, {n:'Collaboration', s:88} ],
@@ -742,7 +736,7 @@
                 feedbackStyle: { directness: '완곡함', focus: '관계 중심', tone: '부드러움' },
                 skills: [ { name: 'UI Design', per: 88, color: '#D7177B' }, { name: 'Figma', per: 90, color: '#551D83' } ],
                 strengths: ['사용자 중심 사고', '창의적 디자인'], weaknesses: ['데이터 기반 설득', '개발 용어 이해'],
-                growthPath: "M30 90 Q 150 80 270 30", growthPoints: [{x:30,y:90}, {x:150,y:70}, {x:270,y:30}], growthDesc: "디자인 시스템 구축으로 전문성 확대",
+                growthPath: "M20 90 Q 150 80 280 30", growthPoints: [{x:20,y:90}, {x:150,y:70}, {x:280,y:30}], growthDesc: "디자인 시스템 구축으로 전문성 확대",
                 history: [ { date:'19.11', title:'입사', desc:'디자인센터' } ],
                 kpiTotal: 90, kpiDesc: "디자인 시스템 1.0 배포",
                 coreValues: [ {n:'Customer', s:98}, {n:'Sustainability', s:80}, {n:'Agility', s:85}, {n:'Passion', s:90}, {n:'Collaboration', s:92} ],
@@ -764,42 +758,12 @@
             if(id === 'HEROSB' && pw === 'LGCHEM') {
                 document.getElementById('login-page').style.display = 'none';
                 document.getElementById('main-app').style.display = 'flex';
-                loadMemo();
                 showDashboard();
             } else {
                 alert('ID: HEROSB, PW: LGCHEM 입니다.');
             }
         }
         document.getElementById('login-pw').addEventListener('keypress', (e) => { if(e.key==='Enter') checkLogin(); });
-
-        // --- Quick Memo localStorage ---
-        function saveMemo() {
-            const val = document.getElementById('quick-memo').value;
-            localStorage.setItem('chemileader_quickMemo', val);
-            alert('메모가 저장되었습니다.');
-        }
-        function loadMemo() {
-            const saved = localStorage.getItem('chemileader_quickMemo');
-            if (saved) document.getElementById('quick-memo').value = saved;
-        }
-
-        // --- 상단바 검색 기능 ---
-        document.getElementById('top-search-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const val = this.value.trim();
-                if (!val) return;
-
-                const foundName = Object.keys(teamDB).find(name => name.includes(val));
-                
-                if (foundName) {
-                    showFeedback();
-                    showFeedbackDetail(foundName);
-                    this.value = '';
-                } else {
-                    alert('해당 팀원을 찾을 수 없습니다.');
-                }
-            }
-        });
 
         // --- 네비게이션 ---
         function hideAllViews() {
@@ -860,23 +824,6 @@
             });
         }
 
-        // --- 성향 설명 텍스트 ---
-        function getDirectnessHelp(v) {
-            if (v === '직설적') return '돌려 말하기보다, 핵심을 명확하게 짚어주는 피드백을 선호합니다.';
-            if (v === '완곡함') return '먼저 공감과 격려를 듣고 나서, 개선점을 제안받을 때 안정감을 느낍니다.';
-            return '';
-        }
-        function getFocusHelp(v) {
-            if (v === '과업 중심') return '성과, 목표, 구체적인 업무 결과에 초점을 둔 피드백을 선호합니다.';
-            if (v === '관계 중심') return '관계, 감정, 팀워크에 대한 언급이 함께 있는 피드백을 선호합니다.';
-            return '';
-        }
-        function getToneHelp(v) {
-            if (v === '논리적') return '사실과 데이터, 근거가 잘 정리된 메시지에 설득을 느끼는 스타일입니다.';
-            if (v === '부드러움') return '따뜻한 표현과 정서적 지지가 담긴 어조에서 편안함을 느끼는 스타일입니다.';
-            return '';
-        }
-
         // --- 피드백 (상세) ---
         function showFeedbackDetail(name) {
             currentMember = teamDB[name];
@@ -884,8 +831,7 @@
             document.getElementById('view-feedback-detail').classList.add('active');
 
             document.querySelectorAll('.member-list-item').forEach(item => item.classList.remove('active'));
-            const li = document.getElementById('ml-' + name);
-            if (li) li.classList.add('active');
+            document.getElementById('ml-' + name).classList.add('active');
             document.getElementById('detail-member-name').innerText = name;
 
             // [Tab 1: Basic]
@@ -929,15 +875,21 @@
             document.getElementById('dev-comp-goals').innerHTML = currentMember.compGoals.map(g => `<li class="goal-item">${g}</li>`).join('');
             document.getElementById('dev-biz-goals').innerHTML = currentMember.bizGoals.map(g => `<li class="goal-item">${g}</li>`).join('');
 
-            // [Tab 3: Feedback]
+            // [Tab 3: Feedback - Preference Setting]
             const pref = currentMember.feedbackStyle;
             document.getElementById('val-directness').innerText = pref.directness;
+            document.getElementById('desc-directness').innerText = styleMap[pref.directness].desc;
+            document.getElementById('icon-directness').innerText = styleMap[pref.directness].icon;
+            
             document.getElementById('val-focus').innerText = pref.focus;
+            document.getElementById('desc-focus').innerText = styleMap[pref.focus].desc;
+            document.getElementById('icon-focus').innerText = styleMap[pref.focus].icon;
+
             document.getElementById('val-tone').innerText = pref.tone;
-            document.getElementById('help-directness').innerText = getDirectnessHelp(pref.directness);
-            document.getElementById('help-focus').innerText = getFocusHelp(pref.focus);
-            document.getElementById('help-tone').innerText = getToneHelp(pref.tone);
-            document.getElementById('pref-guide-text').innerText = `AI가 ${name}님의 성향(${pref.directness}, ${pref.focus}, ${pref.tone})을 고려하여 맞춤형 피드백 초안을 작성합니다.`;
+            document.getElementById('desc-tone').innerText = styleMap[pref.tone].desc;
+            document.getElementById('icon-tone').innerText = styleMap[pref.tone].icon;
+
+            document.getElementById('pref-guide-text').innerText = `AI가 ${name}님의 성향을 고려하여 맞춤형 피드백 초안을 작성합니다.`;
             
             document.querySelectorAll('.pref-item').forEach(el => el.classList.add('highlight')); 
             setToneBtnState('direct', 'indirect', pref.directness === '직설적');
@@ -973,19 +925,12 @@
             if(!document.getElementById('input-str').value || !document.getElementById('input-imp').value || !document.getElementById('input-gro').value) {
                 alert('키워드를 모두 입력해주세요.'); return;
             }
-
-            // 간단한 로딩 느낌
-            document.getElementById('ev-text-str').innerText = '강점 관련 데이터를 분석하는 중입니다...';
-            document.getElementById('ev-text-imp').innerText = '보완점 관련 사례를 찾는 중입니다...';
-            document.getElementById('ev-text-gro').innerText = '성장 방향 제안을 준비하는 중입니다...';
+            document.getElementById('ev-text-str').innerText = `"${currentMember.projectLog.succ}" 성과를 보면, 입력하신 강점이 잘 드러납니다.`;
+            document.getElementById('ev-text-imp').innerText = `"${currentMember.projectLog.imp}" 사례에서 보완이 필요해 보입니다.`;
+            document.getElementById('ev-text-gro').innerText = `"${currentMember.goalRole}"로 성장하기 위해 꼭 필요한 부분입니다.`;
+            
             document.getElementById('ai-evidence-section').classList.add('active');
-
-            setTimeout(() => {
-                document.getElementById('ev-text-str').innerText = `"${currentMember.projectLog.succ}" 성과를 보면, 입력하신 강점이 잘 드러납니다.`;
-                document.getElementById('ev-text-imp').innerText = `"${currentMember.projectLog.imp}" 사례에서 보완이 필요해 보입니다.`;
-                document.getElementById('ev-text-gro').innerText = `"${currentMember.goalRole}"로 성장하기 위해 꼭 필요한 부분입니다.`;
-                createFinalMsg();
-            }, 700);
+            createFinalMsg();
         }
 
         function selectEvidence(type) {
