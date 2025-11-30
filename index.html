@@ -236,6 +236,18 @@
         .goal-item { padding: 12px; background: #f9f9f9; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #444; line-height: 1.5; display: flex; align-items: flex-start; gap: 8px; }
         .goal-item::before { content:'•'; color:var(--color-teal); font-weight:bold; }
 
+        /* [추가] 로드맵(체크리스트) 스타일 */
+        .roadmap-list { display: flex; flex-direction: column; gap: 12px; }
+        .roadmap-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: #f9f9f9; border-radius: 8px; transition: 0.2s; cursor: pointer; }
+        .roadmap-item:hover { background: #f0f0f0; }
+        .roadmap-item.checked { background: #f4eff9; }
+        .roadmap-item.checked .rm-text { text-decoration: line-through; color: #888; }
+        .rm-checkbox { width: 20px; height: 20px; border: 2px solid var(--color-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0;}
+        .roadmap-item.checked .rm-checkbox { background: var(--color-purple); }
+        .rm-checkbox::after { content: '✔'; color: #fff; font-size: 12px; display: none; }
+        .roadmap-item.checked .rm-checkbox::after { display: block; }
+        .rm-text { font-size: 14px; font-weight: 500; color: #333; }
+
         /* Feedback Tab Elements */
         .preference-card { background: linear-gradient(135deg, #f0faff 0%, #ffffff 100%); border: 1px solid var(--color-lightblue); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
         .pref-header { font-size: 18px; font-weight: 700; color: var(--color-teal); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
@@ -270,6 +282,14 @@
         .ev-controls { display: flex; gap: 8px; justify-content: flex-end; margin-top: auto; }
         .btn-xs { padding: 6px 12px; font-size: 12px; border-radius: 6px; border: 1px solid #ddd; background: #fff; cursor: pointer; color: #666; transition: 0.2s; }
         .btn-xs:hover { background: #eee; }
+        /* [추가] STEP 2 버튼 비활성화 스타일 */
+        .ev-controls button:disabled {
+            background-color: #f0f0f0;
+            color: #ccc;
+            border-color: #eee;
+            cursor: not-allowed;
+        }
+
         .btn-select { background: #fff; color: var(--color-purple); border: 1px solid var(--color-purple); font-weight: 700; }
         .btn-select:hover { background: #f4eff9; }
         .btn-select.active { background: var(--color-purple); color: #fff; border-color: var(--color-purple); }
@@ -543,6 +563,11 @@
                                         <ul class="goal-list" id="dev-biz-goals"></ul>
                                     </div>
                                 </div>
+                                <!-- [NEW] Roadmap Checklist -->
+                                <div class="card" style="margin-top: 24px;">
+                                    <div class="card-head">역량 성장 로드맵 (Checklist)</div>
+                                    <div id="growth-roadmap-list" class="roadmap-list"></div>
+                                </div>
                             </div>
 
                             <div id="dt-feedback" class="detail-content">
@@ -583,16 +608,16 @@
                                             <div class="ev-title">🔥 강점 행동 사례</div>
                                             <div class="ev-text" id="ev-text-str">(위 버튼을 눌러 AI 추천 사례를 확인하세요)</div>
                                             <div class="ev-controls">
-                                                <button class="btn-xs" onclick="reexplore('str')">🔄 재탐색</button>
-                                                <button class="btn-xs btn-select" id="btn-sel-str" onclick="toggleSelection('str')">선택</button>
+                                                <button class="btn-xs" onclick="reexplore('str')" disabled>🔄 재탐색</button>
+                                                <button class="btn-xs btn-select" id="btn-sel-str" onclick="toggleSelection('str')" disabled>선택</button>
                                             </div>
                                         </div>
                                         <div class="evidence-box" id="ev-box-imp">
                                             <div class="ev-title">💡 보완점 행동 사례</div>
                                             <div class="ev-text" id="ev-text-imp">(위 버튼을 눌러 AI 추천 사례를 확인하세요)</div>
                                             <div class="ev-controls">
-                                                <button class="btn-xs" onclick="reexplore('imp')">🔄 재탐색</button>
-                                                <button class="btn-xs btn-select" id="btn-sel-imp" onclick="toggleSelection('imp')">선택</button>
+                                                <button class="btn-xs" onclick="reexplore('imp')" disabled>🔄 재탐색</button>
+                                                <button class="btn-xs btn-select" id="btn-sel-imp" onclick="toggleSelection('imp')" disabled>선택</button>
                                             </div>
                                         </div>
                                     </div>
@@ -621,6 +646,50 @@
 
     <script>
         // [1] 데이터 및 변수 선언
+        const FEEDBACK_LIBRARY = {
+          "keywordGroups": [
+            { "groupName": "소통 및 커뮤니케이션", "tags": ["소통", "대화", "공유", "연락", "피드백", "경청", "설득", "보고", "미팅", "협업"] },
+            { "groupName": "업무 디테일 및 품질", "tags": ["꼼꼼", "디테일", "세심", "정확", "검토", "오류 최소화", "품질", "완결성", "테스트", "확인"] },
+            { "groupName": "속도 및 납기 준수", "tags": ["속도", "신속", "빠른", "기한", "납기", "일정", "데드라인", "타임라인", "효율", "민첩"] },
+            { "groupName": "문제 해결 및 분석", "tags": ["분석", "데이터", "논리", "인사이트", "원인 파악", "대안 제시", "해결", "통찰", "구조화"] },
+            { "groupName": "책임감 및 오너십", "tags": ["책임", "오너십", "주도", "마무리", "완수", "성실", "솔선수범", "헌신", "끝까지"] },
+            { "groupName": "기술 역량 및 전문성", "tags": ["기술", "전문", "지식", "코드", "툴", "학습", "최신 트렌드", "숙련도", "노하우", "테크"] },
+            { "groupName": "업무 태도 및 자세", "tags": ["태도", "긍정", "열정", "적극", "유연", "수용", "성장", "마인드", "동기부여"] },
+            { "groupName": "문서화 및 정보 정리", "tags": ["문서", "정리", "기록", "리포트", "보고서", "매뉴얼", "가이드", "위키", "히스토리"] }
+          ],
+          "behavioralSamples": [
+            { "groupName": "소통 및 커뮤니케이션", "type": "strength", "tags": ["공유"], "text": "복잡한 프로젝트 이슈를 팀원들이 이해하기 쉬운 언어로 정리하여 신속하게 공유함으로써 혼선을 줄였습니다." },
+            { "groupName": "소통 및 커뮤니케이션", "type": "strength", "tags": ["경청"], "text": "회의 시간 동안 동료의 의견을 끝까지 경청하고 핵심을 요약해주며 논의가 긍정적인 방향으로 흐르도록 도왔습니다." },
+            { "groupName": "소통 및 커뮤니케이션", "type": "improvement", "tags": ["공유"], "text": "이슈 발생 시 혼자 해결하려다 공유 시점이 늦어지는 경우가 있어 초기 단계에서의 신속한 공유가 필요합니다." },
+            { "groupName": "소통 및 커뮤니케이션", "type": "improvement", "tags": ["보고"], "text": "구두로 논의된 내용을 문서나 메일로 한 번 더 정리해서 남겨둔다면 업무 이력을 관리하는 데 도움이 될 것입니다." },
+            { "groupName": "업무 디테일 및 품질", "type": "strength", "tags": ["검토"], "text": "산출물 제출 전 다각도로 검토를 수행하여 사소한 오류까지 사전에 발견하고 수정했습니다." },
+            { "groupName": "업무 디테일 및 품질", "type": "improvement", "tags": ["검토"], "text": "전체적인 방향성은 좋으나 최종 단계에서 오타나 포맷 오류 등을 한 번 더 확인하는 습관이 필요합니다." },
+            { "groupName": "속도 및 납기 준수", "type": "strength", "tags": ["기한"], "text": "타이트한 일정 속에서도 우선순위를 명확히 하여 약속된 기한 내에 업무를 완수했습니다." },
+            { "groupName": "속도 및 납기 준수", "type": "improvement", "tags": ["공유"], "text": "빠른 진행도 중요하지만 중간 진행 상황을 동료들에게 주기적으로 공유하여 보조를 맞추는 것이 필요합니다." },
+            { "groupName": "문제 해결 및 분석", "type": "strength", "tags": ["데이터"], "text": "직관에 의존하기보다 객관적인 데이터와 지표를 근거로 문제의 원인을 분석하여 설득력을 높였습니다." },
+            { "groupName": "문제 해결 및 분석", "type": "improvement", "tags": ["설명"], "text": "분석 결과는 훌륭하지만 비전문가도 이해할 수 있도록 조금 더 쉬운 용어와 시각화 자료를 활용하면 좋겠습니다." },
+            { "groupName": "책임감 및 오너십", "type": "strength", "tags": ["마무리"], "text": "맡은 업무는 어떤 어려움이 있어도 끝까지 완수해내는 강한 책임감을 보여주어 동료들에게 신뢰를 주었습니다." },
+            { "groupName": "책임감 및 오너십", "type": "improvement", "tags": ["위임"], "text": "모든 일을 혼자 감당하려 하기보다 적절한 시점에 동료에게 도움을 요청하거나 업무를 위임하는 유연함이 필요합니다." },
+            { "groupName": "기술 역량 및 전문성", "type": "strength", "tags": ["학습"], "text": "새로운 기술이나 툴을 두려움 없이 빠르게 학습하고 실무에 적용하여 업무 효율을 높였습니다." },
+            { "groupName": "기술 역량 및 전문성", "type": "improvement", "tags": ["문서화"], "text": "개인의 기술적 노하우가 암묵지로 남지 않도록 체계적인 문서화를 통해 팀의 자산으로 남겨주면 좋겠습니다." },
+            { "groupName": "문서화 및 정보 정리", "type": "strength", "tags": ["정리"], "text": "산발적인 정보들을 체계적으로 정리하고 구조화하여 누구나 쉽게 찾아볼 수 있는 문서를 만들었습니다." },
+            { "groupName": "문서화 및 정보 정리", "type": "improvement", "tags": ["핵심"], "text": "내용을 빠짐없이 기록하는 것도 좋지만 읽는 사람을 배려하여 핵심 위주로 요약하는 연습이 필요합니다." }
+          ],
+          "templates": [
+             { "section": "intro", "patterns": ["이번 평가 기간 동안 {{name}}님은 {{area}} 영역에서 안정적인 성과와 의미 있는 성장 흐름을 보여주었습니다."] },
+             { "section": "strength_intro", "patterns": ["강점 측면에서는 {{strength_keyword}} 부분에서 특히 역량이 돋보입니다."] },
+             { "section": "improve_intro", "patterns": ["한편, {{improvement_keyword}}와 관련해서는 앞으로 조금 더 보완해 보면 좋겠습니다."] }
+          ]
+        };
+
+        const IMPACT_PHRASES = [
+            "실질적인 성과 향상으로 이어졌습니다.",
+            "업무 효율 개선에 의미 있는 영향을 주었습니다.",
+            "조직 차원의 성과에도 긍정적인 변화를 만들었습니다.",
+            "실질적인 업무 개선 효과로 이어졌습니다.",
+            "팀의 실행력을 높이는 데 기여했습니다."
+        ];
+
         const styleMap = {
             '직설적': { icon: '🎯', desc: '핵심부터 명확하게 전달하는 것을 선호합니다.' },
             '완곡함': { icon: '🧸', desc: '먼저 공감과 격려를 들을 때 심리적 안정감을 느끼는 스타일입니다.' },
@@ -686,8 +755,13 @@
                 feedbackStyle: { directness: '직설적', focus: '과업 중심', tone: '논리적' },
                 skills: [ { name: 'Python', per: 90, color: '#D7177B' }, { name: 'ML', per: 75, color: '#551D83' } ],
                 strengths: ['데이터 인사이트 도출', '새로운 툴 학습 빠름'], weaknesses: ['발표 스킬 부족', '멀티태스킹 어려움'],
-                growthPath: "M30 90 Q 150 10 270 50", growthPoints: [{x:30,y:90}, {x:150,y:40}, {x:270,y:50}], growthDesc: "최근 분석 역량이 급격히 상승함",
-                history: [ { date:'23.01', title:'DX팀 합류', desc:'데이터 분석 리드' }, { date:'19.01', title:'입사', desc:'생산기술팀' } ],
+                growthPath: "M30 90 Q 150 10 270 50", growthPoints: [{x:30,y:90}, {x:150,y:40}, {x:270,y:50}], growthDesc: "데이터 분석 역량이 급격히 상승하며, 팀 내 핵심 분석가로 자리잡고 있습니다.",
+                history: [
+                    { date:'23.01', title:'DX팀 합류', desc:'데이터 분석 리드' },
+                    { date:'21.05', title:'데이터 분석가 과정 수료', desc:'사내 전문가 과정' },
+                    { date:'20.03', title:'생산 공정 데이터 수집', desc:'초기 셋업 프로젝트 참여' },
+                    { date:'19.01', title:'입사', desc:'생산기술팀' }
+                ],
                 kpiTotal: 92, kpiDesc: "데이터 파이프라인 구축 완료 (120% 달성)",
                 coreValues: [ {n:'Customer', s:95}, {n:'Sustainability', s:85}, {n:'Agility', s:90}, {n:'Passion', s:92}, {n:'Collaboration', s:80} ],
                 currRole: 'Data Scientist', goalRole: 'Data Tech Lead', 
@@ -705,7 +779,12 @@
                         { tags: ['협업', '일정'], text: "개인 업무에 몰입하느라 유관부서와의 중간 공유 일정을 놓친 사례가 있었습니다. 주기적인 소통이 필요합니다." },
                         { tags: ['멀티태스킹'], text: "여러 프로젝트가 동시에 진행될 때 우선순위 설정에 어려움을 겪어 마감 기한이 임박했던 적이 있습니다." }
                     ]
-                }
+                },
+                growthRoadmap: [
+                    { task: "SQL 고급 쿼리 마스터하기", checked: false },
+                    { task: "데이터 시각화 대시보드 구축 프로젝트 리딩", checked: true },
+                    { task: "머신러닝 기초 스터디 수료", checked: false }
+                ]
             },
             '박재현': {
                 job: 'AI Researcher', avatar: '👨🏻‍🔬', years: '8년 1개월',
@@ -713,8 +792,13 @@
                 feedbackStyle: { directness: '완곡함', focus: '과업 중심', tone: '논리적' },
                 skills: [ { name: 'Deep Learning', per: 95, color: '#551D83' }, { name: 'CV', per: 80, color: '#D7177B' } ],
                 strengths: ['최신 논문 구현 능력', '알고리즘 최적화'], weaknesses: ['비즈니스 적용 관점', '문서화 습관'],
-                growthPath: "M30 90 Q 150 50 270 20", growthPoints: [{x:30,y:90}, {x:150,y:53}, {x:270,y:20}], growthDesc: "꾸준한 우상향 성장세 유지",
-                history: [ { date:'22.01', title:'선행연구팀', desc:'비전 검사' } ],
+                growthPath: "M30 90 Q 150 50 270 20", growthPoints: [{x:30,y:90}, {x:150,y:53}, {x:270,y:20}], growthDesc: "딥러닝 기술 전문성을 바탕으로 꾸준한 우상향 성장세를 유지하며 연구 성과를 주도하고 있습니다.",
+                history: [
+                    { date:'22.01', title:'선행연구팀', desc:'비전 검사' },
+                    { date:'20.11', title:'비전 검사 솔루션 개발', desc:'핵심 알고리즘 설계' },
+                    { date:'18.07', title:'딥러닝 연구 파트장', desc:'이미지 인식 고도화' },
+                    { date:'16.03', title:'입사 (R&D 센터)', desc:'영상처리 연구' }
+                ],
                 kpiTotal: 88, kpiDesc: "특허 2건 출원, 학회 발표",
                 coreValues: [ {n:'Customer', s:80}, {n:'Sustainability', s:75}, {n:'Agility', s:95}, {n:'Passion', s:90}, {n:'Collaboration', s:70} ],
                 currRole: 'AI Researcher', goalRole: 'Principal Researcher', 
@@ -730,7 +814,12 @@
                         { tags: ['소통', '연락', '공유'], text: "연구에 몰입하다 보면 메신저 응답이 늦어지거나, 중간 공유가 누락되는 경우가 종종 발생하여 협업 부서의 대기 시간이 길어집니다." },
                         { tags: ['비즈니스', '현장'], text: "연구 결과의 우수성에도 불구하고, 이를 실제 생산 현장에 어떻게 적용할지에 대한 현실적인 고려가 부족해 보입니다." }
                     ]
-                }
+                },
+                growthRoadmap: [
+                    { task: "최신 논문 리뷰 세미나 발표 (분기 1회)", checked: true },
+                    { task: "TensorFlow 자격증 취득", checked: false },
+                    { task: "코드 리팩토링 가이드 작성", checked: false }
+                ]
             },
             '박정호': {
                 job: 'Project Manager', avatar: '👨🏻‍💼', years: '12년',
@@ -738,8 +827,13 @@
                 feedbackStyle: { directness: '완곡함', focus: '관계 중심', tone: '부드러움' },
                 skills: [ { name: 'PM', per: 92, color: '#008785' }, { name: 'Communication', per: 88, color: '#551D83' } ],
                 strengths: ['강력한 추진력', '이해관계자 조율'], weaknesses: ['최신 기술 트렌드 이해', '실무 툴 활용'],
-                growthPath: "M30 40 Q 150 30 270 40", growthPoints: [{x:30,y:40}, {x:150,y:35}, {x:270,y:40}], growthDesc: "안정적인 리더십 발휘 단계",
-                history: [ { date:'20.01', title:'DX PM', desc:'스마트팩토리' } ],
+                growthPath: "M30 40 Q 150 30 270 40", growthPoints: [{x:30,y:40}, {x:150,y:35}, {x:270,y:40}], growthDesc: "프로젝트 관리 및 리더십 역량이 안정기에 접어들며, 조직 내 신뢰도가 매우 높습니다.",
+                history: [
+                    { date:'20.01', title:'DX PM', desc:'스마트팩토리' },
+                    { date:'18.09', title:'스마트팩토리 TFT 리드', desc:'전사 확산 전략 수립' },
+                    { date:'15.06', title:'전략기획팀 이동', desc:'중장기 전략 수립' },
+                    { date:'12.02', title:'입사 (경영지원)', desc:'관리 회계' }
+                ],
                 kpiTotal: 95, kpiDesc: "프로젝트 납기 100% 준수",
                 coreValues: [ {n:'Customer', s:90}, {n:'Sustainability', s:85}, {n:'Agility', s:88}, {n:'Passion', s:92}, {n:'Collaboration', s:98} ],
                 currRole: 'Project Manager', goalRole: 'Center Leader', 
@@ -755,7 +849,12 @@
                         { tags: ['기술', '이해', '지식'], text: "AI 모델링에 대한 기술적 이해도가 부족하여 개발팀과의 커뮤니케이션에서 다소 오해가 발생했던 사례가 있습니다." },
                         { tags: ['툴', '협업'], text: "최신 협업 툴(Jira, Confluence) 활용 능력을 높인다면 프로젝트 관리 효율성이 더욱 향상될 것입니다." }
                     ]
-                }
+                },
+                growthRoadmap: [
+                    { task: "애자일 코치 자격증 준비", checked: true },
+                    { task: "타 부서와의 분기별 얼라인먼트 미팅 주재", checked: true },
+                    { task: "리스크 관리 매뉴얼 업데이트", checked: false }
+                ]
             },
             '박재원': {
                 job: 'Software Eng.', avatar: '👩🏻‍💻', years: '3년',
@@ -763,8 +862,12 @@
                 feedbackStyle: { directness: '직설적', focus: '과업 중심', tone: '부드러움' },
                 skills: [ { name: 'React', per: 75, color: '#551D83' }, { name: 'AWS', per: 60, color: '#70C0E6' } ],
                 strengths: ['빠른 프로토타이핑', '성실한 태도'], weaknesses: ['아키텍처 설계', '코드 리뷰 참여'],
-                growthPath: "M30 90 L 120 80 L 270 30", growthPoints: [{x:30,y:90}, {x:120,y:80}, {x:270,y:30}], growthDesc: "초기 적응 후 가파른 성장",
-                history: [ { date:'21.02', title:'입사', desc:'플랫폼 개발' } ],
+                growthPath: "M30 90 L 120 80 L 270 30", growthPoints: [{x:30,y:90}, {x:120,y:80}, {x:270,y:30}], growthDesc: "입사 초기 적응기를 거쳐, 최근 기술 습득 속도가 빨라지며 가파른 성장 곡선을 그리고 있습니다.",
+                history: [
+                    { date:'23.04', title:'백엔드 리드 역할 수행', desc:'API 서버 구조 개선' },
+                    { date:'22.08', title:'클라우드 마이그레이션 참여', desc:'IDC to AWS' },
+                    { date:'21.02', title:'입사', desc:'플랫폼 개발' }
+                ],
                 kpiTotal: 85, kpiDesc: "신규 기능 3종 배포 완료",
                 coreValues: [ {n:'Customer', s:85}, {n:'Sustainability', s:80}, {n:'Agility', s:85}, {n:'Passion', s:90}, {n:'Collaboration', s:88} ],
                 currRole: 'Software Eng.', goalRole: 'Architect', 
@@ -780,7 +883,12 @@
                         { tags: ['설계', '아키텍처'], text: "기능 구현에 집중하느라 전체 시스템 아키텍처의 확장성을 고려하지 못한 설계가 일부 발견되었습니다." },
                         { tags: ['코드리뷰', '소통'], text: "동료의 코드 리뷰에 조금 더 적극적으로 참여하여 팀 전체의 코드 품질 향상에 기여했으면 합니다." }
                     ]
-                }
+                },
+                growthRoadmap: [
+                    { task: "Kubernetes 클러스터 운영 경험 공유", checked: false },
+                    { task: "사내 해커톤 참가", checked: true },
+                    { task: "오픈소스 기여 1건 이상", checked: false }
+                ]
             },
             '하유림': {
                 job: 'UX Designer', avatar: '👩🏻‍🎨', years: '4년',
@@ -788,8 +896,13 @@
                 feedbackStyle: { directness: '완곡함', focus: '관계 중심', tone: '부드러움' },
                 skills: [ { name: 'UI Design', per: 88, color: '#D7177B' }, { name: 'Figma', per: 90, color: '#551D83' } ],
                 strengths: ['사용자 중심 사고', '창의적 디자인'], weaknesses: ['데이터 기반 설득', '개발 용어 이해'],
-                growthPath: "M30 90 Q 150 80 270 30", growthPoints: [{x:30,y:90}, {x:150,y:70}, {x:270,y:30}], growthDesc: "디자인 시스템 구축으로 전문성 확대",
-                history: [ { date:'19.11', title:'입사', desc:'디자인센터' } ],
+                growthPath: "M30 90 Q 150 80 270 30", growthPoints: [{x:30,y:90}, {x:150,y:70}, {x:270,y:30}], growthDesc: "디자인 시스템 구축 경험을 통해 UX 전문성을 크게 확대하며 영향력을 넓히고 있습니다.",
+                history: [
+                    { date:'23.05', title:'사내 디자인 어워드 수상', desc:'사용자 친화적 UI/UX' },
+                    { date:'22.09', title:'디자인 시스템 구축 TF', desc:'공통 컴포넌트 표준화' },
+                    { date:'21.03', title:'모바일 앱 개편 디자인', desc:'사용성 개선 프로젝트' },
+                    { date:'19.11', title:'입사', desc:'디자인센터' }
+                ],
                 kpiTotal: 90, kpiDesc: "디자인 시스템 1.0 배포",
                 coreValues: [ {n:'Customer', s:98}, {n:'Sustainability', s:80}, {n:'Agility', s:85}, {n:'Passion', s:90}, {n:'Collaboration', s:92} ],
                 currRole: 'UX Designer', goalRole: 'Product Designer', 
@@ -805,7 +918,12 @@
                         { tags: ['데이터', '근거', '분석'], text: "디자인 시안 제안 시, 사용자 행동 데이터(Log)나 A/B 테스트 결과와 같은 정량적 근거가 부족할 때가 있습니다." },
                         { tags: ['개발', '이해', '기술'], text: "개발팀과 소통할 때 기술적인 제약 사항에 대한 이해를 높인다면 더 현실적인 디자인 제안이 가능할 것입니다." }
                     ]
-                }
+                },
+                growthRoadmap: [
+                    { task: "디자인 시스템 컴포넌트 고도화", checked: true },
+                    { task: "사용자 리서치 방법론 A/B 테스트 적용", checked: false },
+                    { task: "프론트엔드 기초 이해 (HTML/CSS)", checked: true }
+                ]
             }
         };
 
@@ -888,6 +1006,44 @@
             updateGenerateButtonState();
         }
 
+        function toggleRoadmapItem(el) {
+            el.classList.toggle('checked');
+        }
+
+        function resetFeedbackState() {
+            selectedEvidence = { str: '', imp: '', gro: '' };
+            document.getElementById('input-str').value = '';
+            document.getElementById('input-imp').value = '';
+            const finalBox = document.getElementById('final-feedback-text');
+            if(finalBox) finalBox.value = '';
+
+            const evStr = document.getElementById('ev-text-str');
+            if(evStr) {
+                evStr.innerText = '(위 버튼을 눌러 AI 추천 사례를 확인하세요)';
+                delete evStr.dataset.cat;
+            }
+            const evImp = document.getElementById('ev-text-imp');
+            if(evImp) {
+                evImp.innerText = '(위 버튼을 눌러 AI 추천 사례를 확인하세요)';
+                delete evImp.dataset.cat;
+            }
+
+            document.querySelectorAll('.evidence-box').forEach(box => box.classList.remove('selected'));
+            document.querySelectorAll('.btn-select').forEach(btn => {
+                btn.classList.remove('active');
+                btn.innerText = '선택';
+            });
+
+            // [중요] 초기 상태에서는 STEP 2 버튼들 비활성화
+            const step2Buttons = document.querySelectorAll('#ai-evidence-section button');
+            step2Buttons.forEach(btn => btn.disabled = true);
+
+            updateGenerateButtonState();
+
+            const aiSection = document.getElementById('ai-evidence-section');
+            if(aiSection) aiSection.classList.remove('active');
+        }
+
         function hideAllViews() {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.detail-container').forEach(el => el.classList.remove('active'));
@@ -915,6 +1071,7 @@
         }
 
         function showFeedback() {
+            resetFeedbackState();
             hideAllViews();
             const menuFeedback = document.getElementById('menu-feedback');
             const sidebarList = document.getElementById('member-list-sidebar');
@@ -957,6 +1114,7 @@
         }
 
         function showFeedbackDetail(name) {
+            resetFeedbackState();
             currentMember = teamDB[name];
             
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -1006,6 +1164,14 @@
             document.getElementById('dev-comp-goals').innerHTML = currentMember.compGoals.map(g => `<li class="goal-item">${g}</li>`).join('');
             document.getElementById('dev-biz-goals').innerHTML = currentMember.bizGoals.map(g => `<li class="goal-item">${g}</li>`).join('');
 
+            const roadmapContainer = document.getElementById('growth-roadmap-list');
+            roadmapContainer.innerHTML = currentMember.growthRoadmap.map((item, index) => `
+                <div class="roadmap-item ${item.checked ? 'checked' : ''}" onclick="toggleRoadmapItem(this)">
+                    <div class="rm-checkbox"></div>
+                    <div class="rm-text">${item.task}</div>
+                </div>
+            `).join('');
+
             const pref = currentMember.feedbackStyle;
             document.getElementById('val-directness').innerText = pref.directness;
             document.getElementById('desc-directness').innerText = styleMap[pref.directness].desc;
@@ -1021,19 +1187,6 @@
             
             switchDetailTab('basic', document.querySelector('#view-feedback-detail .detail-tab'));
             
-            document.getElementById('input-str').value = '';
-            document.getElementById('input-imp').value = '';
-            document.getElementById('final-feedback-text').value = '';
-            
-            document.getElementById('ev-text-str').innerText = '(위 버튼을 눌러 AI 추천 사례를 확인하세요)';
-            document.getElementById('ev-text-imp').innerText = '(위 버튼을 눌러 AI 추천 사례를 확인하세요)';
-            
-            const aiSection = document.getElementById('ai-evidence-section');
-            if(aiSection) aiSection.classList.remove('active');
-            selectedEvidence = { str:'', imp:'', gro:'' };
-            
-            updateGenerateButtonState();
-
             const scrollWrap = detailView.querySelector('.detail-scroll-wrapper');
             if(scrollWrap) scrollWrap.scrollTop = 0;
         }
@@ -1082,17 +1235,21 @@
                 const strText = findMatchingSample(strInput, currentMember.behavioralSamples.strength);
                 document.getElementById('ev-text-str').innerText = strText;
             } else {
-                document.getElementById('ev-text-str').innerText = "(입력된 키워드에 해당하는 추천 사례가 없습니다.)";
+                document.getElementById('ev-text-str').innerText = "(입력된 키워드가 없어 추천할 강점 사례가 없습니다.)";
             }
 
             if(impInput) {
                 const impText = findMatchingSample(impInput, currentMember.behavioralSamples.improvement);
                 document.getElementById('ev-text-imp').innerText = impText;
             } else {
-                document.getElementById('ev-text-imp').innerText = "(입력된 키워드에 해당하는 추천 사례가 없습니다.)";
+                document.getElementById('ev-text-imp').innerText = "(입력된 키워드가 없어 추천할 보완점 사례가 없습니다.)";
             }
             
             document.getElementById('ai-evidence-section').classList.add('active');
+            
+            // [중요] 생성 완료 후 STEP 2 버튼 활성화
+            const step2Buttons = document.querySelectorAll('#ai-evidence-section button');
+            step2Buttons.forEach(btn => btn.disabled = false);
         }
 
         function reexplore(type) {
@@ -1144,13 +1301,11 @@
 
         function convertToNounPhrase(text) {
             if(!text) return '';
-            // 문장 끝을 명사절로 변환하여 자연스럽게 연결
-            let replaced = text.replace(/(했습니다|됐습니다|합니다|입니다)\.?$/, '했던 사례는');
-            replaced = replaced.replace(/(있다|있습니다)\.?$/, '있었던 사례는');
+            let replaced = text.replace(/(했습니다|됐습니다|합니다|입니다)\.?$/, '했던 경험은');
+            replaced = replaced.replace(/(있다|있습니다)\.?$/, '있었던 실행은');
             replaced = replaced.replace(/(이다)\.?$/, '였던 점은');
             
-            // 변환되지 않은 경우 기본 처리
-            if(replaced === text) return `"${text}"와 같은 구체적 행동은`;
+            if(replaced === text) return `${text} 관련 경험은`;
             return replaced;
         }
 
@@ -1182,11 +1337,9 @@
             const goalRole = currentMember.goalRole || '차상위 리더';
             const style = currentMember.feedbackStyle;
 
-            // 1. Evidence Cleanup
             const rawStrEv = cleanQuotes(selectedEvidence.str || '');
             const rawImpEv = cleanQuotes(selectedEvidence.imp || '');
             
-            // 2. Detect Categories (Priority: Evidence > Input)
             const strInput = document.getElementById('input-str').value || '';
             const impInput = document.getElementById('input-imp').value || '';
             
@@ -1197,36 +1350,30 @@
             const strSummaryDesc = STRENGTH_SUMMARY[catKeyStr];
             const impSummaryDesc = IMPROVEMENT_SUMMARY[catKeyImp];
 
-            // 3. Trait-based Tone Logic
-            // Improvement Tone Selection
             let improvementToneMsg = "";
             if (style.directness === '직설적') {
                 improvementToneMsg = "이 부분은 향후 업무 효율을 높이기 위해 우선적으로 조정될 필요가 있습니다.";
             } else {
-                improvementToneMsg = "이 부분은 작은 조정만으로도 충분히 개선될 수 있는 영역입니다.";
+                improvementToneMsg = "이 부분은 작은 조정만으로도 충분히 개선될 수 있는 영역이며, 조금만 정리해도 협업 효율이 더 높아질 수 있습니다.";
             }
 
-            // 4. Assemble Paragraph
             let msg = "";
 
-            // [Intro]
-            msg += `이번 평가 기간 동안 ${name}님은 ${strLabel} 영역에서 안정적인 성과와 의미 있는 성장 흐름을 보여주었습니다.\n`;
+            msg += `이번 평가 기간 동안 ${name}님은 ${strLabel} 영역에서 안정적인 성과와 의미 있는 성장 흐름을 보여주었습니다.\n\n`;
 
-            // [Strength Section]
             msg += `${strSummaryDesc}\n`;
             if (rawStrEv) {
                 const naturalStrEv = convertToNounPhrase(rawStrEv);
-                msg += `특히 ${naturalStrEv} 실질적인 성과 향상으로 이어졌습니다.\n\n`;
+                const impactMsg = IMPACT_PHRASES[Math.floor(Math.random() * IMPACT_PHRASES.length)];
+                msg += `특히 ${naturalStrEv} ${impactMsg}\n\n`;
             } else {
                 msg += `\n`;
             }
 
-            // [Improvement Section]
             msg += `${impSummaryDesc}\n`;
             if (rawImpEv) {
-                // For improvement, keep quote clean but context clear
-                let impNaturalEv = rawImpEv.replace(/(했습니다|됐습니다|합니다|입니다)\.?$/, '했던 사례는');
-                impNaturalEv = impNaturalEv.replace(/(있다|있습니다)\.?$/, '있었던 사례는');
+                let impNaturalEv = rawImpEv.replace(/(했습니다|됐습니다|합니다|입니다)\.?$/, '했던 상황은');
+                impNaturalEv = impNaturalEv.replace(/(있다|있습니다)\.?$/, '있었던 상황은');
                 if(impNaturalEv === rawImpEv) impNaturalEv = `${rawImpEv} 상황은`;
 
                 msg += `${impNaturalEv} 업무 과정에서 아쉬움을 남길 수 있는 요인이었습니다. ${improvementToneMsg}\n\n`;
@@ -1234,7 +1381,6 @@
                 msg += `${improvementToneMsg}\n\n`;
             }
 
-            // [Fixed Closing]
             msg += `리더로서 ${name}님이 강점을 더욱 발전시키고 보완이 필요한 부분을 안정적으로 개선해 나가실 수 있도록 함께하겠습니다.\n`;
             msg += `또한 향후 목표로 두고 계신 ${goalRole} 역할에 한 걸음 더 다가가실 수 있도록 필요한 자원과 방향성을 함께 고민하며 정기적인 체크인과 지원을 이어가겠습니다.\n`;
             msg += `올 한 해 수고 많으셨습니다.`;
