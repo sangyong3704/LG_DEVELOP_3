@@ -289,21 +289,25 @@
         .fb-label { font-size: 14px; font-weight: 700; margin-bottom: 10px; display: block; }
         .fb-desc-sub { font-size: 13px; color: #666; margin-bottom: 16px; }
         .fb-textarea { width: 100%; height: 100px; border: 1px solid #ddd; border-radius: 8px; padding: 12px; resize: none; font-family: inherit; font-size: 14px; outline: none; transition: 0.2s; }
+        /* [수정] placeholder 스타일 지정 */
+        .fb-textarea::placeholder {
+            color: #999;
+            font-size: 13px;
+            font-weight: 400;
+        }
         .fb-textarea:focus { border-color: var(--color-purple); background: #fff; }
         
         .evidence-container { background: #f9f9f9; padding: 24px; border-radius: 12px; margin-bottom: 20px; display: block; }
         .evidence-container.active { animation: fadeIn 0.3s; }
-        
-        /* [수정] 1x6 리스트형 그리드 & 스크롤 적용 */
+        /* [수정] 1열 리스트형 그리드 & 스크롤 적용 */
         .evidence-grid { 
             display: grid; 
             grid-template-columns: 1fr; 
             gap: 12px; 
             max-height: 400px; 
             overflow-y: auto; 
-            padding-right: 8px; /* 스크롤바 여백 */
+            padding-right: 8px; 
         }
-        /* 스크롤바 스타일링 */
         .evidence-grid::-webkit-scrollbar { width: 6px; }
         .evidence-grid::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
         .evidence-grid::-webkit-scrollbar-track { background: transparent; }
@@ -318,24 +322,21 @@
             transition: 0.2s; 
             position: relative; 
             display: flex; 
-            flex-direction: row; /* 가로 배치 */
+            flex-direction: row; 
             align-items: center;
             justify-content: space-between;
-            /* min-height 제거 */
         }
         .evidence-box:hover { border-color: var(--color-lightblue); transform: translateX(2px); }
         .evidence-box.selected { border: 2px solid var(--color-purple); background: #f9f4ff; }
-        /* 체크 표시 아이콘 제거 (버튼으로 대체) */
         .evidence-box.selected::after { display: none; }
 
-        /* 내부 요소 스타일 조정 */
         .ev-content-wrapper { flex: 1; margin-right: 12px; }
         .ev-title { font-size: 13px; font-weight: 700; color: var(--color-purple); margin-bottom: 4px; }
         .ev-text { font-size: 14px; line-height: 1.4; color: #333; margin-bottom: 0; word-break: keep-all; }
         
         .ev-controls { 
             display: flex; 
-            flex-direction: column; /* 버튼 세로 배치 */
+            flex-direction: column; 
             gap: 6px; 
             margin-top: 0; 
             flex-shrink: 0;
@@ -373,7 +374,6 @@
             .detail-tabs { gap: 20px; }
             .detail-tab { font-size: 16px; padding: 14px 6px; }
             .grade-big { font-size: 50px; }
-            /* 모바일에서 슬림 카드 스타일 유지하되 세로 배치 */
             .evidence-box { flex-direction: column; align-items: flex-start; }
             .ev-controls { flex-direction: row; width: 100%; justify-content: flex-end; margin-top: 10px; }
         }
@@ -550,6 +550,8 @@
                                     <div class="card">
                                         <div class="card-head">전문 역량</div>
                                         <div id="p-skills"></div>
+                                        <!-- [수정] SWOT 분석 타이틀 제거 -->
+                                        <!-- <div class="card-head" style="margin-top:30px;">SWOT 분석</div> -->
                                         <div class="swot-box" style="margin-top: 30px;">
                                             <div class="swot-col">
                                                 <div class="swot-head" style="color:var(--color-magenta)">🔥 강점</div>
@@ -565,7 +567,10 @@
                                 <div class="grid-half">
                                     <div class="card">
                                         <div class="card-head">성장 곡선</div>
-                                        <div id="growth-stages" class="growth-box-container"></div>
+                                        <div id="growth-stages" class="growth-box-container">
+                                            <!-- Growth Boxes will be rendered here -->
+                                        </div>
+                                        <!-- [수정] 누락된 growth-desc 요소 복구 -->
                                         <div id="growth-desc" style="margin-top: 20px; color: #555; font-size: 14px; line-height: 1.6; text-align: center;"></div>
                                     </div>
                                     <div class="card">
@@ -849,6 +854,11 @@
             '문서': '다만 문서 정리에 시간을 많이 쓰는 만큼 핵심 위주로 정리하여 효율성을 높이는 방향도 함께 고민해 볼 수 있겠습니다.'
         };
 
+        const IMPROVEMENT_SUGGESTION = {
+            '직설적': '이 부분은 향후 업무 효율을 높이기 위해 우선적으로 조정될 필요가 있습니다.',
+            '완곡함': '이 부분은 작은 조정만으로도 충분히 개선될 수 있는 영역이며 조금만 정리해도 협업 효율이 더 높아질 수 있습니다.'
+        };
+
         const teamDB = {
             '박태희': {
                 job: 'Data Scientist', avatar: '👩🏻‍💻', years: '5년 3개월',
@@ -880,8 +890,7 @@
                     { task: "머신러닝 기초 스터디 수료", checked: false }
                 ]
             },
-            // ... Other team members (omitted for brevity but included in logic) ...
-             '박재현': {
+            '박재현': {
                 job: 'AI Researcher', avatar: '👨🏻‍🔬', years: '8년 1개월',
                 keywords: ['#AI', '#딥러닝', '#혁신'],
                 feedbackStyle: { directness: '완곡함', focus: '과업 중심', tone: '논리적' },
@@ -994,6 +1003,16 @@
                 compGoals: ['UX Writing 가이드라인 수립', '데이터 시각화 디자인 역량 강화', '사용자 리서치 방법론 마스터'],
                 bizGoals: ['서비스 사용자 이탈률 5% 감소', '디자인-개발 핸드오프 효율화', '신규 서비스 UX 컨셉 제안 및 채택'],
                 projectLog: { succ: "개발-디자인 협업 효율 30% 증가", imp: "로그 데이터 기반 근거 부족" },
+                behavioralSamples: {
+                    strength: [
+                        { tags: ['사용자', '인사이트', '공감'], text: "사용자 인터뷰를 통해 숨겨진 니즈를 발굴하고 이를 직관적인 UI로 풀어낸 점이 매우 훌륭합니다." },
+                        { tags: ['디자인', '효율', '꼼꼼'], text: "디자인 시스템을 꼼꼼하게 구축하여 개발팀과의 협업 효율을 30% 이상 높인 성과가 돋보입니다." }
+                    ],
+                    improvement: [
+                        { tags: ['데이터', '근거', '분석'], text: "디자인 시안 제안 시, 사용자 행동 데이터(Log)나 A/B 테스트 결과와 같은 정량적 근거가 부족할 때가 있습니다." },
+                        { tags: ['개발', '이해', '기술'], text: "개발팀과 소통할 때 기술적인 제약 사항에 대한 이해를 높인다면 더 현실적인 디자인 제안이 가능할 것입니다." }
+                    ]
+                },
                 growthRoadmap: [
                     { task: "디자인 시스템 컴포넌트 고도화", checked: true },
                     { task: "사용자 리서치 방법론 A/B 테스트 적용", checked: false },
@@ -1272,7 +1291,6 @@
             document.getElementById('dev-comp-goals').innerHTML = currentMember.compGoals.map(g => `<li class="goal-item">${g}</li>`).join('');
             document.getElementById('dev-biz-goals').innerHTML = currentMember.bizGoals.map(g => `<li class="goal-item">${g}</li>`).join('');
 
-            // Render Roadmap (Read-Only)
             const roadmapContainer = document.getElementById('growth-roadmap-list');
             roadmapContainer.innerHTML = currentMember.growthRoadmap.map((item, index) => `
                 <div class="roadmap-item ${item.checked ? 'checked' : ''}" style="cursor: default;">
@@ -1291,6 +1309,7 @@
             document.getElementById('val-tone').innerText = pref.tone;
             document.getElementById('desc-tone').innerText = styleMap[pref.tone].desc;
             document.getElementById('icon-tone').innerText = styleMap[pref.tone].icon;
+            // [수정] 어조(Tone)까지 포함된 안내 문구
             document.getElementById('pref-guide-text').innerText = `AI가 ${name}님의 성향(${pref.directness}, ${pref.focus}, ${pref.tone})을 고려하여 맞춤형 피드백 초안을 작성합니다.`;
             document.querySelectorAll('.pref-item').forEach(el => el.classList.add('highlight')); 
             
@@ -1298,6 +1317,50 @@
             
             const scrollWrap = detailView.querySelector('.detail-scroll-wrapper');
             if(scrollWrap) scrollWrap.scrollTop = 0;
+
+            // [NEW] Auto-fill Step 1 examples
+            setDefaultFeedbackExamples(name, currentMember);
+        }
+
+        // [NEW FUNCTION] Build default examples for Step 1
+        function buildStrengthExample(memberName, member) {
+            const s = member.strengths || [];
+            const picked = s.slice(0, 2).join('과 ');
+            return `강점: 직무역량 진단 결과, ${picked}은(는) 강점으로 나타났습니다.`;
+        }
+
+        function buildImprovementExample(member) {
+            const w = member.weaknesses || [];
+            const picked = w.slice(0, 2).join('과 ');
+            return `보완점: ${picked}에서 개선이 필요한 것으로 파악되었습니다.`;
+        }
+
+        // [MODIFIED] buildGrowthExample - Short & Concise version
+        function buildGrowthExample(memberName, member) {
+            const goalRole = member.goalRole || '차기 리더 역할';
+            // Optional chaining for safety
+            const comp = member.compGoals?.[0] || '전문성 강화';
+            const biz = member.bizGoals?.[0] || '조직 성과 기여';
+
+            return `성장: ${memberName}님은 ${goalRole}를 목표로 하고 있으며, '${comp}'와 '${biz}' 방향의 성장을 기대합니다.`;
+        }
+
+        function setDefaultFeedbackExamples(name, member) {
+            const strBox = document.getElementById('input-str');
+            const impBox = document.getElementById('input-imp');
+            const groBox = document.getElementById('input-gro');
+
+            if (!strBox || !impBox || !groBox) return;
+
+            // Use placeholder instead of value
+            strBox.placeholder = buildStrengthExample(name, member);
+            impBox.placeholder = buildImprovementExample(member);
+            groBox.placeholder = buildGrowthExample(name, member);
+            
+            // Clear value so placeholder shows
+            strBox.value = '';
+            impBox.value = '';
+            groBox.value = '';
         }
 
         function detectCategoryFromInput(inputText) {
@@ -1313,22 +1376,27 @@
             return foundCats.length > 0 ? foundCats[0] : null;
         }
 
-        function findMatchingSample(inputText, samples) {
+        function findMatchingSample(inputText, type, samples) {
             const input = inputText.trim();
             if (!input) return "";
             let foundTags = [];
             for (const [key, keywords] of Object.entries(KEYWORD_MAP)) {
                 if (keywords.some(k => input.includes(k))) foundTags.push(key);
             }
+            
+            // Filter samples by type first
+            let typeSamples = samples.filter(s => s.type === type);
+            
             let matchedSamples = [];
             if (foundTags.length > 0) {
-                matchedSamples = samples.filter(s => s.tags.some(t => foundTags.includes(t)));
+                matchedSamples = typeSamples.filter(s => s.tags.some(t => foundTags.includes(t)));
             }
             
             if (matchedSamples.length > 0) {
                 return matchedSamples[Math.floor(Math.random() * matchedSamples.length)].text;
             } else {
-                return samples[Math.floor(Math.random() * samples.length)].text;
+                // Return random sample of correct type if no keyword match
+                return typeSamples.length > 0 ? typeSamples[Math.floor(Math.random() * typeSamples.length)].text : "";
             }
         }
 
@@ -1346,11 +1414,33 @@
             return [first, second];
         }
 
+        // [New Function] Build Growth Suggestions based on Career Data
+        function buildGrowthSuggestions(member, inputGroText) {
+            const input = inputGroText || "";
+            
+            // Option 1: Competency & Career Focus
+            // Pattern: Current Role -> Goal Role + Comp Goal + Roadmap Item
+            const compGoal = member.compGoals.length > 0 ? member.compGoals[0] : "전문성 강화";
+            const roadmapItem = member.growthRoadmap.length > 0 ? member.growthRoadmap[0].task : "역량 개발 활동";
+            
+            const gro1 = `현재 ${member.currRole}로서 쌓아온 경험을 바탕으로, ${member.goalRole}에게 요구되는 ${compGoal} 역량을 구체화해보면 좋겠습니다. 예를 들어 '${roadmapItem}'와 같은 활동을 지속한다면 커리어 성장에 큰 도움이 될 것입니다.`;
+
+            // Option 2: Business Impact Focus
+            // Pattern: Business Goal + Roadmap Item
+            const bizGoal = member.bizGoals.length > 0 ? member.bizGoals[0] : "조직 성과 기여";
+            const roadmapItem2 = member.growthRoadmap.length > 1 ? member.growthRoadmap[1].task : (member.growthRoadmap[0] ? member.growthRoadmap[0].task : "프로젝트 리딩");
+
+            const gro2 = `${bizGoal}과 같은 비즈니스 목표 달성은 개인의 성장을 넘어 조직에 기여하는 중요한 경험이 됩니다. 특히 ${roadmapItem2} 활동을 통해 실질적인 성과를 만들어낸다면 다음 단계로 도약하는 데 확실한 근거가 될 것입니다.`;
+
+            return { gro1, gro2 };
+        }
+
         function generateEvidence() {
             const strInput = document.getElementById('input-str').value;
             const impInput = document.getElementById('input-imp').value;
             const groInput = document.getElementById('input-gro').value;
 
+            // [수정] Placeholder is just a hint, user input is required to generate
             if(!strInput || !impInput) {
                 alert('강점과 보완점 키워드를 입력해주세요.'); return;
             }
@@ -1377,10 +1467,10 @@
             const impEl2 = document.getElementById('ev-text-imp-2');
             impEl2.innerText = imp2 || "(추천 사례가 없습니다)";
 
-            // Growth
-            const [gro1, gro2] = findTwoUniqueSamples(groInput, 'growth', FEEDBACK_LIBRARY.behavioralSamples);
-            document.getElementById('ev-text-gro-1').innerText = gro1 || "(추천 제언이 없습니다)";
-            document.getElementById('ev-text-gro-2').innerText = gro2 || "(추천 제언이 없습니다)";
+            // Growth (Personalized)
+            const growthSuggestions = buildGrowthSuggestions(currentMember, groInput);
+            document.getElementById('ev-text-gro-1').innerText = growthSuggestions.gro1;
+            document.getElementById('ev-text-gro-2').innerText = growthSuggestions.gro2;
             
             document.getElementById('ai-evidence-section').classList.add('active');
             
@@ -1394,7 +1484,16 @@
             let inputId = 'input-str';
             let sampleType = 'strength';
             if(type === 'imp') { inputId = 'input-imp'; sampleType = 'improvement'; }
-            if(type === 'gro') { inputId = 'input-gro'; sampleType = 'growth'; }
+            
+            // For Growth, we might just regenerate or shuffle if needed. 
+            // Since logic is deterministic based on profile, 'reexplore' for growth might just return same or switch to generic sample?
+            // Let's mix generic sample if re-explored for variety.
+            if(type === 'gro') { 
+                const samples = FEEDBACK_LIBRARY.behavioralSamples.filter(s => s.type === 'growth');
+                const randomSample = samples[Math.floor(Math.random() * samples.length)].text;
+                document.getElementById(`ev-text-gro-${index}`).innerText = randomSample;
+                return; 
+            }
 
             const inputVal = document.getElementById(inputId).value;
             const targetElem = document.getElementById(`ev-text-${type}-${index}`);
@@ -1448,7 +1547,7 @@
             const btn = document.getElementById('btn-generate-feedback');
             const finalBox = document.getElementById('final-feedback-text');
 
-            // Check if at least one is selected for each
+            // Check if at least one is selected for each category
             const hasStr = selectedEvidence.str1 || selectedEvidence.str2;
             const hasImp = selectedEvidence.imp1 || selectedEvidence.imp2;
             const hasGro = selectedEvidence.gro1 || selectedEvidence.gro2;
@@ -1536,7 +1635,7 @@
             // [Growth]
             if (groEvs.length > 0) {
                 const combinedGro = groEvs.join(" 또한, ");
-                msg += `성장 관점에서는 ${combinedGro} 활동이 ${name}님의 커리어 확장에 큰 자산이 될 것입니다.\n\n`;
+                msg += `성장 관점에서는 ${combinedGro}\n\n`;
             }
 
             // [Closing]
