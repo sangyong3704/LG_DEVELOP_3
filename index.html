@@ -409,14 +409,14 @@
         <div class="app-body">
             <nav class="main-sidebar">
                 <ul class="main-menu">
-                    <li class="menu-item" id="menu-eval" onclick="showEval()">📊 CHEMIBRATION(평가)</li>
-                    <li class="menu-item" id="menu-feedback" onclick="showFeedback()">💬 CHEMISTREE(피드백)</li>
+                    <li class="menu-item" id="menu-eval" onclick="showEval()">📊 CHEMIBRATION</li>
+                    <li class="menu-item" id="menu-feedback" onclick="showFeedback()">💬 CHEMISTREE</li>
                 </ul>
                 <ul class="member-list-sidebar" id="member-list-sidebar"></ul>
                 <div class="leader-profile">
                     <div class="lp-avatar">👨🏻‍💼</div>
                     <div class="lp-info">
-                        <div class="lp-name">박LG 팀장</div>
+                        <div class="lp-name">박엘지 팀장</div>
                         <div class="lp-role">DX 추진팀</div>
                     </div>
                 </div>
@@ -429,7 +429,7 @@
                         <!-- 왼쪽 메인 카드 -->
                         <div class="dash-card">
                             <div class="dash-header">
-                                <div class="dash-welcome">박LG 팀장님, 안녕하세요! 👋</div>
+                                <div class="dash-welcome">박엘지 팀장님, 안녕하세요! 👋</div>
                                 <div class="dash-sub">오늘도 팀원들과 함께 성장하는 하루 되세요.</div>
                             </div>
                             <div class="dash-info-block">
@@ -1270,7 +1270,6 @@
             document.getElementById('dev-comp-goals').innerHTML = currentMember.compGoals.map(g => `<li class="goal-item">${g}</li>`).join('');
             document.getElementById('dev-biz-goals').innerHTML = currentMember.bizGoals.map(g => `<li class="goal-item">${g}</li>`).join('');
 
-            // Render Roadmap
             const roadmapContainer = document.getElementById('growth-roadmap-list');
             roadmapContainer.innerHTML = currentMember.growthRoadmap.map((item, index) => `
                 <div class="roadmap-item ${item.checked ? 'checked' : ''}" onclick="toggleRoadmapItem(this)">
