@@ -116,8 +116,13 @@
         /* 컨텐츠 영역 */
         .content-container { flex: 1; background-color: var(--color-bg-gray); overflow-y: auto; padding: 0; position: relative; display: flex; flex-direction: column; }
         
-        .view-section { display: none; padding: 40px; max-width: 1200px; margin: 0 auto; width: 100%; animation: fadeIn 0.3s; }
+        /* [수정] view-section padding 조정 (탭 디자인 통일을 위해) */
+        .view-section { display: none; padding: 0; max-width: 1200px; margin: 0 auto; width: 100%; animation: fadeIn 0.3s; }
         .view-section.active { display: block; }
+        
+        /* 대시보드는 패딩이 필요함 */
+        #view-dashboard { padding: 40px; }
+        #view-feedback-list { padding: 40px; }
 
         /* [VIEW 1] 대시보드 */
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; height: 100%; }
@@ -152,14 +157,10 @@
         .cheer-card { background: linear-gradient(135deg, #f0faff 0%, #ffffff 100%); border: 1px solid #cceeff; text-align: center; align-items: center; justify-content: center; flex: 1; }
         .cheer-icon { font-size: 50px; margin-bottom: 16px; animation: float 3s infinite ease-in-out; }
         .cheer-text { font-size: 16px; font-weight: 700; color: var(--color-teal); line-height: 1.6; }
-        
-        /* [VIEW 2] 평가 */
-        .sub-tabs { display: flex; justify-content: center; border-bottom: 1px solid #ddd; margin-bottom: 30px; gap: 40px; }
-        .sub-tab-item { padding: 14px 10px; cursor: pointer; font-size: 16px; font-weight: 500; color: #888; border-bottom: 3px solid transparent; transition: 0.2s; }
-        .sub-tab-item:hover { color: #555; }
-        .sub-tab-item.active { color: var(--color-purple); font-weight: 700; border-bottom-color: var(--color-purple); }
-        .eval-placeholder { text-align: center; padding: 100px 0; color: #aaa; font-size: 16px; background: #fff; border-radius: 12px; border: 1px dashed #ddd; }
 
+        /* [VIEW 2] 평가 (케미브레이션) - [수정] 탭 디자인 통일 */
+        /* 기존 detail-tabs-wrapper 스타일을 공통으로 사용하거나 똑같이 적용 */
+        
         /* [VIEW 3] 피드백 목록 */
         .member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
         .member-card { background: #fff; border-radius: 16px; padding: 30px 24px; border: 1px solid #eee; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
@@ -174,7 +175,8 @@
         .detail-container { display: none; flex-direction: column; height: 100%; padding: 0; max-width: none; }
         .detail-container.active { display: flex; animation: fadeIn 0.3s; }
 
-        .detail-tabs-wrapper { background: #fff; border-bottom: 1px solid #eee; display: flex; justify-content: center; padding: 0; flex-shrink: 0; }
+        /* [공통] 탭 Wrapper 스타일 (케미브레이션 & 케미트리 상세 동일 적용) */
+        .detail-tabs-wrapper { background: #fff; border-bottom: 1px solid #eee; display: flex; justify-content: center; padding: 0; flex-shrink: 0; width: 100%; }
         .detail-tabs { display: flex; gap: 60px; } 
         .detail-tab { padding: 18px 10px 14px; font-size: 18px; font-weight: 500; color: #999; cursor: pointer; transition: 0.2s; border-bottom: 3px solid transparent; letter-spacing: -0.5px; }
         .detail-tab:hover { color: #555; }
@@ -187,6 +189,11 @@
 
         .detail-content { display: none; animation: fadeIn 0.3s; }
         .detail-content.active { display: block; }
+        
+        /* 평가용 컨텐츠 영역 (패딩 동일하게) */
+        .eval-content-area { padding: 30px 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .eval-placeholder { text-align: center; padding: 100px 0; color: #aaa; font-size: 16px; background: #fff; border-radius: 12px; border: 1px dashed #ddd; }
+
 
         /* 상세 공통 */
         .card { background: #fff; border-radius: 16px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid #eee; margin-bottom: 24px; }
@@ -231,7 +238,7 @@
         .goal-item { padding: 12px; background: #f9f9f9; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #444; line-height: 1.5; display: flex; align-items: flex-start; gap: 8px; }
         .goal-item::before { content:'•'; color:var(--color-teal); font-weight:bold; }
 
-        /* [수정] Feedback Tab - Preference Card (상세 성향 추가) */
+        /* Feedback Tab Elements */
         .preference-card { background: linear-gradient(135deg, #f0faff 0%, #ffffff 100%); border: 1px solid var(--color-lightblue); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
         .pref-header { font-size: 18px; font-weight: 700; color: var(--color-teal); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
         .pref-grid { display: flex; gap: 16px; margin-bottom: 16px; }
@@ -249,16 +256,25 @@
         .fb-input-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
         .fb-card-small { background: #fcfcfc; border: 1px solid #eee; padding: 16px; border-radius: 12px; }
         .fb-label { font-size: 14px; font-weight: 700; margin-bottom: 10px; display: block; }
+        .fb-desc-sub { font-size: 13px; color: #666; margin-bottom: 16px; }
         .fb-textarea { width: 100%; height: 100px; border: 1px solid #ddd; border-radius: 8px; padding: 12px; resize: none; font-family: inherit; font-size: 14px; outline: none; transition: 0.2s; }
         .fb-textarea:focus { border-color: var(--color-purple); background: #fff; }
         
-        .evidence-container { background: #f9f9f9; padding: 20px; border-radius: 12px; margin-bottom: 20px; display: none; }
+        .evidence-container { background: #f9f9f9; padding: 24px; border-radius: 12px; margin-bottom: 20px; display: none; }
         .evidence-container.active { display: block; animation: fadeIn 0.3s; }
         .evidence-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-        .evidence-box { background: #fff; border: 1px solid #ddd; padding: 16px; border-radius: 8px; cursor: pointer; transition: 0.2s; position: relative; }
+        .evidence-box { background: #fff; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: pointer; transition: 0.2s; position: relative; display: flex; flex-direction: column; }
         .evidence-box:hover { border-color: var(--color-lightblue); }
-        .evidence-box.selected { border-color: var(--color-purple); background: #f4eff9; box-shadow: 0 4px 12px rgba(85,29,131,0.1); }
-        .evidence-box.selected::after { content:'✔'; position: absolute; top:10px; right:10px; color:var(--color-purple); font-weight:bold; }
+        .evidence-box.selected { border: 2px solid var(--color-purple); background: #f9f4ff; box-shadow: 0 8px 20px rgba(85,29,131,0.15); }
+        .evidence-box.selected::after { content:'✔'; position: absolute; top:0; left:0; width:100%; height:100%; border-radius: 12px; border: 2px solid var(--color-purple); pointer-events: none; }
+        .ev-title { font-size: 14px; font-weight: 700; color: #555; margin-bottom: 8px; }
+        .ev-text { font-size: 14px; line-height: 1.6; color: #333; margin-bottom: 16px; flex: 1; }
+        .ev-controls { display: flex; gap: 8px; justify-content: flex-end; margin-top: auto; }
+        .btn-xs { padding: 6px 12px; font-size: 12px; border-radius: 6px; border: 1px solid #ddd; background: #fff; cursor: pointer; color: #666; transition: 0.2s; }
+        .btn-xs:hover { background: #eee; }
+        .btn-select { background: #fff; color: var(--color-purple); border: 1px solid var(--color-purple); font-weight: 700; }
+        .btn-select:hover { background: #f4eff9; }
+        .btn-select.active { background: var(--color-purple); color: #fff; border-color: var(--color-purple); }
         
         .tone-controls { display: flex; gap: 20px; padding: 20px; background: #fff; border: 1px solid #eee; border-radius: 12px; margin-bottom: 20px; }
         .tone-group { flex: 1; }
@@ -270,39 +286,20 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
 
-        /* [수정] 모바일 반응형 레이아웃 (Responsive) */
         @media (max-width: 768px) {
             .app-body { flex-direction: column; overflow-y: auto; }
-            
-            /* 사이드바 -> 상단 메뉴바로 변경 */
-            .main-sidebar {
-                width: 100%; height: auto; flex-direction: row; padding: 10px; border-right: none; border-bottom: 1px solid #e0e0e0;
-                justify-content: space-around; align-items: center; flex-shrink: 0;
-            }
-            .leader-profile { display: none; } /* 공간 절약을 위해 프로필 숨김 */
+            .main-sidebar { width: 100%; height: auto; flex-direction: row; padding: 10px; border-right: none; border-bottom: 1px solid #e0e0e0; justify-content: space-around; align-items: center; flex-shrink: 0; }
+            .leader-profile { display: none; }
             .main-menu { display: flex; margin-top: 0; padding: 0; width: 100%; justify-content: space-around; }
             .menu-item { margin-bottom: 0; padding: 10px; font-size: 14px; }
-            .member-list-sidebar { display: none !important; } /* 모바일에서는 사이드 리스트 숨김 (화면이 좁으므로) */
-
-            /* 컨텐츠 영역 */
-            .content-container { overflow-y: visible; } /* Body 스크롤 사용 */
+            .member-list-sidebar { display: none !important; }
+            .content-container { overflow-y: visible; }
             .detail-content-area { padding: 20px; }
             .view-section { padding: 20px; }
-
-            /* 그리드 1단 변경 */
-            .dashboard-grid, .grid-basic, .grid-half, .grid-career-growth, .fb-input-grid, .evidence-grid, .pref-grid {
-                grid-template-columns: 1fr !important;
-                gap: 16px;
-            }
-            
-            /* 상세 탭 조정 */
+            .dashboard-grid, .grid-basic, .grid-half, .grid-career-growth, .fb-input-grid, .evidence-grid, .pref-grid { grid-template-columns: 1fr !important; gap: 16px; }
             .detail-tabs { gap: 20px; }
-            .detail-tab { font-size: 14px; padding: 14px 6px; }
-            
-            /* 기타 요소 크기 조정 */
+            .detail-tab { font-size: 16px; padding: 14px 6px; }
             .grade-big { font-size: 50px; }
-            .grade-info-score { font-size: 22px; }
-            .final-msg-box { height: 150px; }
         }
     </style>
 </head>
@@ -329,14 +326,14 @@
     <div id="main-app">
         <header class="main-header">
             <div class="header-logo" onclick="showDashboard()">CHEMILEADER</div>
-            <input type="text" class="search-box" placeholder="팀원, 부서 검색">
+            <input type="text" id="top-search-input" class="search-box" placeholder="팀원, 부서 검색">
         </header>
 
         <div class="app-body">
             <nav class="main-sidebar">
                 <ul class="main-menu">
-                    <li class="menu-item" id="menu-eval" onclick="showEval()">📊 평가</li>
-                    <li class="menu-item" id="menu-feedback" onclick="showFeedback()">💬 피드백</li>
+                    <li class="menu-item" id="menu-eval" onclick="showEval()">📊 케미브레이션</li>
+                    <li class="menu-item" id="menu-feedback" onclick="showFeedback()">💬 케미트리</li>
                 </ul>
                 <ul class="member-list-sidebar" id="member-list-sidebar"></ul>
                 <div class="leader-profile">
@@ -358,16 +355,10 @@
                                 <div class="dash-welcome">박LG 팀장님, 안녕하세요! 👋</div>
                                 <div class="dash-sub">오늘도 팀원들과 함께 성장하는 하루 되세요.</div>
                             </div>
-                            
-                            <!-- 팀 목표 -->
                             <div class="dash-info-block">
                                 <div class="dash-info-title">🎯 2024 팀 목표</div>
-                                <div class="dash-info-content">
-                                    데이터 기반의 R&D/제조 혁신을 통한<br>전사적 DX 가속화 및 생산성 극대화
-                                </div>
+                                <div class="dash-info-content">데이터 기반의 R&D/제조 혁신을 통한<br>전사적 DX 가속화 및 생산성 극대화</div>
                             </div>
-
-                            <!-- 금주 팀원 특이사항 -->
                             <div class="dash-info-block">
                                 <div class="dash-info-title" style="color:#d97706;">📢 금주 팀원 특이사항</div>
                                 <div class="dash-issue-list">
@@ -389,8 +380,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- 주요 프로젝트 현황 -->
                             <div class="dash-info-block" style="margin-bottom:0;">
                                 <div class="dash-info-title">🚀 주요 프로젝트 현황</div>
                                 <div class="dash-project-list">
@@ -405,8 +394,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- 오른쪽 사이드 카드 -->
                         <div style="display: flex; flex-direction: column; gap: 24px; height:100%;">
                             <div class="dash-card" style="flex:0 auto; padding: 20px;">
                                 <div style="font-size:14px; font-weight:700; color:#555; margin-bottom:10px;">📒 Quick Memo</div>
@@ -415,28 +402,32 @@
                             </div>
                             <div class="dash-card cheer-card">
                                 <div class="cheer-icon">🍀</div>
-                                <div class="cheer-text">
-                                    "리더의 한마디가<br>팀원의 성장을 이끕니다"<br><br>오늘도 힘찬 하루<br>응원합니다!
-                                </div>
+                                <div class="cheer-text">"리더의 한마디가<br>팀원의 성장을 이끕니다"<br><br>오늘도 힘찬 하루<br>응원합니다!</div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- [VIEW 2] 평가 -->
+                <!-- [VIEW 2] 평가 (디자인 수정됨) -->
                 <section id="view-evaluation" class="view-section">
-                    <div class="sub-tabs">
-                        <div class="sub-tab-item active" onclick="switchEvalTab(this)">정량평가</div>
-                        <div class="sub-tab-item" onclick="switchEvalTab(this)">정성평가</div>
-                        <div class="sub-tab-item" onclick="switchEvalTab(this)">공동평가</div>
+                    <!-- [수정] sub-tabs 제거 후 detail-tabs-wrapper 구조 적용 -->
+                    <div class="detail-tabs-wrapper">
+                        <div class="detail-tabs">
+                            <div class="detail-tab active" onclick="switchEvalTab(this)">정량평가</div>
+                            <div class="detail-tab" onclick="switchEvalTab(this)">정성평가</div>
+                            <div class="detail-tab" onclick="switchEvalTab(this)">공동평가</div>
+                        </div>
                     </div>
-                    <div class="eval-placeholder">
-                        <div style="font-size:40px; margin-bottom:20px;">🚧</div>
-                        평가 모듈은 현재 준비 중입니다.<br>추후 업데이트될 예정입니다.
+
+                    <div class="eval-content-area">
+                         <div class="eval-placeholder">
+                            <div style="font-size:40px; margin-bottom:20px;">🚧</div>
+                            평가 모듈은 현재 준비 중입니다.<br>추후 업데이트될 예정입니다.
+                        </div>
                     </div>
                 </section>
 
-                <!-- [VIEW 3] 피드백 - 목록 -->
+                <!-- [VIEW 3] 피드백 목록 -->
                 <section id="view-feedback-list" class="view-section">
                     <div style="margin-bottom:24px;">
                         <div style="font-size:24px; font-weight:700;">팀원 피드백</div>
@@ -445,7 +436,7 @@
                     <div class="member-grid" id="member-card-container"></div>
                 </section>
 
-                <!-- [VIEW 4] 피드백 - 상세 -->
+                <!-- [VIEW 4] 피드백 상세 -->
                 <section id="view-feedback-detail" class="detail-container">
                     <div class="detail-tabs-wrapper">
                         <div class="detail-tabs">
@@ -463,7 +454,6 @@
                             </div>
                         </div>
 
-                        <!-- 1. 기본정보 -->
                         <div id="dt-basic" class="detail-content active">
                             <div class="grid-basic">
                                 <div class="card profile-lg-box">
@@ -507,7 +497,6 @@
                             </div>
                         </div>
 
-                        <!-- 2. 성과 & 육성 -->
                         <div id="dt-perf" class="detail-content">
                             <div class="eval-grade-card">
                                 <div>
@@ -558,30 +547,13 @@
                             </div>
                         </div>
 
-                        <!-- 3. 전달 (피드백) -->
                         <div id="dt-feedback" class="detail-content">
-                            <!-- [수정] 피드백 성향 카드 고도화 -->
                             <div class="preference-card" id="feedback-preference-section">
                                 <div class="pref-header">💡 피드백 성향 가이드</div>
                                 <div class="pref-grid">
-                                    <div class="pref-item" id="pref-directness">
-                                        <div class="pref-icon" id="icon-directness"></div>
-                                        <span class="pref-label">화법</span>
-                                        <strong class="pref-val" id="val-directness"></strong>
-                                        <small class="pref-sub-desc" id="desc-directness"></small>
-                                    </div>
-                                    <div class="pref-item" id="pref-focus">
-                                        <div class="pref-icon" id="icon-focus"></div>
-                                        <span class="pref-label">관점</span>
-                                        <strong class="pref-val" id="val-focus"></strong>
-                                        <small class="pref-sub-desc" id="desc-focus"></small>
-                                    </div>
-                                    <div class="pref-item" id="pref-tone">
-                                        <div class="pref-icon" id="icon-tone"></div>
-                                        <span class="pref-label">어조</span>
-                                        <strong class="pref-val" id="val-tone"></strong>
-                                        <small class="pref-sub-desc" id="desc-tone"></small>
-                                    </div>
+                                    <div class="pref-item" id="pref-directness"><div class="pref-icon" id="icon-directness"></div><span class="pref-label">화법</span><strong class="pref-val" id="val-directness"></strong><small class="pref-sub-desc" id="desc-directness"></small></div>
+                                    <div class="pref-item" id="pref-focus"><div class="pref-icon" id="icon-focus"></div><span class="pref-label">관점</span><strong class="pref-val" id="val-focus"></strong><small class="pref-sub-desc" id="desc-focus"></small></div>
+                                    <div class="pref-item" id="pref-tone"><div class="pref-icon" id="icon-tone"></div><span class="pref-label">어조</span><strong class="pref-val" id="val-tone"></strong><small class="pref-sub-desc" id="desc-tone"></small></div>
                                 </div>
                                 <div class="pref-guide-box">
                                     <span>🤖</span> <span id="pref-guide-text">AI가 팀원의 성향을 고려하여 피드백 초안을 작성합니다.</span>
@@ -590,39 +562,40 @@
 
                             <div class="card">
                                 <div class="card-head" style="color:var(--color-purple);">Step 1. 피드백 키워드 입력</div>
+                                <p class="fb-desc-sub">키워드 별 핵심 한 줄을 입력해주세요!</p>
                                 <div class="fb-input-grid">
                                     <div class="fb-card-small">
                                         <span class="fb-label" style="color:var(--color-magenta)">🔥 강점 (Strength)</span>
-                                        <textarea id="input-str" class="fb-textarea" placeholder="예: 분석적인 사고, 빠른 습득력"></textarea>
+                                        <textarea id="input-str" class="fb-textarea" placeholder="예: 꼼꼼함, 분석적 사고"></textarea>
                                     </div>
                                     <div class="fb-card-small">
                                         <span class="fb-label" style="color:var(--color-teal)">💡 보완점 (Improvement)</span>
-                                        <textarea id="input-imp" class="fb-textarea" placeholder="예: 소통 강화, 경청하는 태도"></textarea>
-                                    </div>
-                                    <div class="fb-card-small">
-                                        <span class="fb-label" style="color:var(--color-purple)">🚀 성장 방향 (Growth)</span>
-                                        <textarea id="input-gro" class="fb-textarea" placeholder="예: 프로젝트 리더, 기술 전문가"></textarea>
+                                        <textarea id="input-imp" class="fb-textarea" placeholder="예: 소통, 일정 관리"></textarea>
                                     </div>
                                 </div>
                                 <div style="text-align:right;">
-                                    <button class="login-btn" style="width:auto; padding:12px 30px; margin:0;" onclick="generateEvidence()">✨ AI 근거 찾기</button>
+                                    <button class="login-btn" style="width:auto; padding:12px 30px; margin:0;" onclick="generateEvidence()">✨ AI 행동 사례 찾기</button>
                                 </div>
                             </div>
 
                             <div id="ai-evidence-section" class="evidence-container">
-                                <div class="card-head" style="border:none; margin-bottom:10px;">Step 2. AI 추천 근거 선택</div>
+                                <div class="card-head" style="border:none; margin-bottom:10px;">Step 2. 구체적 행동 사례 매칭</div>
                                 <div class="evidence-grid">
-                                    <div class="evidence-box" id="ev-box-str" onclick="selectEvidence('str')">
-                                        <div style="font-size:12px; color:#888; margin-bottom:6px;">강점 근거</div>
-                                        <div id="ev-text-str" style="font-size:13px; line-height:1.5;"></div>
+                                    <div class="evidence-box" id="ev-box-str">
+                                        <div class="ev-title">🔥 강점 행동 사례</div>
+                                        <div class="ev-text" id="ev-text-str"></div>
+                                        <div class="ev-controls">
+                                            <button class="btn-xs" onclick="reexplore('str')">🔄 재탐색</button>
+                                            <button class="btn-xs btn-select" id="btn-sel-str" onclick="toggleSelection('str')">선택</button>
+                                        </div>
                                     </div>
-                                    <div class="evidence-box" id="ev-box-imp" onclick="selectEvidence('imp')">
-                                        <div style="font-size:12px; color:#888; margin-bottom:6px;">보완점 근거</div>
-                                        <div id="ev-text-imp" style="font-size:13px; line-height:1.5;"></div>
-                                    </div>
-                                    <div class="evidence-box" id="ev-box-gro" onclick="selectEvidence('gro')">
-                                        <div style="font-size:12px; color:#888; margin-bottom:6px;">성장 제언</div>
-                                        <div id="ev-text-gro" style="font-size:13px; line-height:1.5;"></div>
+                                    <div class="evidence-box" id="ev-box-imp">
+                                        <div class="ev-title">💡 보완점 행동 사례</div>
+                                        <div class="ev-text" id="ev-text-imp"></div>
+                                        <div class="ev-controls">
+                                            <button class="btn-xs" onclick="reexplore('imp')">🔄 재탐색</button>
+                                            <button class="btn-xs btn-select" id="btn-sel-imp" onclick="toggleSelection('imp')">선택</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -658,17 +631,129 @@
     </div>
 
     <script>
-        // --- 성향 가이드 매핑 데이터 ---
+        // [1] 함수 정의 (최상단으로 이동)
+        function switchDetailTab(tabName, el) {
+            if (!el) return;
+            const tabs = el.parentElement ? el.parentElement.querySelectorAll('.detail-tab') : document.querySelectorAll('.detail-tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            document.querySelectorAll('.detail-content').forEach(c => c.classList.remove('active'));
+            const content = document.getElementById('dt-' + tabName);
+            if (content) content.classList.add('active');
+        }
+        
+        // [수정] switchEvalTab 로직 수정 (detail-tab 클래스 사용)
+        function switchEvalTab(el) {
+            if (!el) return;
+            const tabs = el.parentElement.querySelectorAll('.detail-tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function toggleSelection(type) {
+            const box = document.getElementById('ev-box-' + type);
+            const btn = document.getElementById('btn-sel-' + type);
+            const textElem = document.getElementById('ev-text-' + type);
+            if (!box || !btn || !textElem) return; 
+            const text = textElem.innerText;
+
+            if (box.classList.contains('selected')) {
+                selectedEvidence[type] = '';
+                box.classList.remove('selected');
+                btn.classList.remove('active');
+                btn.innerText = '선택';
+            } else {
+                selectedEvidence[type] = text;
+                box.classList.add('selected');
+                btn.classList.add('active');
+                btn.innerText = '✅ 선택됨';
+            }
+            createFinalMsg();
+        }
+
+        function setTone(type, el) {
+            if (!el) return;
+            const isDirect = type === 'direct' || type === 'indirect';
+            if(isDirect) toneProfile.direct = (type === 'direct');
+            else toneProfile.task = (type === 'task');
+            
+            if(el.parentElement) {
+                el.parentElement.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+            }
+            el.classList.add('active');
+            createFinalMsg();
+        }
+
+        function setToneBtnState(id1, id2, isFirst) {
+            const btn1 = document.getElementById('btn-'+id1);
+            const btn2 = document.getElementById('btn-'+id2);
+            if(btn1) btn1.classList.toggle('active', isFirst);
+            if(btn2) btn2.classList.toggle('active', !isFirst);
+            if(id1 === 'direct') toneProfile.direct = isFirst;
+            if(id1 === 'task') toneProfile.task = isFirst;
+        }
+
+        function hideAllViews() {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+            const detailView = document.getElementById('view-feedback-detail');
+            if(detailView) detailView.classList.remove('active');
+            
+            const sidebarList = document.getElementById('member-list-sidebar');
+            if(sidebarList) sidebarList.style.display = 'none';
+        }
+
+        function showDashboard() { 
+            hideAllViews(); 
+            const dash = document.getElementById('view-dashboard');
+            if(dash) dash.classList.add('active');
+            document.querySelector('.content-container').scrollTop = 0;
+        }
+
+        function showEval() { 
+            hideAllViews(); 
+            const evalView = document.getElementById('view-evaluation');
+            const menuEval = document.getElementById('menu-eval');
+            if(evalView) evalView.classList.add('active'); 
+            if(menuEval) menuEval.classList.add('active');
+            document.querySelector('.content-container').scrollTop = 0;
+        }
+
+        function showFeedback() {
+            hideAllViews();
+            const menuFeedback = document.getElementById('menu-feedback');
+            const sidebarList = document.getElementById('member-list-sidebar');
+            const listView = document.getElementById('view-feedback-list');
+
+            if(menuFeedback) menuFeedback.classList.add('active');
+            if(sidebarList) sidebarList.style.display = 'block';
+            if(listView) listView.classList.add('active');
+            
+            renderMemberList(); 
+            renderMembers();    
+        }
+
+        // [2] 데이터 및 변수 선언
         const styleMap = {
             '직설적': { icon: '🎯', desc: '핵심부터 명확하게 전달하는 것을 선호합니다.' },
-            '완곡함': { icon: '🧸', desc: '공감과 격려를 먼저 들을 때 안정감을 느낍니다.' },
+            '완곡함': { icon: '🧸', desc: '먼저 공감과 격려를 들을 때 심리적 안정감을 느끼는 스타일입니다.' },
             '과업 중심': { icon: '📊', desc: '구체적인 성과와 데이터 위주의 피드백을 선호합니다.' },
             '관계 중심': { icon: '🤝', desc: '팀워크와 태도에 대한 인정을 중요하게 생각합니다.' },
             '논리적': { icon: '⚖️', desc: '인과관계와 근거가 명확한 설명을 선호합니다.' },
             '부드러움': { icon: '🌿', desc: '강압적이지 않고 제안하는 투의 어조를 선호합니다.' }
         };
 
-        // --- 데이터베이스 ---
+        const KEYWORD_MAP = {
+            '소통': ['소통', '대화', '말투', '연락', '공유', '커뮤니케이션', '미팅', '회의', '협업'],
+            '꼼꼼': ['꼼꼼', '디테일', '세심', '정확', '실수', '검토', '확인', '완벽'],
+            '속도': ['속도', '빠른', '신속', '납기', '기한', '일정', '데드라인'],
+            '분석': ['분석', '데이터', '논리', '인사이트', '파악', '원인'],
+            '책임': ['책임', '성실', '주도', '마무리', '오너십'],
+            '기술': ['기술', '전문', '지식', '코드', '툴', '학습'],
+            '태도': ['태도', '적극', '긍정', '열정'],
+            '문서': ['문서', '정리', '기록', '리포트', '보고서']
+        };
+
         const teamDB = {
             '박태희': {
                 job: 'Data Scientist', avatar: '👩🏻‍💻', years: '5년 3개월',
@@ -676,14 +761,26 @@
                 feedbackStyle: { directness: '직설적', focus: '과업 중심', tone: '논리적' },
                 skills: [ { name: 'Python', per: 90, color: '#D7177B' }, { name: 'ML', per: 75, color: '#551D83' } ],
                 strengths: ['데이터 인사이트 도출', '새로운 툴 학습 빠름'], weaknesses: ['발표 스킬 부족', '멀티태스킹 어려움'],
-                growthPath: "M20 90 Q 150 30 280 50", growthPoints: [{x:20,y:90}, {x:150,y:30}, {x:280,y:50}], growthDesc: "최근 분석 역량이 급격히 상승함",
+                growthPath: "M30 90 Q 150 10 270 50", growthPoints: [{x:30,y:90}, {x:150,y:40}, {x:270,y:50}], growthDesc: "최근 분석 역량이 급격히 상승함",
                 history: [ { date:'23.01', title:'DX팀 합류', desc:'데이터 분석 리드' }, { date:'19.01', title:'입사', desc:'생산기술팀' } ],
                 kpiTotal: 92, kpiDesc: "데이터 파이프라인 구축 완료 (120% 달성)",
                 coreValues: [ {n:'Customer', s:95}, {n:'Sustainability', s:85}, {n:'Agility', s:90}, {n:'Passion', s:92}, {n:'Collaboration', s:80} ],
                 currRole: 'Data Scientist', goalRole: 'Data Tech Lead', 
                 compGoals: ['MLOps 파이프라인 구축 마스터', 'AWS 머신러닝 전문 자격 취득', '기술 블로그 월 1회 연재'],
                 bizGoals: ['생산 공정 수율 2% 개선 모델 개발', '데이터 분석 자동화로 리드타임 30% 단축', '사내 데이터 리터러시 교육 진행'],
-                projectLog: { succ: "데이터 파이프라인 최적화로 처리 속도 200% 개선", imp: "현업 부서와의 초기 요구사항 조율 미흡" }
+                projectLog: { succ: "데이터 파이프라인 최적화로 처리 속도 200% 개선", imp: "현업 부서와의 초기 요구사항 조율 미흡" },
+                behavioralSamples: {
+                    strength: [
+                        { tags: ['꼼꼼', '분석', '데이터'], text: "지난달 공정 데이터 전처리 과정에서 0.1%의 결측치까지 놓치지 않고 완벽하게 정제하여 모델 정확도를 높인 점이 돋보입니다." },
+                        { tags: ['속도', '파이썬'], text: "복잡한 데이터 쿼리를 파이썬 스크립트로 자동화하여 분석 시간을 기존 대비 50% 단축시켰습니다." },
+                        { tags: ['논리', '인사이트'], text: "데이터 패턴에서 비즈니스 인사이트를 도출하여 생산 효율성 개선 제안을 논리적으로 전개했습니다." }
+                    ],
+                    improvement: [
+                        { tags: ['소통', '발표'], text: "분석 결과를 공유하는 자리에서 전문 용어를 너무 많이 사용하여, 현업 담당자들이 이해하는 데 어려움을 겪었습니다." },
+                        { tags: ['협업', '일정'], text: "개인 업무에 몰입하느라 유관부서와의 중간 공유 일정을 놓친 사례가 있었습니다. 주기적인 소통이 필요합니다." },
+                        { tags: ['멀티태스킹'], text: "여러 프로젝트가 동시에 진행될 때 우선순위 설정에 어려움을 겪어 마감 기한이 임박했던 적이 있습니다." }
+                    ]
+                }
             },
             '박재현': {
                 job: 'AI Researcher', avatar: '👨🏻‍🔬', years: '8년 1개월',
@@ -691,14 +788,24 @@
                 feedbackStyle: { directness: '완곡함', focus: '과업 중심', tone: '논리적' },
                 skills: [ { name: 'Deep Learning', per: 95, color: '#551D83' }, { name: 'CV', per: 80, color: '#D7177B' } ],
                 strengths: ['최신 논문 구현 능력', '알고리즘 최적화'], weaknesses: ['비즈니스 적용 관점', '문서화 습관'],
-                growthPath: "M20 70 L 150 50 L 280 20", growthPoints: [{x:20,y:70}, {x:150,y:50}, {x:280,y:20}], growthDesc: "꾸준한 우상향 성장세 유지",
+                growthPath: "M30 90 Q 150 50 270 20", growthPoints: [{x:30,y:90}, {x:150,y:53}, {x:270,y:20}], growthDesc: "꾸준한 우상향 성장세 유지",
                 history: [ { date:'22.01', title:'선행연구팀', desc:'비전 검사' } ],
                 kpiTotal: 88, kpiDesc: "특허 2건 출원, 학회 발표",
                 coreValues: [ {n:'Customer', s:80}, {n:'Sustainability', s:75}, {n:'Agility', s:95}, {n:'Passion', s:90}, {n:'Collaboration', s:70} ],
                 currRole: 'AI Researcher', goalRole: 'Principal Researcher', 
                 compGoals: ['Top Tier 학회 논문 게재', '글로벌 연구 네트워크 확장', '최신 생성형 AI 모델 파인튜닝'],
                 bizGoals: ['비전 검사 정확도 99.9% 달성으로 불량률 감소', 'AI 모델 경량화로 엣지 디바이스 탑재', '신규 연구 과제 발굴 및 제안'],
-                projectLog: { succ: "비전 검사 정확도 99.5% 달성", imp: "현장 엔지니어 피드백 반영 지연" }
+                projectLog: { succ: "비전 검사 정확도 99.5% 달성", imp: "현장 엔지니어 피드백 반영 지연" },
+                behavioralSamples: {
+                    strength: [
+                        { tags: ['연구', '최신', '꼼꼼'], text: "최신 Transformer 모델 논문을 꼼꼼하게 분석하고 빠르게 구현하여 비전 검사 정확도를 획기적으로 개선했습니다." },
+                        { tags: ['최적화', '알고리즘', '기술'], text: "복잡한 알고리즘을 경량화하여 엣지 디바이스에서도 실시간 추론이 가능하게 만든 최적화 역량이 뛰어납니다." }
+                    ],
+                    improvement: [
+                        { tags: ['소통', '연락', '공유'], text: "연구에 몰입하다 보면 메신저 응답이 늦어지거나, 중간 공유가 누락되는 경우가 종종 발생하여 협업 부서의 대기 시간이 길어집니다." },
+                        { tags: ['비즈니스', '현장'], text: "연구 결과의 우수성에도 불구하고, 이를 실제 생산 현장에 어떻게 적용할지에 대한 현실적인 고려가 부족해 보입니다." }
+                    ]
+                }
             },
             '박정호': {
                 job: 'Project Manager', avatar: '👨🏻‍💼', years: '12년',
@@ -706,14 +813,24 @@
                 feedbackStyle: { directness: '완곡함', focus: '관계 중심', tone: '부드러움' },
                 skills: [ { name: 'PM', per: 92, color: '#008785' }, { name: 'Communication', per: 88, color: '#551D83' } ],
                 strengths: ['강력한 추진력', '이해관계자 조율'], weaknesses: ['최신 기술 트렌드 이해', '실무 툴 활용'],
-                growthPath: "M20 30 Q 150 20 280 20", growthPoints: [{x:20,y:30}, {x:150,y:20}, {x:280,y:20}], growthDesc: "안정적인 리더십 발휘 단계",
+                growthPath: "M30 40 Q 150 30 270 40", growthPoints: [{x:30,y:40}, {x:150,y:35}, {x:270,y:40}], growthDesc: "안정적인 리더십 발휘 단계",
                 history: [ { date:'20.01', title:'DX PM', desc:'스마트팩토리' } ],
                 kpiTotal: 95, kpiDesc: "프로젝트 납기 100% 준수",
                 coreValues: [ {n:'Customer', s:90}, {n:'Sustainability', s:85}, {n:'Agility', s:88}, {n:'Passion', s:92}, {n:'Collaboration', s:98} ],
                 currRole: 'Project Manager', goalRole: 'Center Leader', 
                 compGoals: ['PMP 자격증 갱신 및 최신 트렌드 학습', '애자일 코칭 전문가 과정 수료', 'DX 비즈니스 전략 수립 역량 강화'],
                 bizGoals: ['스마트팩토리 구축 프로젝트 성공적 런칭', '프로젝트 예산 절감 10% 달성', '팀 내 애자일 문화 전파 및 정착'],
-                projectLog: { succ: "스마트팩토리 예산 15% 절감", imp: "초기 기술 검토 단계 리스크 관리" }
+                projectLog: { succ: "스마트팩토리 예산 15% 절감", imp: "초기 기술 검토 단계 리스크 관리" },
+                behavioralSamples: {
+                    strength: [
+                        { tags: ['조율', '소통', '꼼꼼'], text: "스마트팩토리 구축 프로젝트에서 유관부서 간의 이해관계를 꼼꼼하게 파악하고 조율하여 일정을 차질 없이 준수했습니다." },
+                        { tags: ['추진력', '리더십', '책임'], text: "명확한 R&R 설정과 정기적인 싱크업 미팅을 통해 팀원들이 목표에 집중할 수 있는 환경을 주도적으로 조성했습니다." }
+                    ],
+                    improvement: [
+                        { tags: ['기술', '이해', '지식'], text: "AI 모델링에 대한 기술적 이해도가 부족하여 개발팀과의 커뮤니케이션에서 다소 오해가 발생했던 사례가 있습니다." },
+                        { tags: ['툴', '협업'], text: "최신 협업 툴(Jira, Confluence) 활용 능력을 높인다면 프로젝트 관리 효율성이 더욱 향상될 것입니다." }
+                    ]
+                }
             },
             '박재원': {
                 job: 'Software Eng.', avatar: '👩🏻‍💻', years: '3년',
@@ -721,14 +838,24 @@
                 feedbackStyle: { directness: '직설적', focus: '과업 중심', tone: '부드러움' },
                 skills: [ { name: 'React', per: 75, color: '#551D83' }, { name: 'AWS', per: 60, color: '#70C0E6' } ],
                 strengths: ['빠른 프로토타이핑', '성실한 태도'], weaknesses: ['아키텍처 설계', '코드 리뷰 참여'],
-                growthPath: "M20 90 L 120 80 L 280 40", growthPoints: [{x:20,y:90}, {x:120,y:80}, {x:280,y:40}], growthDesc: "초기 적응 후 가파른 성장",
+                growthPath: "M30 90 L 120 80 L 270 30", growthPoints: [{x:30,y:90}, {x:120,y:80}, {x:270,y:30}], growthDesc: "초기 적응 후 가파른 성장",
                 history: [ { date:'21.02', title:'입사', desc:'플랫폼 개발' } ],
                 kpiTotal: 85, kpiDesc: "신규 기능 3종 배포 완료",
                 coreValues: [ {n:'Customer', s:85}, {n:'Sustainability', s:80}, {n:'Agility', s:85}, {n:'Passion', s:90}, {n:'Collaboration', s:88} ],
                 currRole: 'Software Eng.', goalRole: 'Architect', 
                 compGoals: ['Kubernetes 운영 마스터', 'MSA 아키텍처 설계 경험 축적', '오픈소스 프로젝트 기여'],
                 bizGoals: ['시스템 가용성 99.99% 유지', '레거시 시스템 클라우드 전환 가속화', '개발 생산성 20% 향상 툴 도입'],
-                projectLog: { succ: "사용자 요청 기능 2주내 배포", imp: "테스트 코드 커버리지 부족" }
+                projectLog: { succ: "사용자 요청 기능 2주내 배포", imp: "테스트 코드 커버리지 부족" },
+                behavioralSamples: {
+                    strength: [
+                        { tags: ['속도', '프로토타이핑', '빠른'], text: "사용자 요청 기능을 2주 만에 프로토타입으로 빠르게 구현하여 피드백을 즉각적으로 수용한 점이 인상적입니다." },
+                        { tags: ['성실', '책임', '꼼꼼'], text: "맡은 기능 개발에 대해 책임감을 가지고 꼼꼼하게 테스트하여 버그 없는 배포를 수행했습니다." }
+                    ],
+                    improvement: [
+                        { tags: ['설계', '아키텍처'], text: "기능 구현에 집중하느라 전체 시스템 아키텍처의 확장성을 고려하지 못한 설계가 일부 발견되었습니다." },
+                        { tags: ['코드리뷰', '소통'], text: "동료의 코드 리뷰에 조금 더 적극적으로 참여하여 팀 전체의 코드 품질 향상에 기여했으면 합니다." }
+                    ]
+                }
             },
             '하유림': {
                 job: 'UX Designer', avatar: '👩🏻‍🎨', years: '4년',
@@ -736,14 +863,24 @@
                 feedbackStyle: { directness: '완곡함', focus: '관계 중심', tone: '부드러움' },
                 skills: [ { name: 'UI Design', per: 88, color: '#D7177B' }, { name: 'Figma', per: 90, color: '#551D83' } ],
                 strengths: ['사용자 중심 사고', '창의적 디자인'], weaknesses: ['데이터 기반 설득', '개발 용어 이해'],
-                growthPath: "M20 90 Q 150 80 280 30", growthPoints: [{x:20,y:90}, {x:150,y:70}, {x:280,y:30}], growthDesc: "디자인 시스템 구축으로 전문성 확대",
+                growthPath: "M30 90 Q 150 80 270 30", growthPoints: [{x:30,y:90}, {x:150,y:70}, {x:270,y:30}], growthDesc: "디자인 시스템 구축으로 전문성 확대",
                 history: [ { date:'19.11', title:'입사', desc:'디자인센터' } ],
                 kpiTotal: 90, kpiDesc: "디자인 시스템 1.0 배포",
                 coreValues: [ {n:'Customer', s:98}, {n:'Sustainability', s:80}, {n:'Agility', s:85}, {n:'Passion', s:90}, {n:'Collaboration', s:92} ],
                 currRole: 'UX Designer', goalRole: 'Product Designer', 
                 compGoals: ['UX Writing 가이드라인 수립', '데이터 시각화 디자인 역량 강화', '사용자 리서치 방법론 마스터'],
                 bizGoals: ['서비스 사용자 이탈률 5% 감소', '디자인-개발 핸드오프 효율화', '신규 서비스 UX 컨셉 제안 및 채택'],
-                projectLog: { succ: "개발-디자인 협업 효율 30% 증가", imp: "로그 데이터 기반 근거 부족" }
+                projectLog: { succ: "개발-디자인 협업 효율 30% 증가", imp: "로그 데이터 기반 근거 부족" },
+                behavioralSamples: {
+                    strength: [
+                        { tags: ['사용자', '인사이트', '공감'], text: "사용자 인터뷰를 통해 숨겨진 니즈를 발굴하고 이를 직관적인 UI로 풀어낸 점이 매우 훌륭합니다." },
+                        { tags: ['디자인', '효율', '꼼꼼'], text: "디자인 시스템을 꼼꼼하게 구축하여 개발팀과의 협업 효율을 30% 이상 높인 성과가 돋보입니다." }
+                    ],
+                    improvement: [
+                        { tags: ['데이터', '근거', '분석'], text: "디자인 시안 제안 시, 사용자 행동 데이터(Log)나 A/B 테스트 결과와 같은 정량적 근거가 부족할 때가 있습니다." },
+                        { tags: ['개발', '이해', '기술'], text: "개발팀과 소통할 때 기술적인 제약 사항에 대한 이해를 높인다면 더 현실적인 디자인 제안이 가능할 것입니다." }
+                    ]
+                }
             }
         };
 
@@ -765,6 +902,24 @@
         }
         document.getElementById('login-pw').addEventListener('keypress', (e) => { if(e.key==='Enter') checkLogin(); });
 
+        // --- 상단바 검색 기능 ---
+        document.getElementById('top-search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const val = this.value.trim();
+                if (!val) return;
+
+                const foundName = Object.keys(teamDB).find(name => name.includes(val));
+                
+                if (foundName) {
+                    showFeedback();
+                    showFeedbackDetail(foundName);
+                    this.value = '';
+                } else {
+                    alert('해당 팀원을 찾을 수 없습니다.');
+                }
+            }
+        });
+
         // --- 네비게이션 ---
         function hideAllViews() {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -783,10 +938,7 @@
             document.getElementById('menu-eval').classList.add('active');
             document.querySelector('.content-container').scrollTop = 0;
         }
-        function switchEvalTab(el) {
-            document.querySelectorAll('.sub-tab-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-        }
+        
         function showFeedback() {
             hideAllViews();
             document.getElementById('menu-feedback').classList.add('active');
@@ -831,10 +983,10 @@
             document.getElementById('view-feedback-detail').classList.add('active');
 
             document.querySelectorAll('.member-list-item').forEach(item => item.classList.remove('active'));
-            document.getElementById('ml-' + name).classList.add('active');
+            const li = document.getElementById('ml-' + name);
+            if (li) li.classList.add('active');
             document.getElementById('detail-member-name').innerText = name;
 
-            // [Tab 1: Basic]
             document.getElementById('p-avatar').innerText = currentMember.avatar;
             document.getElementById('p-name').innerText = name;
             document.getElementById('p-job').innerText = `${currentMember.job} | ${currentMember.years}`;
@@ -855,103 +1007,129 @@
                 `<div class="timeline-item"><div class="tl-date">${h.date}</div><div class="tl-title">${h.title}</div><div class="tl-desc">${h.desc}</div></div>`
             ).join('');
 
-            // [Tab 2: Perf]
             const finalScore = currentMember.kpiTotal * 0.8 + currentMember.coreValues.reduce((a,b)=>a+b.s,0)/5 * 0.2;
             document.getElementById('final-grade').innerText = finalScore >= 90 ? 'S' : (finalScore >= 80 ? 'A' : 'B');
             document.getElementById('sum-kpi').innerText = currentMember.kpiTotal;
             document.getElementById('sum-cv').innerText = Math.round(currentMember.coreValues.reduce((a,b)=>a+b.s,0)/5);
-            
             document.getElementById('kpi-val').innerText = currentMember.kpiTotal + '%';
             document.getElementById('kpi-desc').innerText = currentMember.kpiDesc;
             const dashOffset = 339 - (339 * currentMember.kpiTotal / 100);
             setTimeout(() => document.getElementById('kpi-donut').style.strokeDashoffset = dashOffset, 100);
-            
             document.getElementById('cv-list').innerHTML = currentMember.coreValues.map(c => 
                 `<div style="margin-bottom:8px; font-size:13px;"><div style="display:flex; justify-content:space-between; margin-bottom:2px;"><span>${c.n}</span><strong>${c.s}</strong></div><div style="height:4px; background:#eee; border-radius:2px;"><div style="width:${c.s}%; height:100%; background:var(--color-teal); border-radius:2px;"></div></div></div>`
             ).join('');
-            
             document.getElementById('dev-current').innerText = currentMember.currRole;
             document.getElementById('dev-goal').innerText = currentMember.goalRole;
             document.getElementById('dev-comp-goals').innerHTML = currentMember.compGoals.map(g => `<li class="goal-item">${g}</li>`).join('');
             document.getElementById('dev-biz-goals').innerHTML = currentMember.bizGoals.map(g => `<li class="goal-item">${g}</li>`).join('');
 
-            // [Tab 3: Feedback - Preference Setting]
             const pref = currentMember.feedbackStyle;
             document.getElementById('val-directness').innerText = pref.directness;
             document.getElementById('desc-directness').innerText = styleMap[pref.directness].desc;
             document.getElementById('icon-directness').innerText = styleMap[pref.directness].icon;
-            
             document.getElementById('val-focus').innerText = pref.focus;
             document.getElementById('desc-focus').innerText = styleMap[pref.focus].desc;
             document.getElementById('icon-focus').innerText = styleMap[pref.focus].icon;
-
             document.getElementById('val-tone').innerText = pref.tone;
             document.getElementById('desc-tone').innerText = styleMap[pref.tone].desc;
             document.getElementById('icon-tone').innerText = styleMap[pref.tone].icon;
-
-            document.getElementById('pref-guide-text').innerText = `AI가 ${name}님의 성향을 고려하여 맞춤형 피드백 초안을 작성합니다.`;
-            
+            document.getElementById('pref-guide-text').innerText = `AI가 ${name}님의 성향(${pref.directness}, ${pref.focus})을 고려하여 맞춤형 피드백 초안을 작성합니다.`;
             document.querySelectorAll('.pref-item').forEach(el => el.classList.add('highlight')); 
+            
             setToneBtnState('direct', 'indirect', pref.directness === '직설적');
             setToneBtnState('task', 'relation', pref.focus === '과업 중심');
             
-            // Reset UI
             switchDetailTab('basic', document.querySelector('.detail-tab'));
             document.getElementById('input-str').value = '';
             document.getElementById('input-imp').value = '';
-            document.getElementById('input-gro').value = '';
             document.getElementById('final-feedback-text').value = '';
-            document.getElementById('ai-evidence-section').classList.remove('active');
+            const aiSection = document.getElementById('ai-evidence-section');
+            if(aiSection) aiSection.classList.remove('active');
             selectedEvidence = { str:'', imp:'', gro:'' };
-            
             document.querySelector('.detail-content-area').scrollTop = 0;
         }
 
-        function setToneBtnState(id1, id2, isFirst) {
-            document.getElementById('btn-'+id1).classList.toggle('active', isFirst);
-            document.getElementById('btn-'+id2).classList.toggle('active', !isFirst);
-            if(id1 === 'direct') toneProfile.direct = isFirst;
-            if(id1 === 'task') toneProfile.task = isFirst;
-        }
-
-        function switchDetailTab(tabName, el) {
-            document.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-            document.querySelectorAll('.detail-content').forEach(c => c.classList.remove('active'));
-            document.getElementById('dt-' + tabName).classList.add('active');
+        function findMatchingSample(inputText, samples) {
+            const input = inputText.trim();
+            if (!input) return "";
+            let foundTags = [];
+            for (const [key, keywords] of Object.entries(KEYWORD_MAP)) {
+                if (keywords.some(k => input.includes(k))) foundTags.push(key);
+            }
+            let matchedSamples = [];
+            if (foundTags.length > 0) {
+                matchedSamples = samples.filter(s => s.tags.some(t => foundTags.includes(t)));
+            }
+            
+            if (matchedSamples.length > 0) {
+                return matchedSamples[Math.floor(Math.random() * matchedSamples.length)].text;
+            } else {
+                return samples[Math.floor(Math.random() * samples.length)].text;
+            }
         }
 
         function generateEvidence() {
-            if(!document.getElementById('input-str').value || !document.getElementById('input-imp').value || !document.getElementById('input-gro').value) {
-                alert('키워드를 모두 입력해주세요.'); return;
+            const strInput = document.getElementById('input-str').value;
+            const impInput = document.getElementById('input-imp').value;
+
+            if(!strInput && !impInput) {
+                alert('강점 또는 보완점 키워드를 하나 이상 입력해주세요.'); return;
             }
-            document.getElementById('ev-text-str').innerText = `"${currentMember.projectLog.succ}" 성과를 보면, 입력하신 강점이 잘 드러납니다.`;
-            document.getElementById('ev-text-imp').innerText = `"${currentMember.projectLog.imp}" 사례에서 보완이 필요해 보입니다.`;
-            document.getElementById('ev-text-gro').innerText = `"${currentMember.goalRole}"로 성장하기 위해 꼭 필요한 부분입니다.`;
+            
+            if(strInput) {
+                const strText = findMatchingSample(strInput, currentMember.behavioralSamples.strength);
+                document.getElementById('ev-text-str').innerText = strText;
+            } else {
+                document.getElementById('ev-text-str').innerText = "(입력된 키워드가 없어 추천할 강점 사례가 없습니다.)";
+            }
+
+            if(impInput) {
+                const impText = findMatchingSample(impInput, currentMember.behavioralSamples.improvement);
+                document.getElementById('ev-text-imp').innerText = impText;
+            } else {
+                document.getElementById('ev-text-imp').innerText = "(입력된 키워드가 없어 추천할 보완점 사례가 없습니다.)";
+            }
             
             document.getElementById('ai-evidence-section').classList.add('active');
             createFinalMsg();
         }
 
-        function selectEvidence(type) {
-            const box = document.getElementById('ev-box-'+type);
-            const text = document.getElementById('ev-text-'+type).innerText;
-            if(selectedEvidence[type]) {
-                selectedEvidence[type] = ''; box.classList.remove('selected');
-            } else {
-                selectedEvidence[type] = text; box.classList.add('selected');
-            }
-            createFinalMsg();
-        }
+        function reexplore(type) {
+            const inputVal = document.getElementById('input-' + type).value;
+            const currentTextElem = document.getElementById('ev-text-' + type);
+            const currentText = currentTextElem.innerText;
 
-        function setTone(type, el) {
-            const isDirect = type === 'direct' || type === 'indirect';
-            if(isDirect) toneProfile.direct = (type === 'direct');
-            else toneProfile.task = (type === 'task');
+            let samples = [];
+            if (type === 'str') samples = currentMember.behavioralSamples.strength;
+            if (type === 'imp') samples = currentMember.behavioralSamples.improvement;
             
-            el.parentElement.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
-            createFinalMsg();
+            const candidates = samples.filter(s => s.text !== currentText);
+            
+            if(candidates.length > 0) {
+                const input = inputVal.trim();
+                let foundTags = [];
+                for (const [key, keywords] of Object.entries(KEYWORD_MAP)) {
+                    if (keywords.some(k => input.includes(k))) foundTags.push(key);
+                }
+                
+                let matchedCandidates = candidates.filter(s => s.tags.some(t => foundTags.includes(t)));
+                
+                if(matchedCandidates.length > 0) {
+                     currentTextElem.innerText = matchedCandidates[Math.floor(Math.random() * matchedCandidates.length)].text;
+                } else {
+                     currentTextElem.innerText = candidates[Math.floor(Math.random() * candidates.length)].text;
+                }
+
+                selectedEvidence[type] = ''; 
+                const box = document.getElementById('ev-box-' + type);
+                const btn = document.getElementById('btn-sel-' + type);
+                if(box) box.classList.remove('selected'); 
+                if(btn) {
+                    btn.classList.remove('active');   
+                    btn.innerText = '선택';           
+                }
+                createFinalMsg(); 
+            }
         }
 
         function createFinalMsg() {
@@ -974,7 +1152,8 @@
             msg += `3. 성장 제언\n${gro} 방향으로 역량을 키워봅시다.`;
             if(selectedEvidence.gro) msg += ` ${selectedEvidence.gro}`;
             
-            document.getElementById('final-feedback-text').value = msg;
+            const finalBox = document.getElementById('final-feedback-text');
+            if(finalBox) finalBox.value = msg;
         }
     </script>
 </body>
