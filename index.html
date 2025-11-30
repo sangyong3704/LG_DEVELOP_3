@@ -114,13 +114,13 @@
         .lp-role { font-size: 11px; color: #888; }
 
         /* 컨텐츠 영역 */
+        /* [수정] overflow-y: auto 유지하되, 내부 view들이 100% flex로 동작할 경우를 위해 display: flex */
         .content-container { flex: 1; background-color: var(--color-bg-gray); overflow-y: auto; padding: 0; position: relative; display: flex; flex-direction: column; }
         
-        /* [수정] view-section padding 조정 (탭 디자인 통일을 위해) */
+        /* [수정] view-section은 리스트/대시보드용 (Max-width 제한 있음) */
         .view-section { display: none; padding: 0; max-width: 1200px; margin: 0 auto; width: 100%; animation: fadeIn 0.3s; }
         .view-section.active { display: block; }
         
-        /* 대시보드는 패딩이 필요함 */
         #view-dashboard { padding: 40px; }
         #view-feedback-list { padding: 40px; }
 
@@ -158,9 +158,6 @@
         .cheer-icon { font-size: 50px; margin-bottom: 16px; animation: float 3s infinite ease-in-out; }
         .cheer-text { font-size: 16px; font-weight: 700; color: var(--color-teal); line-height: 1.6; }
 
-        /* [VIEW 2] 평가 (케미브레이션) - [수정] 탭 디자인 통일 */
-        /* 기존 detail-tabs-wrapper 스타일을 공통으로 사용하거나 똑같이 적용 */
-        
         /* [VIEW 3] 피드백 목록 */
         .member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
         .member-card { background: #fff; border-radius: 16px; padding: 30px 24px; border: 1px solid #eee; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
@@ -171,18 +168,23 @@
         .mc-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
         .mc-tag { font-size: 12px; background: #f0f4f8; padding: 4px 10px; border-radius: 20px; color: #555; font-weight: 500; }
 
-        /* [VIEW 4] 피드백 상세 */
-        .detail-container { display: none; flex-direction: column; height: 100%; padding: 0; max-width: none; }
+        /* [VIEW 4 & VIEW 2 공통] Full Width Container */
+        .detail-container { display: none; flex-direction: column; height: 100%; padding: 0; max-width: none; width: 100%; }
         .detail-container.active { display: flex; animation: fadeIn 0.3s; }
 
-        /* [공통] 탭 Wrapper 스타일 (케미브레이션 & 케미트리 상세 동일 적용) */
+        /* [수정] 스크롤바가 오른쪽 끝에 붙도록 하는 래퍼 */
+        .detail-scroll-wrapper { flex: 1; overflow-y: auto; width: 100%; }
+
+        /* [공통] 탭 Wrapper 스타일 */
         .detail-tabs-wrapper { background: #fff; border-bottom: 1px solid #eee; display: flex; justify-content: center; padding: 0; flex-shrink: 0; width: 100%; }
         .detail-tabs { display: flex; gap: 60px; } 
         .detail-tab { padding: 18px 10px 14px; font-size: 18px; font-weight: 500; color: #999; cursor: pointer; transition: 0.2s; border-bottom: 3px solid transparent; letter-spacing: -0.5px; }
         .detail-tab:hover { color: #555; }
         .detail-tab.active { color: var(--color-purple); font-weight: 700; border-bottom-color: var(--color-purple); }
 
-        .detail-content-area { padding: 30px 40px; overflow-y: auto; flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; }
+        /* [수정] 컨텐츠 영역 자체는 스크롤을 갖지 않고, 중앙 정렬만 담당 */
+        .detail-content-area { padding: 30px 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        
         .detail-header { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; }
         .btn-back { padding: 8px 14px; background: #fff; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-weight: 600; color: #555; display: flex; align-items: center; gap: 6px; transition: 0.2s; font-size: 13px; }
         .btn-back:hover { background: #f5f5f5; color: #333; }
@@ -408,9 +410,9 @@
                     </div>
                 </section>
 
-                <!-- [VIEW 2] 평가 (디자인 수정됨) -->
-                <section id="view-evaluation" class="view-section">
-                    <!-- [수정] sub-tabs 제거 후 detail-tabs-wrapper 구조 적용 -->
+                <!-- [VIEW 2] 평가 (디자인 수정됨 - Full Width 구조 적용) -->
+                <!-- [수정] class="detail-container" 적용하여 전체 너비 사용 -->
+                <section id="view-evaluation" class="detail-container">
                     <div class="detail-tabs-wrapper">
                         <div class="detail-tabs">
                             <div class="detail-tab active" onclick="switchEvalTab(this)">정량평가</div>
@@ -419,10 +421,13 @@
                         </div>
                     </div>
 
-                    <div class="eval-content-area">
-                         <div class="eval-placeholder">
-                            <div style="font-size:40px; margin-bottom:20px;">🚧</div>
-                            평가 모듈은 현재 준비 중입니다.<br>추후 업데이트될 예정입니다.
+                    <!-- [수정] 스크롤은 여기서 담당하고 컨텐츠는 중앙 정렬 -->
+                    <div class="detail-scroll-wrapper">
+                        <div class="eval-content-area">
+                             <div class="eval-placeholder">
+                                <div style="font-size:40px; margin-bottom:20px;">🚧</div>
+                                평가 모듈은 현재 준비 중입니다.<br>추후 업데이트될 예정입니다.
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -446,181 +451,184 @@
                         </div>
                     </div>
 
-                    <div class="detail-content-area">
-                        <div class="detail-header">
-                            <button class="btn-back" onclick="showFeedback()">← 목록으로</button>
-                            <div style="font-size:20px; font-weight:700;">
-                                <span id="detail-member-name"></span>
-                            </div>
-                        </div>
-
-                        <div id="dt-basic" class="detail-content active">
-                            <div class="grid-basic">
-                                <div class="card profile-lg-box">
-                                    <div class="profile-lg-img" id="p-avatar"></div>
-                                    <div style="font-size:22px; font-weight:700;" id="p-name"></div>
-                                    <div style="color:#666; margin-bottom:12px;" id="p-job"></div>
-                                    <div id="p-keywords" style="display:flex; justify-content:center; gap:6px; flex-wrap:wrap;"></div>
-                                    <div id="p-info-list" style="margin-top:20px; text-align:left; border-top:1px solid #eee; padding-top:20px;"></div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-head">전문 역량</div>
-                                    <div id="p-skills"></div>
-                                    <div class="card-head" style="margin-top:30px;">SWOT 분석</div>
-                                    <div class="swot-box">
-                                        <div class="swot-col">
-                                            <div class="swot-head" style="color:var(--color-magenta)">🔥 강점</div>
-                                            <div id="p-strengths"></div>
-                                        </div>
-                                        <div class="swot-col">
-                                            <div class="swot-head" style="color:var(--color-teal)">💡 보완점</div>
-                                            <div id="p-weaknesses"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="grid-half">
-                                <div class="card">
-                                    <div class="card-head">성장 곡선</div>
-                                    <div style="height:150px; display:flex; align-items:center; justify-content:center;">
-                                        <svg width="300" height="120" viewBox="0 0 300 120">
-                                            <path id="growth-path" d="" fill="none" stroke="var(--color-purple)" stroke-width="3" stroke-linecap="round"/>
-                                            <g id="growth-points"></g>
-                                        </svg>
-                                    </div>
-                                    <div id="growth-desc" style="text-align:center; color:#666; font-size:14px;"></div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-head">Career History</div>
-                                    <div id="p-history" style="padding-top:10px;"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="dt-perf" class="detail-content">
-                            <div class="eval-grade-card">
-                                <div>
-                                    <div style="font-size:14px; opacity:0.8;">2024 종합 성과 등급</div>
-                                    <div class="grade-big" id="final-grade"></div>
-                                </div>
-                                <div class="grade-info-right">
-                                    <div class="grade-info-item">업무달성도(KPI) <strong id="sum-kpi" class="grade-info-score"></strong>점</div>
-                                    <div class="grade-info-item">핵심가치 <strong id="sum-cv" class="grade-info-score"></strong>점</div>
-                                </div>
-                            </div>
-                            <div class="grid-half">
-                                <div class="card">
-                                    <div class="card-head">업무 달성도 (KPI)</div>
-                                    <div class="kpi-donut-wrapper">
-                                        <svg width="120" height="120">
-                                            <circle cx="60" cy="60" r="54" fill="none" stroke="#f0f0f0" stroke-width="12"></circle>
-                                            <circle id="kpi-donut" cx="60" cy="60" r="54" fill="none" stroke="var(--color-magenta)" stroke-width="12" stroke-linecap="round" stroke-dasharray="339" stroke-dashoffset="339" transform="rotate(-90 60 60)"></circle>
-                                        </svg>
-                                        <div class="kpi-text">
-                                            <div style="font-weight:700; font-size:24px; color:var(--color-magenta);" id="kpi-val"></div>
-                                            <div id="kpi-desc" style="font-size:13px; color:#666; margin-top:4px;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-head">핵심가치 5대 항목</div>
-                                    <div id="cv-list"></div>
-                                </div>
-                            </div>
-                            <div class="grid-career-growth">
-                                <div class="card">
-                                    <div class="card-head">Career Path</div>
-                                    <div class="career-path-vertical">
-                                        <div class="cp-node" id="dev-current"></div>
-                                        <div class="cp-arrow-down">⬇</div>
-                                        <div class="cp-node future" id="dev-goal"></div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-head">역량/경력 목표</div>
-                                    <ul class="goal-list" id="dev-comp-goals"></ul>
-                                </div>
-                                <div class="card">
-                                    <div class="card-head">비즈니스 기여 목표</div>
-                                    <ul class="goal-list" id="dev-biz-goals"></ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="dt-feedback" class="detail-content">
-                            <div class="preference-card" id="feedback-preference-section">
-                                <div class="pref-header">💡 피드백 성향 가이드</div>
-                                <div class="pref-grid">
-                                    <div class="pref-item" id="pref-directness"><div class="pref-icon" id="icon-directness"></div><span class="pref-label">화법</span><strong class="pref-val" id="val-directness"></strong><small class="pref-sub-desc" id="desc-directness"></small></div>
-                                    <div class="pref-item" id="pref-focus"><div class="pref-icon" id="icon-focus"></div><span class="pref-label">관점</span><strong class="pref-val" id="val-focus"></strong><small class="pref-sub-desc" id="desc-focus"></small></div>
-                                    <div class="pref-item" id="pref-tone"><div class="pref-icon" id="icon-tone"></div><span class="pref-label">어조</span><strong class="pref-val" id="val-tone"></strong><small class="pref-sub-desc" id="desc-tone"></small></div>
-                                </div>
-                                <div class="pref-guide-box">
-                                    <span>🤖</span> <span id="pref-guide-text">AI가 팀원의 성향을 고려하여 피드백 초안을 작성합니다.</span>
+                    <!-- [수정] 스크롤 래퍼 추가 -->
+                    <div class="detail-scroll-wrapper">
+                        <div class="detail-content-area">
+                            <div class="detail-header">
+                                <button class="btn-back" onclick="showFeedback()">← 목록으로</button>
+                                <div style="font-size:20px; font-weight:700;">
+                                    <span id="detail-member-name"></span>
                                 </div>
                             </div>
 
-                            <div class="card">
-                                <div class="card-head" style="color:var(--color-purple);">Step 1. 피드백 키워드 입력</div>
-                                <p class="fb-desc-sub">키워드 별 핵심 한 줄을 입력해주세요!</p>
-                                <div class="fb-input-grid">
-                                    <div class="fb-card-small">
-                                        <span class="fb-label" style="color:var(--color-magenta)">🔥 강점 (Strength)</span>
-                                        <textarea id="input-str" class="fb-textarea" placeholder="예: 꼼꼼함, 분석적 사고"></textarea>
+                            <div id="dt-basic" class="detail-content active">
+                                <div class="grid-basic">
+                                    <div class="card profile-lg-box">
+                                        <div class="profile-lg-img" id="p-avatar"></div>
+                                        <div style="font-size:22px; font-weight:700;" id="p-name"></div>
+                                        <div style="color:#666; margin-bottom:12px;" id="p-job"></div>
+                                        <div id="p-keywords" style="display:flex; justify-content:center; gap:6px; flex-wrap:wrap;"></div>
+                                        <div id="p-info-list" style="margin-top:20px; text-align:left; border-top:1px solid #eee; padding-top:20px;"></div>
                                     </div>
-                                    <div class="fb-card-small">
-                                        <span class="fb-label" style="color:var(--color-teal)">💡 보완점 (Improvement)</span>
-                                        <textarea id="input-imp" class="fb-textarea" placeholder="예: 소통, 일정 관리"></textarea>
-                                    </div>
-                                </div>
-                                <div style="text-align:right;">
-                                    <button class="login-btn" style="width:auto; padding:12px 30px; margin:0;" onclick="generateEvidence()">✨ AI 행동 사례 찾기</button>
-                                </div>
-                            </div>
-
-                            <div id="ai-evidence-section" class="evidence-container">
-                                <div class="card-head" style="border:none; margin-bottom:10px;">Step 2. 구체적 행동 사례 매칭</div>
-                                <div class="evidence-grid">
-                                    <div class="evidence-box" id="ev-box-str">
-                                        <div class="ev-title">🔥 강점 행동 사례</div>
-                                        <div class="ev-text" id="ev-text-str"></div>
-                                        <div class="ev-controls">
-                                            <button class="btn-xs" onclick="reexplore('str')">🔄 재탐색</button>
-                                            <button class="btn-xs btn-select" id="btn-sel-str" onclick="toggleSelection('str')">선택</button>
+                                    <div class="card">
+                                        <div class="card-head">전문 역량</div>
+                                        <div id="p-skills"></div>
+                                        <div class="card-head" style="margin-top:30px;">SWOT 분석</div>
+                                        <div class="swot-box">
+                                            <div class="swot-col">
+                                                <div class="swot-head" style="color:var(--color-magenta)">🔥 강점</div>
+                                                <div id="p-strengths"></div>
+                                            </div>
+                                            <div class="swot-col">
+                                                <div class="swot-head" style="color:var(--color-teal)">💡 보완점</div>
+                                                <div id="p-weaknesses"></div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="evidence-box" id="ev-box-imp">
-                                        <div class="ev-title">💡 보완점 행동 사례</div>
-                                        <div class="ev-text" id="ev-text-imp"></div>
-                                        <div class="ev-controls">
-                                            <button class="btn-xs" onclick="reexplore('imp')">🔄 재탐색</button>
-                                            <button class="btn-xs btn-select" id="btn-sel-imp" onclick="toggleSelection('imp')">선택</button>
+                                </div>
+                                <div class="grid-half">
+                                    <div class="card">
+                                        <div class="card-head">성장 곡선</div>
+                                        <div style="height:150px; display:flex; align-items:center; justify-content:center;">
+                                            <svg width="300" height="120" viewBox="0 0 300 120">
+                                                <path id="growth-path" d="" fill="none" stroke="var(--color-purple)" stroke-width="3" stroke-linecap="round"/>
+                                                <g id="growth-points"></g>
+                                            </svg>
                                         </div>
+                                        <div id="growth-desc" style="text-align:center; color:#666; font-size:14px;"></div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-head">Career History</div>
+                                        <div id="p-history" style="padding-top:10px;"></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="card">
-                                <div class="card-head">Step 3. 톤앤매너 & 최종 생성</div>
-                                <div class="tone-controls">
-                                    <div class="tone-group">
-                                        <span style="font-size:13px; font-weight:700;">화법</span>
-                                        <div class="tone-btn-group">
-                                            <div class="tone-btn" id="btn-direct" onclick="setTone('direct', this)">직설적</div>
-                                            <div class="tone-btn" id="btn-indirect" onclick="setTone('indirect', this)">완곡함</div>
+                            <div id="dt-perf" class="detail-content">
+                                <div class="eval-grade-card">
+                                    <div>
+                                        <div style="font-size:14px; opacity:0.8;">2024 종합 성과 등급</div>
+                                        <div class="grade-big" id="final-grade"></div>
+                                    </div>
+                                    <div class="grade-info-right">
+                                        <div class="grade-info-item">업무달성도(KPI) <strong id="sum-kpi" class="grade-info-score"></strong>점</div>
+                                        <div class="grade-info-item">핵심가치 <strong id="sum-cv" class="grade-info-score"></strong>점</div>
+                                    </div>
+                                </div>
+                                <div class="grid-half">
+                                    <div class="card">
+                                        <div class="card-head">업무 달성도 (KPI)</div>
+                                        <div class="kpi-donut-wrapper">
+                                            <svg width="120" height="120">
+                                                <circle cx="60" cy="60" r="54" fill="none" stroke="#f0f0f0" stroke-width="12"></circle>
+                                                <circle id="kpi-donut" cx="60" cy="60" r="54" fill="none" stroke="var(--color-magenta)" stroke-width="12" stroke-linecap="round" stroke-dasharray="339" stroke-dashoffset="339" transform="rotate(-90 60 60)"></circle>
+                                            </svg>
+                                            <div class="kpi-text">
+                                                <div style="font-weight:700; font-size:24px; color:var(--color-magenta);" id="kpi-val"></div>
+                                                <div id="kpi-desc" style="font-size:13px; color:#666; margin-top:4px;"></div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="tone-group">
-                                        <span style="font-size:13px; font-weight:700;">관점</span>
-                                        <div class="tone-btn-group">
-                                            <div class="tone-btn" id="btn-task" onclick="setTone('task', this)">과업 중심</div>
-                                            <div class="tone-btn" id="btn-relation" onclick="setTone('relation', this)">관계 중심</div>
+                                    <div class="card">
+                                        <div class="card-head">핵심가치 5대 항목</div>
+                                        <div id="cv-list"></div>
+                                    </div>
+                                </div>
+                                <div class="grid-career-growth">
+                                    <div class="card">
+                                        <div class="card-head">Career Path</div>
+                                        <div class="career-path-vertical">
+                                            <div class="cp-node" id="dev-current"></div>
+                                            <div class="cp-arrow-down">⬇</div>
+                                            <div class="cp-node future" id="dev-goal"></div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-head">역량/경력 목표</div>
+                                        <ul class="goal-list" id="dev-comp-goals"></ul>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-head">비즈니스 기여 목표</div>
+                                        <ul class="goal-list" id="dev-biz-goals"></ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="dt-feedback" class="detail-content">
+                                <div class="preference-card" id="feedback-preference-section">
+                                    <div class="pref-header">💡 피드백 성향 가이드</div>
+                                    <div class="pref-grid">
+                                        <div class="pref-item" id="pref-directness"><div class="pref-icon" id="icon-directness"></div><span class="pref-label">화법</span><strong class="pref-val" id="val-directness"></strong><small class="pref-sub-desc" id="desc-directness"></small></div>
+                                        <div class="pref-item" id="pref-focus"><div class="pref-icon" id="icon-focus"></div><span class="pref-label">관점</span><strong class="pref-val" id="val-focus"></strong><small class="pref-sub-desc" id="desc-focus"></small></div>
+                                        <div class="pref-item" id="pref-tone"><div class="pref-icon" id="icon-tone"></div><span class="pref-label">어조</span><strong class="pref-val" id="val-tone"></strong><small class="pref-sub-desc" id="desc-tone"></small></div>
+                                    </div>
+                                    <div class="pref-guide-box">
+                                        <span>🤖</span> <span id="pref-guide-text">AI가 팀원의 성향을 고려하여 피드백 초안을 작성합니다.</span>
+                                    </div>
+                                </div>
+
+                                <div class="card">
+                                    <div class="card-head" style="color:var(--color-purple);">Step 1. 피드백 키워드 입력</div>
+                                    <p class="fb-desc-sub">키워드 별 핵심 한 줄을 입력해주세요!</p>
+                                    <div class="fb-input-grid">
+                                        <div class="fb-card-small">
+                                            <span class="fb-label" style="color:var(--color-magenta)">🔥 강점 (Strength)</span>
+                                            <textarea id="input-str" class="fb-textarea" placeholder="예: 꼼꼼함, 분석적 사고"></textarea>
+                                        </div>
+                                        <div class="fb-card-small">
+                                            <span class="fb-label" style="color:var(--color-teal)">💡 보완점 (Improvement)</span>
+                                            <textarea id="input-imp" class="fb-textarea" placeholder="예: 소통, 일정 관리"></textarea>
+                                        </div>
+                                    </div>
+                                    <div style="text-align:right;">
+                                        <button class="login-btn" style="width:auto; padding:12px 30px; margin:0;" onclick="generateEvidence()">✨ AI 행동 사례 찾기</button>
+                                    </div>
+                                </div>
+
+                                <div id="ai-evidence-section" class="evidence-container">
+                                    <div class="card-head" style="border:none; margin-bottom:10px;">Step 2. 구체적 행동 사례 매칭</div>
+                                    <div class="evidence-grid">
+                                        <div class="evidence-box" id="ev-box-str">
+                                            <div class="ev-title">🔥 강점 행동 사례</div>
+                                            <div class="ev-text" id="ev-text-str"></div>
+                                            <div class="ev-controls">
+                                                <button class="btn-xs" onclick="reexplore('str')">🔄 재탐색</button>
+                                                <button class="btn-xs btn-select" id="btn-sel-str" onclick="toggleSelection('str')">선택</button>
+                                            </div>
+                                        </div>
+                                        <div class="evidence-box" id="ev-box-imp">
+                                            <div class="ev-title">💡 보완점 행동 사례</div>
+                                            <div class="ev-text" id="ev-text-imp"></div>
+                                            <div class="ev-controls">
+                                                <button class="btn-xs" onclick="reexplore('imp')">🔄 재탐색</button>
+                                                <button class="btn-xs btn-select" id="btn-sel-imp" onclick="toggleSelection('imp')">선택</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <textarea id="final-feedback-text" class="final-msg-box" placeholder="AI가 생성한 최종 메시지가 여기에 표시됩니다."></textarea>
-                                <div style="text-align:right; margin-top:20px;">
-                                    <button class="login-btn" style="width:auto; padding:12px 30px; margin:0;" onclick="alert('피드백이 전송되었습니다!')">📩 피드백 전송</button>
+
+                                <div class="card">
+                                    <div class="card-head">Step 3. 톤앤매너 & 최종 생성</div>
+                                    <div class="tone-controls">
+                                        <div class="tone-group">
+                                            <span style="font-size:13px; font-weight:700;">화법</span>
+                                            <div class="tone-btn-group">
+                                                <div class="tone-btn" id="btn-direct" onclick="setTone('direct', this)">직설적</div>
+                                                <div class="tone-btn" id="btn-indirect" onclick="setTone('indirect', this)">완곡함</div>
+                                            </div>
+                                        </div>
+                                        <div class="tone-group">
+                                            <span style="font-size:13px; font-weight:700;">관점</span>
+                                            <div class="tone-btn-group">
+                                                <div class="tone-btn" id="btn-task" onclick="setTone('task', this)">과업 중심</div>
+                                                <div class="tone-btn" id="btn-relation" onclick="setTone('relation', this)">관계 중심</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <textarea id="final-feedback-text" class="final-msg-box" placeholder="AI가 생성한 최종 메시지가 여기에 표시됩니다."></textarea>
+                                    <div style="text-align:right; margin-top:20px;">
+                                        <button class="login-btn" style="width:auto; padding:12px 30px; margin:0;" onclick="alert('피드백이 전송되었습니다!')">📩 피드백 전송</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -642,7 +650,6 @@
             if (content) content.classList.add('active');
         }
         
-        // [수정] switchEvalTab 로직 수정 (detail-tab 클래스 사용)
         function switchEvalTab(el) {
             if (!el) return;
             const tabs = el.parentElement.querySelectorAll('.detail-tab');
@@ -695,10 +702,10 @@
 
         function hideAllViews() {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
-            const detailView = document.getElementById('view-feedback-detail');
-            if(detailView) detailView.classList.remove('active');
+            // [수정] detail-container 클래스도 비활성화 처리
+            document.querySelectorAll('.detail-container').forEach(el => el.classList.remove('active'));
             
+            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
             const sidebarList = document.getElementById('member-list-sidebar');
             if(sidebarList) sidebarList.style.display = 'none';
         }
@@ -716,7 +723,9 @@
             const menuEval = document.getElementById('menu-eval');
             if(evalView) evalView.classList.add('active'); 
             if(menuEval) menuEval.classList.add('active');
-            document.querySelector('.content-container').scrollTop = 0;
+            // 스크롤 초기화는 이제 scroll-wrapper에서 수행
+            const scrollWrap = evalView.querySelector('.detail-scroll-wrapper');
+            if(scrollWrap) scrollWrap.scrollTop = 0;
         }
 
         function showFeedback() {
@@ -923,6 +932,9 @@
         // --- 네비게이션 ---
         function hideAllViews() {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            // [수정] detail-container 클래스도 비활성화 처리
+            document.querySelectorAll('.detail-container').forEach(el => el.classList.remove('active'));
+
             document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
             document.getElementById('view-feedback-detail').classList.remove('active');
             document.getElementById('member-list-sidebar').style.display = 'none';
@@ -936,7 +948,9 @@
             hideAllViews(); 
             document.getElementById('view-evaluation').classList.add('active'); 
             document.getElementById('menu-eval').classList.add('active');
-            document.querySelector('.content-container').scrollTop = 0;
+            // 스크롤 초기화
+            const scrollWrap = document.querySelector('#view-evaluation .detail-scroll-wrapper');
+            if(scrollWrap) scrollWrap.scrollTop = 0;
         }
         
         function showFeedback() {
@@ -979,8 +993,14 @@
         // --- 피드백 (상세) ---
         function showFeedbackDetail(name) {
             currentMember = teamDB[name];
+            
+            // 기존 뷰 숨기기
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.getElementById('view-feedback-detail').classList.add('active');
+            document.querySelectorAll('.detail-container').forEach(el => el.classList.remove('active'));
+            
+            // 상세 뷰 활성화
+            const detailView = document.getElementById('view-feedback-detail');
+            detailView.classList.add('active');
 
             document.querySelectorAll('.member-list-item').forEach(item => item.classList.remove('active'));
             const li = document.getElementById('ml-' + name);
@@ -1046,7 +1066,10 @@
             const aiSection = document.getElementById('ai-evidence-section');
             if(aiSection) aiSection.classList.remove('active');
             selectedEvidence = { str:'', imp:'', gro:'' };
-            document.querySelector('.detail-content-area').scrollTop = 0;
+            
+            // 스크롤 초기화
+            const scrollWrap = detailView.querySelector('.detail-scroll-wrapper');
+            if(scrollWrap) scrollWrap.scrollTop = 0;
         }
 
         function findMatchingSample(inputText, samples) {
