@@ -79,6 +79,14 @@
         }
         .search-box:focus { background: rgba(255,255,255,0.3); border-color: #fff; }
         .search-box::placeholder { color: rgba(255,255,255,0.7); }
+        
+        /* [추가] 로그아웃 버튼 스타일 */
+        .logout-btn {
+            background: transparent; border: 1px solid rgba(255,255,255,0.4); color: #fff;
+            padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: 600; transition: 0.2s;
+            margin-left: 10px;
+        }
+        .logout-btn:hover { background: rgba(255,255,255,0.2); border-color: #fff; }
 
         .app-body { display: flex; flex: 1; overflow: hidden; }
 
@@ -312,20 +320,60 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
 
+        /* [모바일 호환성 개선] */
         @media (max-width: 768px) {
             .app-body { flex-direction: column; overflow-y: auto; }
-            .main-sidebar { width: 100%; height: auto; flex-direction: row; padding: 10px; border-right: none; border-bottom: 1px solid #e0e0e0; justify-content: space-around; align-items: center; flex-shrink: 0; }
-            .leader-profile { display: none; }
-            .main-menu { display: flex; margin-top: 0; padding: 0; width: 100%; justify-content: space-around; }
-            .menu-item { margin-bottom: 0; padding: 10px; font-size: 14px; }
+            
+            /* 사이드바: 상단 가로 스크롤 형태로 변경 */
+            .main-sidebar { 
+                width: 100%; height: auto; 
+                flex-direction: row; 
+                padding: 10px; 
+                border-right: none; 
+                border-bottom: 1px solid #e0e0e0; 
+                justify-content: flex-start; 
+                align-items: center; 
+                flex-shrink: 0; 
+                overflow-x: auto; /* 가로 스크롤 허용 */
+                white-space: nowrap; /* 줄바꿈 방지 */
+            }
+            .leader-profile { display: none; } /* 모바일에서 공간 절약을 위해 프로필 숨김 */
+            
+            .main-menu { display: flex; margin-top: 0; padding: 0; }
+            .menu-item { margin-bottom: 0; padding: 10px; font-size: 14px; flex-shrink: 0; }
+            
             .member-list-sidebar { display: none !important; }
+
+            /* 헤더 */
+            .main-header { padding: 0 20px; }
+            .search-box { display: none; } /* 모바일에서 검색창 숨김 */
+            .header-logo { font-size: 20px; }
+
+            /* 컨텐츠 영역 */
             .content-container { overflow-y: visible; }
             .detail-content-area { padding: 20px; }
             .view-section { padding: 20px; }
-            .dashboard-grid, .grid-basic, .grid-half, .grid-career-growth, .fb-input-grid, .evidence-grid, .pref-grid { grid-template-columns: 1fr !important; gap: 16px; }
+            
+            /* 그리드 1열로 변경 */
+            .dashboard-grid, 
+            .grid-basic, 
+            .grid-half, 
+            .grid-career-growth, 
+            .fb-input-grid, 
+            .evidence-grid, 
+            .pref-grid { 
+                grid-template-columns: 1fr !important; 
+                gap: 16px; 
+            }
+
+            /* 탭 */
             .detail-tabs { gap: 20px; }
             .detail-tab { font-size: 16px; padding: 14px 6px; }
+            
+            /* 기타 */
             .grade-big { font-size: 50px; }
+            .growth-box-container { flex-direction: column; } /* 성장곡선 박스 세로로 */
+            .growth-arrow { transform: rotate(90deg); margin: 4px 0; } /* 화살표 회전 */
         }
     </style>
 </head>
@@ -352,7 +400,10 @@
     <div id="main-app">
         <header class="main-header">
             <div class="header-logo" onclick="showDashboard()">CHEMILEADER</div>
-            <input type="text" id="top-search-input" class="search-box" placeholder="팀원, 부서 검색">
+            <div style="display: flex; align-items: center;">
+                <input type="text" id="top-search-input" class="search-box" placeholder="팀원, 부서 검색">
+                <button class="logout-btn" onclick="logout()">로그아웃</button>
+            </div>
         </header>
 
         <div class="app-body">
@@ -784,6 +835,18 @@
                 compGoals: ['MLOps 파이프라인 구축 마스터', 'AWS 머신러닝 전문 자격 취득', '기술 블로그 월 1회 연재'],
                 bizGoals: ['생산 공정 수율 2% 개선 모델 개발', '데이터 분석 자동화로 리드타임 30% 단축', '사내 데이터 리터러시 교육 진행'],
                 projectLog: { succ: "데이터 파이프라인 최적화로 처리 속도 200% 개선", imp: "현업 부서와의 초기 요구사항 조율 미흡" },
+                behavioralSamples: {
+                    strength: [
+                        { tags: ['꼼꼼', '분석', '데이터'], text: "지난달 공정 데이터 전처리 과정에서 0.1%의 결측치까지 놓치지 않고 완벽하게 정제하여 모델 정확도를 높인 점이 돋보입니다." },
+                        { tags: ['속도', '파이썬'], text: "복잡한 데이터 쿼리를 파이썬 스크립트로 자동화하여 분석 시간을 기존 대비 50% 단축시켰습니다." },
+                        { tags: ['논리', '인사이트'], text: "데이터 패턴에서 비즈니스 인사이트를 도출하여 생산 효율성 개선 제안을 논리적으로 전개했습니다." }
+                    ],
+                    improvement: [
+                        { tags: ['소통', '발표'], text: "분석 결과를 공유하는 자리에서 전문 용어를 너무 많이 사용하여, 현업 담당자들이 이해하는 데 어려움을 겪었습니다." },
+                        { tags: ['협업', '일정'], text: "개인 업무에 몰입하느라 유관부서와의 중간 공유 일정을 놓친 사례가 있었습니다. 주기적인 소통이 필요합니다." },
+                        { tags: ['멀티태스킹'], text: "여러 프로젝트가 동시에 진행될 때 우선순위 설정에 어려움을 겪어 마감 기한이 임박했던 적이 있습니다." }
+                    ]
+                },
                 growthRoadmap: [
                     { task: "SQL 고급 쿼리 마스터하기", checked: false },
                     { task: "데이터 시각화 대시보드 구축 프로젝트 리딩", checked: true },
@@ -814,6 +877,16 @@
                 compGoals: ['Top Tier 학회 논문 게재', '글로벌 연구 네트워크 확장', '최신 생성형 AI 모델 파인튜닝'],
                 bizGoals: ['비전 검사 정확도 99.9% 달성으로 불량률 감소', 'AI 모델 경량화로 엣지 디바이스 탑재', '신규 연구 과제 발굴 및 제안'],
                 projectLog: { succ: "비전 검사 정확도 99.5% 달성", imp: "현장 엔지니어 피드백 반영 지연" },
+                behavioralSamples: {
+                    strength: [
+                        { tags: ['연구', '최신', '꼼꼼'], text: "최신 Transformer 모델 논문을 꼼꼼하게 분석하고 빠르게 구현하여 비전 검사 정확도를 획기적으로 개선했습니다." },
+                        { tags: ['최적화', '알고리즘', '기술'], text: "복잡한 알고리즘을 경량화하여 엣지 디바이스에서도 실시간 추론이 가능하게 만든 최적화 역량이 뛰어납니다." }
+                    ],
+                    improvement: [
+                        { tags: ['소통', '연락', '공유'], text: "연구에 몰입하다 보면 메신저 응답이 늦어지거나, 중간 공유가 누락되는 경우가 종종 발생하여 협업 부서의 대기 시간이 길어집니다." },
+                        { tags: ['비즈니스', '현장'], text: "연구 결과의 우수성에도 불구하고, 이를 실제 생산 현장에 어떻게 적용할지에 대한 현실적인 고려가 부족해 보입니다." }
+                    ]
+                },
                 growthRoadmap: [
                     { task: "최신 논문 리뷰 세미나 발표 (분기 1회)", checked: true },
                     { task: "TensorFlow 자격증 취득", checked: false },
@@ -844,6 +917,16 @@
                 compGoals: ['PMP 자격증 갱신 및 최신 트렌드 학습', '애자일 코칭 전문가 과정 수료', 'DX 비즈니스 전략 수립 역량 강화'],
                 bizGoals: ['스마트팩토리 구축 프로젝트 성공적 런칭', '프로젝트 예산 절감 10% 달성', '팀 내 애자일 문화 전파 및 정착'],
                 projectLog: { succ: "스마트팩토리 예산 15% 절감", imp: "초기 기술 검토 단계 리스크 관리" },
+                behavioralSamples: {
+                    strength: [
+                        { tags: ['조율', '소통', '꼼꼼'], text: "스마트팩토리 구축 프로젝트에서 유관부서 간의 이해관계를 꼼꼼하게 파악하고 조율하여 일정을 차질 없이 준수했습니다." },
+                        { tags: ['추진력', '리더십', '책임'], text: "명확한 R&R 설정과 정기적인 싱크업 미팅을 통해 팀원들이 목표에 집중할 수 있는 환경을 주도적으로 조성했습니다." }
+                    ],
+                    improvement: [
+                        { tags: ['기술', '이해', '지식'], text: "AI 모델링에 대한 기술적 이해도가 부족하여 개발팀과의 커뮤니케이션에서 다소 오해가 발생했던 사례가 있습니다." },
+                        { tags: ['툴', '협업'], text: "최신 협업 툴(Jira, Confluence) 활용 능력을 높인다면 프로젝트 관리 효율성이 더욱 향상될 것입니다." }
+                    ]
+                },
                 growthRoadmap: [
                     { task: "애자일 코치 자격증 준비", checked: true },
                     { task: "타 부서와의 분기별 얼라인먼트 미팅 주재", checked: true },
@@ -873,6 +956,16 @@
                 compGoals: ['Kubernetes 운영 마스터', 'MSA 아키텍처 설계 경험 축적', '오픈소스 프로젝트 기여'],
                 bizGoals: ['시스템 가용성 99.99% 유지', '레거시 시스템 클라우드 전환 가속화', '개발 생산성 20% 향상 툴 도입'],
                 projectLog: { succ: "사용자 요청 기능 2주내 배포", imp: "테스트 코드 커버리지 부족" },
+                behavioralSamples: {
+                    strength: [
+                        { tags: ['속도', '프로토타이핑', '빠른'], text: "사용자 요청 기능을 2주 만에 프로토타입으로 빠르게 구현하여 피드백을 즉각적으로 수용한 점이 인상적입니다." },
+                        { tags: ['성실', '책임', '꼼꼼'], text: "맡은 기능 개발에 대해 책임감을 가지고 꼼꼼하게 테스트하여 버그 없는 배포를 수행했습니다." }
+                    ],
+                    improvement: [
+                        { tags: ['설계', '아키텍처'], text: "기능 구현에 집중하느라 전체 시스템 아키텍처의 확장성을 고려하지 못한 설계가 일부 발견되었습니다." },
+                        { tags: ['코드리뷰', '소통'], text: "동료의 코드 리뷰에 조금 더 적극적으로 참여하여 팀 전체의 코드 품질 향상에 기여했으면 합니다." }
+                    ]
+                },
                 growthRoadmap: [
                     { task: "Kubernetes 클러스터 운영 경험 공유", checked: false },
                     { task: "사내 해커톤 참가", checked: true },
@@ -903,6 +996,16 @@
                 compGoals: ['UX Writing 가이드라인 수립', '데이터 시각화 디자인 역량 강화', '사용자 리서치 방법론 마스터'],
                 bizGoals: ['서비스 사용자 이탈률 5% 감소', '디자인-개발 핸드오프 효율화', '신규 서비스 UX 컨셉 제안 및 채택'],
                 projectLog: { succ: "개발-디자인 협업 효율 30% 증가", imp: "로그 데이터 기반 근거 부족" },
+                behavioralSamples: {
+                    strength: [
+                        { tags: ['사용자', '인사이트', '공감'], text: "사용자 인터뷰를 통해 숨겨진 니즈를 발굴하고 이를 직관적인 UI로 풀어낸 점이 매우 훌륭합니다." },
+                        { tags: ['디자인', '효율', '꼼꼼'], text: "디자인 시스템을 꼼꼼하게 구축하여 개발팀과의 협업 효율을 30% 이상 높인 성과가 돋보입니다." }
+                    ],
+                    improvement: [
+                        { tags: ['데이터', '근거', '분석'], text: "디자인 시안 제안 시, 사용자 행동 데이터(Log)나 A/B 테스트 결과와 같은 정량적 근거가 부족할 때가 있습니다." },
+                        { tags: ['개발', '이해', '기술'], text: "개발팀과 소통할 때 기술적인 제약 사항에 대한 이해를 높인다면 더 현실적인 디자인 제안이 가능할 것입니다." }
+                    ]
+                },
                 growthRoadmap: [
                     { task: "디자인 시스템 컴포넌트 고도화", checked: true },
                     { task: "사용자 리서치 방법론 A/B 테스트 적용", checked: false },
@@ -943,6 +1046,14 @@
                 }
             }
         });
+
+        function logout() {
+            document.getElementById('main-app').style.display = 'none';
+            document.getElementById('login-page').style.display = 'flex';
+            document.getElementById('login-id').value = '';
+            document.getElementById('login-pw').value = '';
+            hideAllViews();
+        }
 
         function switchDetailTab(tabName, el) {
             if (!el) return;
@@ -1159,6 +1270,7 @@
             document.getElementById('dev-comp-goals').innerHTML = currentMember.compGoals.map(g => `<li class="goal-item">${g}</li>`).join('');
             document.getElementById('dev-biz-goals').innerHTML = currentMember.bizGoals.map(g => `<li class="goal-item">${g}</li>`).join('');
 
+            // Render Roadmap
             const roadmapContainer = document.getElementById('growth-roadmap-list');
             roadmapContainer.innerHTML = currentMember.growthRoadmap.map((item, index) => `
                 <div class="roadmap-item ${item.checked ? 'checked' : ''}" onclick="toggleRoadmapItem(this)">
@@ -1242,6 +1354,7 @@
             
             document.getElementById('ai-evidence-section').classList.add('active');
             
+            // [중요] 생성 완료 후 STEP 2 버튼 활성화
             const step2Buttons = document.querySelectorAll('#ai-evidence-section button');
             step2Buttons.forEach(btn => btn.disabled = false);
         }
@@ -1296,14 +1409,17 @@
         function convertToNounPhrase(text) {
             if(!text) return '';
             
+            // (1) '사례는'으로 시작하는 패턴 방어
             if (text.startsWith('사례는')) {
                 return text.replace(/^사례는\s*/, '');
             }
             
+            // (2) 어미 변환 규칙
             let replaced = text.replace(/(했습니다|됐습니다|합니다|입니다)\.?$/, '했던 경험은');
             replaced = replaced.replace(/(있다|있습니다)\.?$/, '있었던 실행은');
             replaced = replaced.replace(/(이다)\.?$/, '였던 활동은');
             
+            // 변환 실패 시 fallback (사례는 X)
             if(replaced === text) return `${text} 관련 활동은`;
             
             return replaced;
