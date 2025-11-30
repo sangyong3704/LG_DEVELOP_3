@@ -1115,9 +1115,9 @@
                 let matchedCandidates = candidates.filter(s => s.tags.some(t => foundTags.includes(t)));
                 
                 if(matchedCandidates.length > 0) {
-                     currentTextElem.innerText = matchedCandidates[Math.floor(Math.random() * matchedCandidates.length)].text;
+                      currentTextElem.innerText = matchedCandidates[Math.floor(Math.random() * matchedCandidates.length)].text;
                 } else {
-                     currentTextElem.innerText = candidates[Math.floor(Math.random() * candidates.length)].text;
+                      currentTextElem.innerText = candidates[Math.floor(Math.random() * candidates.length)].text;
                 }
 
                 selectedEvidence[type] = ''; 
@@ -1125,8 +1125,8 @@
                 const btn = document.getElementById('btn-sel-' + type);
                 if(box) box.classList.remove('selected'); 
                 if(btn) {
-                    btn.classList.remove('active');   
-                    btn.innerText = '선택';           
+                    btn.classList.remove('active');    
+                    btn.innerText = '선택';            
                 }
                 createFinalMsg(); 
             }
@@ -1135,7 +1135,10 @@
         function createFinalMsg() {
             const str = document.getElementById('input-str').value;
             const imp = document.getElementById('input-imp').value;
-            const gro = document.getElementById('input-gro').value;
+            
+            // [Safety Check] input-gro 존재 여부 확인 (기존 코드 유지 및 오류 방지)
+            const groObj = document.getElementById('input-gro');
+            const gro = groObj ? groObj.value : '';
             
             let msg = toneProfile.direct ? 
                 `[${currentMember.feedbackStyle.tone} 톤으로 작성됨]\n금년도 성과에 대해 명확하게 피드백 드립니다.\n\n` : 
@@ -1149,8 +1152,11 @@
             if(selectedEvidence.imp) msg += ` ${selectedEvidence.imp}`;
             msg += "\n\n";
 
-            msg += `3. 성장 제언\n${gro} 방향으로 역량을 키워봅시다.`;
-            if(selectedEvidence.gro) msg += ` ${selectedEvidence.gro}`;
+            // gro 값이 있을 때만 메시지에 추가
+            if(gro) {
+                msg += `3. 성장 제언\n${gro} 방향으로 역량을 키워봅시다.`;
+                if(selectedEvidence.gro) msg += ` ${selectedEvidence.gro}`;
+            }
             
             const finalBox = document.getElementById('final-feedback-text');
             if(finalBox) finalBox.value = msg;
