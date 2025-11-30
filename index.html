@@ -259,8 +259,8 @@
 
         /* [추가] 로드맵(체크리스트) 스타일 */
         .roadmap-list { display: flex; flex-direction: column; gap: 12px; }
-        .roadmap-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: #f9f9f9; border-radius: 8px; transition: 0.2s; cursor: pointer; }
-        .roadmap-item:hover { background: #f0f0f0; }
+        .roadmap-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: #f9f9f9; border-radius: 8px; transition: 0.2s; cursor: default; }
+        .roadmap-item:hover { background: #f9f9f9; } /* 고정이므로 호버 효과 제거 */
         .roadmap-item.checked { background: #f4eff9; }
         .roadmap-item.checked .rm-text { text-decoration: line-through; color: #888; }
         .rm-checkbox { width: 20px; height: 20px; border: 2px solid var(--color-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0;}
@@ -320,60 +320,20 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
 
-        /* [모바일 호환성 개선] */
         @media (max-width: 768px) {
             .app-body { flex-direction: column; overflow-y: auto; }
-            
-            /* 사이드바: 상단 가로 스크롤 형태로 변경 */
-            .main-sidebar { 
-                width: 100%; height: auto; 
-                flex-direction: row; 
-                padding: 10px; 
-                border-right: none; 
-                border-bottom: 1px solid #e0e0e0; 
-                justify-content: flex-start; 
-                align-items: center; 
-                flex-shrink: 0; 
-                overflow-x: auto; /* 가로 스크롤 허용 */
-                white-space: nowrap; /* 줄바꿈 방지 */
-            }
-            .leader-profile { display: none; } /* 모바일에서 공간 절약을 위해 프로필 숨김 */
-            
-            .main-menu { display: flex; margin-top: 0; padding: 0; }
-            .menu-item { margin-bottom: 0; padding: 10px; font-size: 14px; flex-shrink: 0; }
-            
+            .main-sidebar { width: 100%; height: auto; flex-direction: row; padding: 10px; border-right: none; border-bottom: 1px solid #e0e0e0; justify-content: space-around; align-items: center; flex-shrink: 0; }
+            .leader-profile { display: none; }
+            .main-menu { display: flex; margin-top: 0; padding: 0; width: 100%; justify-content: space-around; }
+            .menu-item { margin-bottom: 0; padding: 10px; font-size: 14px; }
             .member-list-sidebar { display: none !important; }
-
-            /* 헤더 */
-            .main-header { padding: 0 20px; }
-            .search-box { display: none; } /* 모바일에서 검색창 숨김 */
-            .header-logo { font-size: 20px; }
-
-            /* 컨텐츠 영역 */
             .content-container { overflow-y: visible; }
             .detail-content-area { padding: 20px; }
             .view-section { padding: 20px; }
-            
-            /* 그리드 1열로 변경 */
-            .dashboard-grid, 
-            .grid-basic, 
-            .grid-half, 
-            .grid-career-growth, 
-            .fb-input-grid, 
-            .evidence-grid, 
-            .pref-grid { 
-                grid-template-columns: 1fr !important; 
-                gap: 16px; 
-            }
-
-            /* 탭 */
+            .dashboard-grid, .grid-basic, .grid-half, .grid-career-growth, .fb-input-grid, .evidence-grid, .pref-grid { grid-template-columns: 1fr !important; gap: 16px; }
             .detail-tabs { gap: 20px; }
             .detail-tab { font-size: 16px; padding: 14px 6px; }
-            
-            /* 기타 */
             .grade-big { font-size: 50px; }
-            .growth-box-container { flex-direction: column; } /* 성장곡선 박스 세로로 */
-            .growth-arrow { transform: rotate(90deg); margin: 4px 0; } /* 화살표 회전 */
         }
     </style>
 </head>
@@ -433,7 +393,7 @@
                                 <div class="dash-sub">오늘도 팀원들과 함께 성장하는 하루 되세요.</div>
                             </div>
                             <div class="dash-info-block">
-                                <div class="dash-info-title">🎯 2024 팀 목표</div>
+                                <div class="dash-info-title">🎯 2025 팀 목표</div>
                                 <div class="dash-info-content">데이터 기반의 R&D/제조 혁신을 통한<br>전사적 DX 가속화 및 생산성 극대화</div>
                             </div>
                             <div class="dash-info-block">
@@ -521,8 +481,8 @@
                     <div class="detail-tabs-wrapper">
                         <div class="detail-tabs">
                             <div class="detail-tab active" onclick="switchDetailTab('basic', this)">기본정보</div>
-                            <div class="detail-tab" onclick="switchDetailTab('perf', this)">성과 & 육성</div>
-                            <div class="detail-tab" onclick="switchDetailTab('feedback', this)">전달 (Feedback)</div>
+                            <div class="detail-tab" onclick="switchDetailTab('perf', this)">성과 & 성장</div>
+                            <div class="detail-tab" onclick="switchDetailTab('feedback', this)">피드백 전달</div>
                         </div>
                     </div>
 
@@ -548,8 +508,9 @@
                                     <div class="card">
                                         <div class="card-head">전문 역량</div>
                                         <div id="p-skills"></div>
-                                        <div class="card-head" style="margin-top:30px;">SWOT 분석</div>
-                                        <div class="swot-box">
+                                        <!-- [수정] SWOT 분석 타이틀 제거 -->
+                                        <!-- <div class="card-head" style="margin-top:30px;">SWOT 분석</div> -->
+                                        <div class="swot-box" style="margin-top: 30px;">
                                             <div class="swot-col">
                                                 <div class="swot-head" style="color:var(--color-magenta)">🔥 강점</div>
                                                 <div id="p-strengths"></div>
@@ -584,13 +545,13 @@
                                         <div class="grade-big" id="final-grade"></div>
                                     </div>
                                     <div class="grade-info-right">
-                                        <div class="grade-info-item">업무달성도(KPI) <strong id="sum-kpi" class="grade-info-score"></strong>점</div>
-                                        <div class="grade-info-item">핵심가치 <strong id="sum-cv" class="grade-info-score"></strong>점</div>
+                                        <div class="grade-info-item">업무 목표 달성도 <strong id="sum-kpi" class="grade-info-score"></strong>점</div>
+                                        <div class="grade-info-item">핵심가치 준수도 <strong id="sum-cv" class="grade-info-score"></strong>점</div>
                                     </div>
                                 </div>
                                 <div class="grid-half">
                                     <div class="card">
-                                        <div class="card-head">업무 달성도 (KPI)</div>
+                                        <div class="card-head">업무 목표 달성도</div>
                                         <div class="kpi-donut-wrapper">
                                             <svg width="120" height="120">
                                                 <circle cx="60" cy="60" r="54" fill="none" stroke="#f0f0f0" stroke-width="12"></circle>
@@ -603,7 +564,7 @@
                                         </div>
                                     </div>
                                     <div class="card">
-                                        <div class="card-head">핵심가치 5대 항목</div>
+                                        <div class="card-head">핵심가치 준수도</div>
                                         <div id="cv-list"></div>
                                     </div>
                                 </div>
@@ -816,7 +777,7 @@
                 keywords: ['#데이터분석', '#통계', '#논리적'],
                 feedbackStyle: { directness: '직설적', focus: '과업 중심', tone: '논리적' },
                 skills: [ { name: 'Python', per: 90, color: '#D7177B' }, { name: 'ML', per: 75, color: '#551D83' } ],
-                strengths: ['데이터 인사이트 도출', '새로운 툴 학습 빠름'], weaknesses: ['발표 스킬 부족', '멀티태스킹 어려움'],
+                strengths: ['데이터 인사이트 도출', '새로운 툴 학습 빠름', '통계적 분석 능력'], weaknesses: ['발표 스킬 부족', '멀티태스킹 어려움', '일정 관리'],
                 growthStages: [
                     { label: "초기 (Onboarding)", desc: "생산 데이터 구조 파악 및 기초 분석 환경 세팅" },
                     { label: "중기 (Developing)", desc: "분석 모델링 기초 확립 및 소규모 과제 수행" },
@@ -858,7 +819,7 @@
                 keywords: ['#AI', '#딥러닝', '#혁신'],
                 feedbackStyle: { directness: '완곡함', focus: '과업 중심', tone: '논리적' },
                 skills: [ { name: 'Deep Learning', per: 95, color: '#551D83' }, { name: 'CV', per: 80, color: '#D7177B' } ],
-                strengths: ['최신 논문 구현 능력', '알고리즘 최적화'], weaknesses: ['비즈니스 적용 관점', '문서화 습관'],
+                strengths: ['최신 논문 구현 능력', '알고리즘 최적화', '딥러닝 아키텍처 설계'], weaknesses: ['비즈니스 적용 관점', '문서화 습관', '타 부서 소통'],
                 growthStages: [
                     { label: "초기 (Onboarding)", desc: "기존 비전 검사 알고리즘 분석 및 이해" },
                     { label: "중기 (Developing)", desc: "독자 모델 프로토타이핑 및 성능 검증" },
@@ -898,7 +859,7 @@
                 keywords: ['#PM', '#리더십', '#소통'],
                 feedbackStyle: { directness: '완곡함', focus: '관계 중심', tone: '부드러움' },
                 skills: [ { name: 'PM', per: 92, color: '#008785' }, { name: 'Communication', per: 88, color: '#551D83' } ],
-                strengths: ['강력한 추진력', '이해관계자 조율'], weaknesses: ['최신 기술 트렌드 이해', '실무 툴 활용'],
+                strengths: ['강력한 추진력', '이해관계자 조율', '리스크 관리'], weaknesses: ['최신 기술 트렌드 이해', '실무 툴 활용', '데이터 분석'],
                 growthStages: [
                     { label: "초기 (Onboarding)", desc: "프로젝트 지원 및 일정 관리 기초" },
                     { label: "중기 (Developing)", desc: "소규모 과제 PM 수행 및 이해관계자 관리" },
@@ -938,7 +899,7 @@
                 keywords: ['#개발', '#클라우드', '#성실'],
                 feedbackStyle: { directness: '직설적', focus: '과업 중심', tone: '부드러움' },
                 skills: [ { name: 'React', per: 75, color: '#551D83' }, { name: 'AWS', per: 60, color: '#70C0E6' } ],
-                strengths: ['빠른 프로토타이핑', '성실한 태도'], weaknesses: ['아키텍처 설계', '코드 리뷰 참여'],
+                strengths: ['빠른 프로토타이핑', '성실한 태도', '문제 해결 능력'], weaknesses: ['아키텍처 설계', '코드 리뷰 참여', '문서화'],
                 growthStages: [
                     { label: "초기 (Onboarding)", desc: "레거시 코드 파악 및 단순 버그 수정" },
                     { label: "중기 (Developing)", desc: "신규 기능 모듈 단위 개발 및 배포" },
@@ -977,7 +938,7 @@
                 keywords: ['#UX', '#디자인', '#공감'],
                 feedbackStyle: { directness: '완곡함', focus: '관계 중심', tone: '부드러움' },
                 skills: [ { name: 'UI Design', per: 88, color: '#D7177B' }, { name: 'Figma', per: 90, color: '#551D83' } ],
-                strengths: ['사용자 중심 사고', '창의적 디자인'], weaknesses: ['데이터 기반 설득', '개발 용어 이해'],
+                strengths: ['사용자 중심 사고', '창의적 디자인', '트렌드 캐치'], weaknesses: ['데이터 기반 설득', '개발 용어 이해', '일정 준수'],
                 growthStages: [
                     { label: "초기 (Onboarding)", desc: "기존 서비스 UI 유지보수 및 가이드 준수" },
                     { label: "중기 (Developing)", desc: "신규 서비스 UX 기획 및 프로토타이핑" },
@@ -1102,7 +1063,7 @@
         }
 
         function toggleRoadmapItem(el) {
-            el.classList.toggle('checked');
+            // el.classList.toggle('checked'); // Removed interactivity
         }
 
         function resetFeedbackState() {
@@ -1248,7 +1209,7 @@
                 `;
             }).join('');
             
-            document.getElementById('growth-desc').innerText = currentMember.growthDesc;
+            document.getElementById('growth-desc').innerText = currentMember.growthDesc || '';
             
             document.getElementById('p-history').innerHTML = currentMember.history.map(h => 
                 `<div class="timeline-item"><div class="tl-date">${h.date}</div><div class="tl-title">${h.title}</div><div class="tl-desc">${h.desc}</div></div>`
@@ -1270,9 +1231,10 @@
             document.getElementById('dev-comp-goals').innerHTML = currentMember.compGoals.map(g => `<li class="goal-item">${g}</li>`).join('');
             document.getElementById('dev-biz-goals').innerHTML = currentMember.bizGoals.map(g => `<li class="goal-item">${g}</li>`).join('');
 
+            // Render Roadmap (Read-Only)
             const roadmapContainer = document.getElementById('growth-roadmap-list');
             roadmapContainer.innerHTML = currentMember.growthRoadmap.map((item, index) => `
-                <div class="roadmap-item ${item.checked ? 'checked' : ''}" onclick="toggleRoadmapItem(this)">
+                <div class="roadmap-item ${item.checked ? 'checked' : ''}" style="cursor: default;">
                     <div class="rm-checkbox"></div>
                     <div class="rm-text">${item.task}</div>
                 </div>
@@ -1408,17 +1370,14 @@
         function convertToNounPhrase(text) {
             if(!text) return '';
             
-            // (1) '사례는'으로 시작하는 패턴 방어
             if (text.startsWith('사례는')) {
                 return text.replace(/^사례는\s*/, '');
             }
             
-            // (2) 어미 변환 규칙
             let replaced = text.replace(/(했습니다|됐습니다|합니다|입니다)\.?$/, '했던 경험은');
             replaced = replaced.replace(/(있다|있습니다)\.?$/, '있었던 실행은');
             replaced = replaced.replace(/(이다)\.?$/, '였던 활동은');
             
-            // 변환 실패 시 fallback (사례는 X)
             if(replaced === text) return `${text} 관련 활동은`;
             
             return replaced;
