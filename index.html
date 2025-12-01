@@ -1193,6 +1193,18 @@
             // Attach event listeners
             var loginBtn = document.getElementById('btn-login-action');
             if(loginBtn) loginBtn.addEventListener('click', checkLogin);
+
+            var loginIdInput = document.getElementById('login-id');
+            var loginPwInput = document.getElementById('login-pw');
+
+            function handleEnterKey(e) {
+                if(e.key === 'Enter') {
+                    checkLogin();
+                }
+            }
+
+            if(loginIdInput) loginIdInput.addEventListener('keyup', handleEnterKey);
+            if(loginPwInput) loginPwInput.addEventListener('keyup', handleEnterKey);
             
             var homeBtn = document.getElementById('btn-home-action');
             if(homeBtn) homeBtn.addEventListener('click', showDashboard);
