@@ -625,7 +625,7 @@
                 <section id="view-feedback-detail" class="detail-container">
                     <div class="detail-tabs-wrapper">
                         <div class="detail-tabs">
-                            <div class="detail-tab active" onclick="switchDetailTab('basic', this)">기본정보</div>
+                            <div class="detail-tab active" onclick="switchDetailTab('basic', this)">기본 정보</div>
                             <div class="detail-tab" onclick="switchDetailTab('perf', this)">성과 & 성장</div>
                             <div class="detail-tab" onclick="switchDetailTab('feedback', this)">피드백 전달</div>
                         </div>
@@ -1855,13 +1855,13 @@
                         "이러한 사례를 통해 앞으로 보완이 필요한 부분을 파악할 수 있습니다.",
                         "이 경험은 향후 개선이 필요한 지점을 보여주는 사례입니다.",
                         "이 사례는 업무 과정에서 어떤 부분을 보완하면 좋을지를 알려주는 근거가 됩니다.",
-                        "이 경험은 " + name + "님이 향후 개선을 통해 더 성장할 수 있는 여지를 보여줍니다."
+                        "이 경험은" + name + "님이 향후 개선을 통해 더 성장할 수 있는 여지를 보여줍니다."
                     ];
                     feedbackMsg += impTemplates[Math.floor(Math.random() * impTemplates.length)] + " ";
                 }
                 if (impEv2) {
                      if (!impEv2.endsWith('.')) impEv2 += '.';
-                     feedbackMsg += "아울러 " + impEv2 + " 부분도 함께 참고하여 개선해 나가면 좋겠습니다.";
+                     feedbackMsg += "아울러" + impEv2 + "이 부분도 함께 참고하여 개선해 나가면 좋겠습니다.";
                 }
                 feedbackMsg += "\n\n";
             }
