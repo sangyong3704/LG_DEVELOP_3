@@ -556,7 +556,7 @@
                                     <div class="issue-item">
                                         <div class="issue-icon">🔥</div>
                                         <div class="issue-content">
-                                            <div class="issue-name">박재현 책임</div>
+                                            <div class="issue-name">박재원 사원</div>
                                             <div class="issue-desc">신규 기능 배포로 인한 3일 연속 야근 (컨디션 체크 필요)</div>
                                         </div>
                                         <div class="issue-tag">Care 필요</div>
@@ -564,7 +564,7 @@
                                     <div class="issue-item">
                                         <div class="issue-icon">🏥</div>
                                         <div class="issue-content">
-                                            <div class="issue-name">박태희 선임</div>
+                                            <div class="issue-name">하유림 선임</div>
                                             <div class="issue-desc">건강검진으로 금요일 오후 반차 예정</div>
                                         </div>
                                         <div class="issue-tag">일정 공유</div>
@@ -688,7 +688,7 @@
                             <div id="dt-perf" class="detail-content">
                                 <div class="eval-grade-card">
                                     <div>
-                                        <div style="font-size:14px; opacity:0.8;">2025 종합 성과 등급</div>
+                                        <div style="font-size:14px; opacity:0.8;">2024 종합 성과 등급</div>
                                         <div class="grade-big" id="final-grade"></div>
                                     </div>
                                     <div class="grade-info-right">
@@ -696,7 +696,7 @@
                                         <div class="grade-info-item">핵심가치 준수도 <strong id="sum-cv" class="grade-info-score"></strong>점</div>
                                     </div>
                                 </div>
-                                <div class="grid-half">
+                                <div class="grid-half" style="margin-bottom: 40px;">
                                     <div class="card">
                                         <div class="card-head">업무 목표 달성도</div>
                                         <div class="kpi-donut-wrapper">
@@ -1482,7 +1482,7 @@
                     mobileList.innerHTML = '<span style="color:#aaa; font-size:12px;">등록된 파일이 없습니다.</span>';
                 } else {
                     mobileList.innerHTML = files.map(function(f) {
-                        return '<a href="'+f.url+'" target="_blank" class="file-chip">' + f.icon + ' ' + f.label + '</a>';
+                        return '<a href="#" onclick="alert(\'LG화학 파이팅!\'); return false;" class="file-chip">' + f.icon + ' ' + f.label + '</a>';
                     }).join('');
                 }
             }
@@ -1511,7 +1511,7 @@
                 var x = currentRadius * Math.cos(angleRad);
                 var y = currentRadius * Math.sin(angleRad);
                 
-                return '<a href="'+f.url+'" target="_blank" class="file-donut-item" data-label="'+f.label+'" style="--tx: '+x+'px; --ty: '+y+'px;">'+f.icon+'</a>';
+                return '<a href="#" onclick="alert(\'LG화학 파이팅!\'); return false;" class="file-donut-item" data-label="'+f.label+'" style="--tx: '+x+'px; --ty: '+y+'px;">'+f.icon+'</a>';
             }).join('');
         }
 
