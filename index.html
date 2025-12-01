@@ -461,7 +461,7 @@
         .btn-select:hover { background: #f4eff9; }
         .btn-select.active { background: var(--color-purple); color: #fff; border-color: var(--color-purple); }
         
-        .final-msg-box { width: 100%; height: 200px; border: 1px solid var(--color-purple); border-radius: 12px; padding: 20px; font-size: 15px; line-height: 1.6; resize: none; outline: none; }
+        .final-msg-box { width: 100%; height: 200px; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; font-size: 15px; line-height: 1.6; resize: none; outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
@@ -593,7 +593,7 @@
                             </div>
                             <div class="dash-card cheer-card">
                                 <div class="cheer-icon">🍀</div>
-                                <div class="cheer-text">"리더의 한마디가<br>팀원의 성장을 이끕니다"<br><br>오늘도 힘찬 하루<br>응원합니다!</div>
+                                <div class="cheer-text">"LG화학의 THE 좋은 리더는<br>팀원의 성장을 이끕니다"<br><br>오늘도 힘찬 하루<br>응원합니다!</div>
                             </div>
                         </div>
                     </div>
@@ -603,10 +603,11 @@
                 <section id="view-evaluation" class="detail-container">
                     <div class="detail-scroll-wrapper">
                         <div class="eval-content-area">
-                            <iframe
-                                src="chemibration-demo.html"
-                                style="width: 100%; height: 1700px; border: none; border-radius: 12px; overflow: hidden;"
-                                loading="lazy">
+                            <iframe 
+                                id="chemibration-frame"
+                                data-src="chemibration-demo.html"
+                                src=""
+                                style="width: 100%; height: 1700px; border: none; border-radius: 12px; overflow: hidden;">
                             </iframe>
                         </div>
                     </div>
@@ -625,8 +626,8 @@
                 <section id="view-feedback-detail" class="detail-container">
                     <div class="detail-tabs-wrapper">
                         <div class="detail-tabs">
-                            <div class="detail-tab active" onclick="switchDetailTab('basic', this)">기본 정보</div>
-                            <div class="detail-tab" onclick="switchDetailTab('perf', this)">성과 & 성장</div>
+                            <div class="detail-tab active" onclick="switchDetailTab('basic', this)">기본정보</div>
+                            <div class="detail-tab" onclick="switchDetailTab('perf', this)">성과 & 육성 </div>
                             <div class="detail-tab" onclick="switchDetailTab('feedback', this)">피드백 전달</div>
                         </div>
                     </div>
@@ -666,7 +667,7 @@
                                 </div>
                                 <div class="grid-half">
                                     <div class="card growth-card-wrapper">
-                                        <div class="card-head">성장 곡선</div>
+                                        <div class="card-head">주요 경험</div>
                                         <div id="growth-stages" class="growth-box-container"></div>
                                         <div id="growth-desc" style="margin-top: 20px; color: #555; font-size: 14px; line-height: 1.6; text-align: center;"></div>
                                         
@@ -678,7 +679,7 @@
                                         </div>
                                     </div>
                                     <div class="card">
-                                        <div class="card-head">Career History</div>
+                                        <div class="card-head">커리어 이력</div>
                                         <div id="p-history" style="padding-top:10px;"></div>
                                     </div>
                                 </div>
@@ -884,7 +885,7 @@
             { "groupName": "일반", "tags": ["일반", "보편", "기본"] }
           ],
           "behavioralSamples": [
-             { "groupName": "소통 및 커뮤니케이션", "type": "strength", "tags": ["소통", "공유", "협업"], "text": "복잡한 프로젝트 이슈를 팀원들이 이해하기 쉬운 언어로 정리하여 신속하게 공유함으로써 혼선을 줄였습니다." },
+              { "groupName": "소통 및 커뮤니케이션", "type": "strength", "tags": ["소통", "공유", "협업"], "text": "복잡한 프로젝트 이슈를 팀원들이 이해하기 쉬운 언어로 정리하여 신속하게 공유함으로써 혼선을 줄였습니다." },
             { "groupName": "소통 및 커뮤니케이션", "type": "strength", "tags": ["경청", "대화"], "text": "회의 시간 동안 동료의 의견을 끝까지 경청하고 핵심을 요약해주며 논의가 긍정적인 방향으로 흐르도록 도왔습니다." },
             { "groupName": "소통 및 커뮤니케이션", "type": "strength", "tags": ["설득", "미팅"], "text": "유관 부서와의 미팅에서 상충되는 의견을 조율하고 합리적인 대안을 제시하여 원만한 합의를 이끌어냈습니다." },
             { "groupName": "소통 및 커뮤니케이션", "type": "improvement", "tags": ["소통", "공유"], "text": "이슈 발생 시 혼자 해결하려다 공유 시점이 늦어지는 경우가 있어 초기 단계에서의 신속한 공유가 필요합니다." },
@@ -1193,7 +1194,8 @@
             // Attach event listeners
             var loginBtn = document.getElementById('btn-login-action');
             if(loginBtn) loginBtn.addEventListener('click', checkLogin);
-
+            
+            // [NEW] 엔터키 로그인 기능 추가
             var loginIdInput = document.getElementById('login-id');
             var loginPwInput = document.getElementById('login-pw');
 
@@ -1205,7 +1207,8 @@
 
             if(loginIdInput) loginIdInput.addEventListener('keyup', handleEnterKey);
             if(loginPwInput) loginPwInput.addEventListener('keyup', handleEnterKey);
-            
+
+
             var homeBtn = document.getElementById('btn-home-action');
             if(homeBtn) homeBtn.addEventListener('click', showDashboard);
 
@@ -1297,12 +1300,26 @@
             document.querySelector('.content-container').scrollTop = 0;
         }
 
+        // iframe이 로드되었는지 확인하는 플래그 변수
+        var isEvalLoaded = false; 
+
         function showEval() { 
             hideAllViews(); 
             var evalView = document.getElementById('view-evaluation');
             var menuEval = document.getElementById('menu-eval');
+            
             if(evalView) evalView.classList.add('active'); 
             if(menuEval) menuEval.classList.add('active');
+            
+            // [최적화] 메뉴를 클릭했을 때 iframe 로딩 시작 (지연 로딩)
+            if (!isEvalLoaded) {
+                var iframe = document.getElementById('chemibration-frame');
+                if (iframe && iframe.dataset.src) {
+                    iframe.src = iframe.dataset.src; // data-src의 주소를 실제 src로 옮김
+                    isEvalLoaded = true; // 로딩 됨 표시
+                }
+            }
+
             var scrollWrap = evalView.querySelector('.detail-scroll-wrapper');
             if(scrollWrap) scrollWrap.scrollTop = 0;
         }
@@ -1652,7 +1669,7 @@
                 gro1_dyn = '글로벌 역량 강화를 위해 ' + (member.files ? '사내 어학 지원 프로그램' : '비즈니스 영어 과정') + '을 수강하고, 해외 지사와의 협업 프로젝트에 주도적으로 참여해 보는 것을 추천합니다.';
                 gro2_dyn = '향후 ' + goal + '로서의 성장을 위해 해외 컨퍼런스나 글로벌 세미나에 참석하여 최신 트렌드를 파악하고 네트워킹을 넓히는 기회를 가져보시기 바랍니다.';
             } else {
-                gro1_dyn = goal+' 역할을 향해 나아가기 위해 '+mainProgram+'과 같이 '+comp+'을 체계적으로 다루는 사내 교육을 수강해 보시면 좋겠습니다.';
+                gro1_dyn = goal+' 역할로 나아갈 수 있도록'+mainProgram+'과 같이 '+comp+'을 체계적으로 다루는 사내 교육을 수강해 보시면 좋겠습니다.';
                 gro2_dyn = biz+' 목표를 고려할 때 검증된 결과를 실무 프로젝트와 연결해 비즈니스 적용 가능성을 함께 제시하는 접근이 도움이 될 것입니다.';
             }
 
@@ -1782,7 +1799,7 @@
             }, 1500);
         }
 
-        // [수정] 최종 피드백 생성 로직 전면 개편 (자연스러운 연결)
+        // [최종 수정] HR 피드백 톤앤매너 완벽 반영 로직
         function createFinalMsgWithStyle() {
             if (!currentMember) return;
 
@@ -1801,107 +1818,132 @@
 
             var feedbackMsg = "";
 
-            // (1) 도입 인사
+            // [1. 도입]
             var intros = [
                 "이번 평가 기간 동안 " + name + "님의 기여와 성장을 함께 돌아보고자 합니다.",
                 "이번 리뷰에서는 지난 기간 동안 보여주신 " + name + "님의 강점과 성장 가능성을 중심으로 말씀드리고자 합니다."
             ];
             feedbackMsg += intros[Math.floor(Math.random() * intros.length)] + "\n\n";
 
-            // (2) 강점 제시 & (3) 강점 사례 연결
+            // [2. 강점 문단]
             if (strInput) {
+                // STEP1 입력 그대로 사용
                 if(!strInput.endsWith('.')) strInput += '.';
                 feedbackMsg += strInput + " "; 
                 
                 if (strEv1) {
                     if (!strEv1.endsWith('.')) strEv1 += '.';
+                    // [수정] 강점 + 사례 연결: 큰따옴표 제거 및 '특히' 문구 수정
                     var templates1 = [
-                        "이러한 역량은 " + strEv1 + " 사례에서도 분명하게 드러났습니다.",
-                        name + "님의 역량은 " + strEv1 + " 경험을 통해서도 잘 나타났습니다.",
-                        "이 경험(" + strEv1 + ")은 " + name + "님의 강점을 확인할 수 있는 근거가 되었습니다."
+                        strEv1 + " 이 사례는 " + name + "님의 강점을 잘 보여주는 예입니다.",
+                        strEv1 + " 이러한 성과는 " + name + "님의 역량이 실무에서 효과적으로 발휘된 순간입니다.",
+                        strEv1 + " 이 과정에서 드러난 접근 방식은 " + name + "님의 강점을 명확하게 보여줍니다.",
+                        strEv1 + " 이와 같은 사례는 " + name + "님이 가진 역량이 팀에 어떤 가치를 더하는지 잘 설명합니다."
                     ];
-                    feedbackMsg += templates1[Math.floor(Math.random() * templates1.length)] + " ";
+                    feedbackMsg += templates1[Math.floor(Math.random() * templates1.length)];
                 }
+                
                 if (strEv2) {
                     if (!strEv2.endsWith('.')) strEv2 += '.';
-                    var templates2 = [
-                        "또한 " + strEv2 + " 사례는 " + name + "님의 역량을 잘 보여주는 예시라고 생각합니다.",
-                        "해당 사례(" + strEv2 + ")는 이러한 강점이 실제 업무에서도 발휘되었음을 보여줍니다.",
-                        "이 사례(" + strEv2 + ")는 " + name + "님의 강점이 실무에서 어떻게 작동하는지를 보여주는 좋은 예입니다."
-                    ];
-                    feedbackMsg += "\n" + templates2[Math.floor(Math.random() * templates2.length)];
+                    // [수정] 추가 사례 연결: 줄바꿈(\n\n) 제거하여 바로 이어지도록 변경
+                    feedbackMsg += " 또한, " + strEv2 + " 이 역시 이러한 강점이 잘 드러난 순간이었습니다.";
                 }
                 feedbackMsg += "\n\n";
             }
 
-            // (4) 보완점 제시 & (5) 보완점 사례 연결
+            // [3. 보완점 문단]
             if (impInput) {
-                // 접속사 정리 (반면, 다만 등 중복 제거)
-                var cleanImp = impInput;
-                var prefixes = ["반면,", "반면", "다만,", "다만", "하지만,", "하지만"];
-                for (var i=0; i<prefixes.length; i++) {
-                    if (cleanImp.startsWith(prefixes[i])) {
-                        cleanImp = cleanImp.substring(prefixes[i].length).trim();
-                    }
-                }
+                // 접속사 중복 방지 (규칙 2) - 입력된 문장 앞의 접속사 제거
+                var cleanImp = impInput.replace(/^(반면|다만|하지만|한편),?\s*/, '');
+                // 첫 글자 대문자 처리 등의 필요가 없으므로 그대로 사용하되, 문맥을 위해 앞쪽 공백 제거
                 if (!cleanImp.endsWith('.')) cleanImp += '.';
                 
-                var impStart = Math.random() > 0.5 ? "반면 " : "다만 ";
+                // 자연스러운 접속사 선택
+                var impStart = Math.random() > 0.5 ? "반면, " : "다만, ";
                 feedbackMsg += impStart + cleanImp + " ";
 
                 if (impEv1) {
                     if (!impEv1.endsWith('.')) impEv1 += '.';
+                    // [수정] 보완점 + 사례 연결: 큰따옴표 제거
                     var impTemplates = [
-                        "이러한 사례를 통해 앞으로 보완이 필요한 부분을 파악할 수 있습니다.",
-                        "이 경험은 향후 개선이 필요한 지점을 보여주는 사례입니다.",
-                        "이 사례는 업무 과정에서 어떤 부분을 보완하면 좋을지를 알려주는 근거가 됩니다.",
-                        "이 경험은" + name + "님이 향후 개선을 통해 더 성장할 수 있는 여지를 보여줍니다."
+                        impEv1 + " 이와 관련해 이러한 사례가 있었으며, 이는 앞으로 개선할 여지가 있는 부분을 보여줍니다.",
+                        impEv1 + " 또한 이 사례는 업무 수행 과정에서 보완될 수 있는 지점을 시사합니다.",
+                        impEv1 + " 실제로 이 상황에서의 경험은 향후 더 나은 성과를 위해 되짚어볼 만한 부분입니다."
                     ];
                     feedbackMsg += impTemplates[Math.floor(Math.random() * impTemplates.length)] + " ";
                 }
+                
+                // 마무리 및 격려 (규칙 2)
                 if (impEv2) {
                      if (!impEv2.endsWith('.')) impEv2 += '.';
-                     feedbackMsg += "아울러" + impEv2 + "이 부분도 함께 참고하여 개선해 나가면 좋겠습니다.";
+                     // [수정] 큰따옴표 제거 및 '이 부분도 함께'로 문맥 수정
+                     feedbackMsg += "\n추가적으로 " + impEv2 + " 이 부분도 함께 고려한다면 더욱 완성도 높은 업무 수행이 가능할 것입니다.";
+                } else {
+                    feedbackMsg += "이 부분이 보완되면 전체 워크플로우의 효율이 더 높아질 것으로 기대됩니다.";
                 }
                 feedbackMsg += "\n\n";
             }
 
-            // (6) 성장 방향 및 마무리
+            // [4. 성장 문단]
+            // 성장 문단 도입부 (규칙 3 - '성장 측면에서는' 금지)
             var growthIntros = [
+                "앞으로의 방향성을 고려하면",
                 "향후 발전을 위해서는",
-                "앞으로의 커리어 목표를 고려하면",
-                "지속적인 성장 관점에서 보면",
-                "앞으로의 방향성을 생각해보면"
+                "커리어 목표를 생각해보았을 때",
+                "장기적인 관점에서 보면",
+                "지속적인 성장을 위해서는"
             ];
             var selectedIntro = growthIntros[Math.floor(Math.random() * growthIntros.length)];
 
             if (groInput) {
                 if(!groInput.endsWith('.')) groInput += '.';
+                // 도입부 + STEP1 입력 그대로 연결
                 feedbackMsg += selectedIntro + " " + groInput + " ";
             }
             
-            var finalGroEv = groEv1 || groEv2;
-            // Fallback if user didn't select anything but entered text
-            if (!finalGroEv && groInput) {
+            // [수정] 성장 제언 1, 2 모두 반영되도록 로직 변경
+            
+            // 선택된 사례가 없으면 자동 추천 로직 사용
+            if (!groEv1 && !groEv2 && groInput) {
                  var autoSug = buildGrowthSuggestions(currentMember, groInput);
-                 finalGroEv = autoSug.gro1;
+                 groEv1 = autoSug.gro1;
+                 groEv2 = autoSug.gro2;
             }
 
-            if (finalGroEv) {
-                if (!finalGroEv.endsWith('.')) finalGroEv += '.';
-                var growthBridges = [
-                     "이 목표를 실현하기 위해서는",
-                     "이를 보다 체계적으로 준비하기 위해",
-                     "이를 뒷받침할 수 있는 실질적 방법으로는",
-                     "이를 실행 단계로 옮기기 위해"
+            // 성장 제언 1 처리
+            if (groEv1) {
+                if (!groEv1.endsWith('.')) groEv1 += '.';
+                var bridges1 = [
+                     "이를 보다 체계적으로 준비하기 위해서는 " + groEv1,
+                     "이를 실천으로 옮기는 방법으로는 " + groEv1,
+                     "이를 뒷받침하기 위해 " + groEv1 + " 활용해보시면 좋습니다.",
+                     "이러한 경험은 향후 성장에 큰 자산이 될 것입니다. 우선 " + groEv1
                 ];
-                var selectedBridge = growthBridges[Math.floor(Math.random() * growthBridges.length)];
-                feedbackMsg += selectedBridge + " " + finalGroEv + "\n";
-            } else {
-                feedbackMsg += "\n";
+                feedbackMsg += bridges1[Math.floor(Math.random() * bridges1.length)] + " ";
             }
 
-            feedbackMsg += "앞으로도 " + name + "님의 성장을 적극적으로 지원하며 함께 발전할 수 있도록 돕겠습니다.";
+            // 성장 제언 2 처리 (접속사로 자연스럽게 연결)
+            if (groEv2) {
+                if (!groEv2.endsWith('.')) groEv2 += '.';
+                var bridges2 = [
+                    "구체적으로 " + groEv2,
+                    "또한 " + groEv2,
+                    "더불어 " + groEv2,
+                    "이와 함께 " + groEv2
+                ];
+                feedbackMsg += bridges2[Math.floor(Math.random() * bridges2.length)];
+            }
+            
+            feedbackMsg += "\n";
+
+            // [5. 지원 및 마무리] (규칙 5)
+            var closings = [
+                "앞으로도 지속적인 성장을 적극적으로 지원하겠습니다.",
+                "리더로서 " + name + "님의 커리어 목표가 실현될 수 있도록 필요한 자원과 기회를 꾸준히 제공하겠습니다.",
+                "함께 더 나은 방향으로 발전해갈 수 있도록 계속 지원하겠습니다."
+            ];
+            // [수정] 앞 문장에서 한 칸 엔터(줄바꿈) 적용
+            feedbackMsg += "\n" + closings[Math.floor(Math.random() * closings.length)];
 
             var finalBox = document.getElementById('final-feedback-text');
             if (finalBox) finalBox.value = feedbackMsg;
