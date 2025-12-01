@@ -688,7 +688,7 @@
                             <div id="dt-perf" class="detail-content">
                                 <div class="eval-grade-card">
                                     <div>
-                                        <div style="font-size:14px; opacity:0.8;">2024 종합 성과 등급</div>
+                                        <div style="font-size:14px; opacity:0.8;">2025 종합 성과 등급</div>
                                         <div class="grade-big" id="final-grade"></div>
                                     </div>
                                     <div class="grade-info-right">
@@ -1586,7 +1586,7 @@
         function buildGrowthExample(memberName, member) {
             var goalRole = member.goalRole || '차기 리더 역할';
             var direction = (member.compGoals && member.compGoals[0]) || (member.bizGoals && member.bizGoals[0]) || '핵심 역량 강화';
-            return '성장: '+memberName+'님은 '+goalRole+'를 목표로 하며 '+direction+'을 위한 실천을 권장합니다.';
+            return memberName+'님은 '+goalRole+'를 목표로 하며 '+direction+'을 위한 실천을 권장합니다.';
         }
 
         function setDefaultFeedbackExamples(name, member) {
