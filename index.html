@@ -556,7 +556,7 @@
                                     <div class="issue-item">
                                         <div class="issue-icon">🔥</div>
                                         <div class="issue-content">
-                                            <div class="issue-name">박태희 선임</div>
+                                            <div class="issue-name">박재원 사원</div>
                                             <div class="issue-desc">신규 기능 배포로 인한 3일 연속 야근 (컨디션 체크 필요)</div>
                                         </div>
                                         <div class="issue-tag">Care 필요</div>
@@ -564,7 +564,7 @@
                                     <div class="issue-item">
                                         <div class="issue-icon">🏥</div>
                                         <div class="issue-content">
-                                            <div class="issue-name">박재현 책임</div>
+                                            <div class="issue-name">하유림 선임</div>
                                             <div class="issue-desc">건강검진으로 금요일 오후 반차 예정</div>
                                         </div>
                                         <div class="issue-tag">일정 공유</div>
@@ -1211,6 +1211,28 @@
 
             var homeBtn = document.getElementById('btn-home-action');
             if(homeBtn) homeBtn.addEventListener('click', showDashboard);
+
+            // [NEW] 상단 팀원 검색 기능 추가
+            var searchInput = document.getElementById('top-search-input');
+            if(searchInput) {
+                searchInput.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') {
+                        var query = this.value.trim();
+                        if (!query) return;
+
+                        if (teamDB.hasOwnProperty(query)) {
+                            // 1. 피드백 뷰 활성화 (사이드바 및 레이아웃 초기화)
+                            showFeedback();
+                            // 2. 해당 멤버 상세 정보 로드 (기본정보 탭으로 이동됨)
+                            showFeedbackDetail(query);
+                            // 3. 입력창 초기화 (선택사항)
+                            this.value = '';
+                        } else {
+                            alert("해당 팀원을 찾을 수 없습니다.");
+                        }
+                    }
+                });
+            }
 
             var logoutBtn = document.getElementById('btn-logout-action');
             if(logoutBtn) logoutBtn.addEventListener('click', logout);
