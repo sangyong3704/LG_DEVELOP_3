@@ -1361,31 +1361,42 @@
             renderMembers();    
         }
 
+        // [수정 1] 팀원 정렬 순서 정의
+        var MEMBER_ORDER = ['박태희', '박재현', '박정호', '박재원', '하유림'];
+
         function renderMemberList() {
             var container = document.getElementById('member-list-sidebar');
             container.innerHTML = '';
-            Object.keys(teamDB).forEach(function(name) {
-                var m = teamDB[name];
-                var li = document.createElement('li');
-                li.className = 'member-list-item';
-                li.id = 'ml-' + name; 
-                li.onclick = function() { showFeedbackDetail(name); };
-                li.innerHTML = '<span class="ml-avatar">'+m.avatar+'</span><span>'+name+'</span>';
-                container.appendChild(li);
+            
+            // Object.keys 대신 정해진 순서 배열(MEMBER_ORDER)을 순회
+            MEMBER_ORDER.forEach(function(name) {
+                if (teamDB[name]) {
+                    var m = teamDB[name];
+                    var li = document.createElement('li');
+                    li.className = 'member-list-item';
+                    li.id = 'ml-' + name; 
+                    li.onclick = function() { showFeedbackDetail(name); };
+                    li.innerHTML = '<span class="ml-avatar">'+m.avatar+'</span><span>'+name+'</span>';
+                    container.appendChild(li);
+                }
             });
         }
         
         function renderMembers() {
             var container = document.getElementById('member-card-container');
             container.innerHTML = '';
-            Object.keys(teamDB).forEach(function(name) {
-                var m = teamDB[name];
-                var card = document.createElement('div');
-                card.className = 'member-card';
-                card.onclick = function() { showFeedbackDetail(name); };
-                var tags = m.keywords.map(function(k){ return '<span class="mc-tag">'+k+'</span>'; }).join('');
-                card.innerHTML = '<div class="mc-avatar">'+m.avatar+'</div><div class="mc-name">'+name+'</div><div class="mc-role">'+m.job+' | '+m.years+'</div><div class="mc-tags">'+tags+'</div>';
-                container.appendChild(card);
+            
+            // Object.keys 대신 정해진 순서 배열(MEMBER_ORDER)을 순회
+            MEMBER_ORDER.forEach(function(name) {
+                if (teamDB[name]) {
+                    var m = teamDB[name];
+                    var card = document.createElement('div');
+                    card.className = 'member-card';
+                    card.onclick = function() { showFeedbackDetail(name); };
+                    var tags = m.keywords.map(function(k){ return '<span class="mc-tag">'+k+'</span>'; }).join('');
+                    card.innerHTML = '<div class="mc-avatar">'+m.avatar+'</div><div class="mc-name">'+name+'</div><div class="mc-role">'+m.job+' | '+m.years+'</div><div class="mc-tags">'+tags+'</div>';
+                    container.appendChild(card);
+                }
             });
         }
 
@@ -1698,6 +1709,7 @@
             return { gro1: gro1_dyn, gro2: gro2_dyn };
         }
 
+        // [수정 2] AI 행동 사례 찾기 (로딩 효과 추가)
         function generateEvidence() {
             var strInput = document.getElementById('input-str').value;
             var impInput = document.getElementById('input-imp').value;
@@ -1706,23 +1718,45 @@
             if(!strInput || !impInput) {
                 alert('강점과 보완점 키워드를 입력해주세요.'); return;
             }
-            
-            var strs = findTwoUniqueSamples(strInput, 'strength', FEEDBACK_LIBRARY.behavioralSamples);
-            document.getElementById('ev-text-str-1').innerText = strs[0];
-            document.getElementById('ev-text-str-2').innerText = strs[1];
-            
-            var imps = findTwoUniqueSamples(impInput, 'improvement', FEEDBACK_LIBRARY.behavioralSamples);
-            document.getElementById('ev-text-imp-1').innerText = imps[0];
-            document.getElementById('ev-text-imp-2').innerText = imps[1];
 
-            var growthSuggestions = buildGrowthSuggestions(currentMember, groInput);
-            document.getElementById('ev-text-gro-1').innerText = growthSuggestions.gro1;
-            document.getElementById('ev-text-gro-2').innerText = growthSuggestions.gro2;
+            // 버튼 로딩 상태 변경
+            var btn = document.getElementById('btn-generate-evidence');
+            var originalText = btn.innerHTML; // 아이콘 포함 내용 저장
             
-            document.getElementById('ai-evidence-section').classList.add('active');
-            
-            var step2Buttons = document.querySelectorAll('#ai-evidence-section button');
-            for(var i=0; i<step2Buttons.length; i++) step2Buttons[i].disabled = false;
+            btn.disabled = true;
+            btn.innerHTML = '⏳ AI가 행동 사례를 분석 중입니다...';
+            btn.style.opacity = "0.7";
+            btn.style.cursor = "wait";
+
+            // 1초(1000ms) 딜레이 후 실행
+            setTimeout(function() {
+                var strs = findTwoUniqueSamples(strInput, 'strength', FEEDBACK_LIBRARY.behavioralSamples);
+                document.getElementById('ev-text-str-1').innerText = strs[0];
+                document.getElementById('ev-text-str-2').innerText = strs[1];
+                
+                var imps = findTwoUniqueSamples(impInput, 'improvement', FEEDBACK_LIBRARY.behavioralSamples);
+                document.getElementById('ev-text-imp-1').innerText = imps[0];
+                document.getElementById('ev-text-imp-2').innerText = imps[1];
+
+                var growthSuggestions = buildGrowthSuggestions(currentMember, groInput);
+                document.getElementById('ev-text-gro-1').innerText = growthSuggestions.gro1;
+                document.getElementById('ev-text-gro-2').innerText = growthSuggestions.gro2;
+                
+                document.getElementById('ai-evidence-section').classList.add('active');
+                
+                var step2Buttons = document.querySelectorAll('#ai-evidence-section button');
+                for(var i=0; i<step2Buttons.length; i++) step2Buttons[i].disabled = false;
+
+                // 스크롤 이동 (부드럽게)
+                document.getElementById('ai-evidence-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                // 버튼 상태 복구
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+
+            }, 1000); 
         }
 
         function reexplore(type, index) {
